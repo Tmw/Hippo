@@ -63,7 +63,7 @@ defmodule Hippo.ProjectsTest do
   end
 
   describe "lanes" do
-    alias Hippo.Projects.Lane
+    alias Hippo.Lanes.Lane
 
     @valid_attrs %{name: "some name"}
     @update_attrs %{name: "some updated name"}

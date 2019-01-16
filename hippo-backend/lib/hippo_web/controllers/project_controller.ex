@@ -21,8 +21,8 @@ defmodule HippoWeb.ProjectController do
   end
 
   def show(conn, %{"id" => id}) do
-    project = Projects.get_project!(id)
-    render(conn, "show.json", project: project)
+    project = Projects.get_project!(id, :with_details)
+    render(conn, "show-with-details.json", project: project)
   end
 
   def update(conn, %{"id" => id, "project" => project_params}) do

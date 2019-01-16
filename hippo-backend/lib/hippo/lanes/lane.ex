@@ -1,7 +1,6 @@
-defmodule Hippo.Projects.Lane do
+defmodule Hippo.Lanes.Lane do
   use Ecto.Schema
   import Ecto.Changeset
-
 
   schema "lanes" do
     field :name, :string

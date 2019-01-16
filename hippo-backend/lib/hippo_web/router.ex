@@ -9,9 +9,13 @@ defmodule HippoWeb.Router do
     pipe_through :api
 
     resources "/projects", ProjectController, except: [:new, :edit] do
-      resources "/lanes", LaneController, except: [:new, :edit] do
-        resources "/cards", CardController, except: [:new, :edit]
-      end
+      resources "/lanes", LaneController, only: [:index, :create]
     end
+
+    resources "/lanes", LaneController, only: [:update, :delete] do
+      resources "/cards", CardController, only: [:index, :create]
+    end
+
+    resources "/cards", CardController, only: [:update, :delete]
   end
 end

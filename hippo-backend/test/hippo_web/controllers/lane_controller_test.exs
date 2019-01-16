@@ -2,7 +2,7 @@ defmodule HippoWeb.LaneControllerTest do
   use HippoWeb.ConnCase
 
   alias Hippo.Projects
-  alias Hippo.Projects.Lane
+  alias Hippo.Lanes.Lane
 
   @create_attrs %{
     name: "some name"

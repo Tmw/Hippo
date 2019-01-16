@@ -1,6 +1,9 @@
 defmodule HippoWeb.LaneView do
   use HippoWeb, :view
-  alias HippoWeb.LaneView
+  alias HippoWeb.{
+    LaneView,
+    CardView
+  }
 
   def render("index.json", %{lanes: lanes}) do
     %{data: render_many(lanes, LaneView, "lane.json")}
@@ -11,7 +14,10 @@ defmodule HippoWeb.LaneView do
   end
 
   def render("lane.json", %{lane: lane}) do
-    %{id: lane.id,
-      name: lane.name}
+    %{
+      id: lane.id,
+      name: lane.name,
+      cards: render_many(lane.cards, CardView, "show.json")
+    }
   end
 end

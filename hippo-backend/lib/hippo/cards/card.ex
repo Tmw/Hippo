@@ -1,12 +1,11 @@
-defmodule Hippo.Projects.Card do
+defmodule Hippo.Cards.Card do
   use Ecto.Schema
   import Ecto.Changeset
-
 
   schema "cards" do
     field :content, :string
 
-    belongs_to :lane, Hippo.Projects.Lane
+    belongs_to :lane, Hippo.Lanes.Lane
 
     timestamps()
   end

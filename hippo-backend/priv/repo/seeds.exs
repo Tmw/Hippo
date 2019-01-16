@@ -27,7 +27,7 @@ defmodule Truncater do
   defp to_queries(table_name) do
     [
       "TRUNCATE TABLE #{table_name} CASCADE",
-      "ALTER SEQUENCE #{table_name}_id_seq RESTART WITH 1",
+      "ALTER SEQUENCE #{table_name}_id_seq RESTART WITH 1"
     ]
   end
 end
@@ -36,18 +36,17 @@ Truncater.truncate([:projects, :lanes, :cards])
 
 tree = %Project{
   name: "First Project",
-
   lanes: [
     %Lane{
       name: "To-Do",
       cards: [
         %Card{content: "Move these"},
         %Card{content: "Cards to the"},
-        %Card{content: "Done Lane"},
+        %Card{content: "Done Lane"}
       ]
     },
-    %Lane{ name: "Doing"},
-    %Lane{ name: "Done"},
+    %Lane{name: "Doing"},
+    %Lane{name: "Done"}
   ]
 }
 

@@ -11,7 +11,6 @@ defmodule HippoWeb.CardView do
   end
 
   def render("card.json", %{card: card}) do
-    %{id: card.id,
-      content: card.content}
+    %{id: card.id, content: card.content}
   end
 end
