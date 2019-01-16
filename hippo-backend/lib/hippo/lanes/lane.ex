@@ -6,7 +6,7 @@ defmodule Hippo.Lanes.Lane do
     field :name, :string
 
     belongs_to :project, Hippo.Projects.Project
-    has_many :cards, Hippo.Projects.Card
+    has_many :cards, Hippo.Cards.Card
 
     timestamps()
   end
