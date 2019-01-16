@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: hippo
+      POSTGRES_USER: hippo
+      POSTGRES_PASSWORD: hippo
+    ports:
+      - 5432:5432
