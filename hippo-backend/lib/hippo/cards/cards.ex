@@ -41,9 +41,10 @@ defmodule Hippo.Cards do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_card(attrs \\ %{}) do
+  def create_card(attrs \\ %{}, for_lane: lane_id) do
+    attrs = attrs |> Map.put("lane_id", lane_id)
     %Card{}
-    |> Card.changeset(attrs)
+    |> Card.changeset(attrs, :create)
     |> Repo.insert()
   end
 

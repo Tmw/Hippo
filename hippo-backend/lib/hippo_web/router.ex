@@ -16,6 +16,6 @@ defmodule HippoWeb.Router do
       resources "/cards", CardController, only: [:create]
     end
 
-    resources "/cards", CardController, only: [:update, :delete]
+    resources "/cards", CardController, only: [:update, :delete, :show]
   end
 end

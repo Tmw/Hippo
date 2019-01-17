@@ -10,6 +10,13 @@ defmodule Hippo.Cards.Card do
     timestamps()
   end
 
+  def changeset(card, attrs, :create) do
+    changeset(card, attrs)
+    |> cast(attrs, [:lane_id])
+    |> validate_required(:lane_id)
+    |> foreign_key_constraint(:lane_id)
+  end
+
   @doc false
   def changeset(card, attrs) do
     card
