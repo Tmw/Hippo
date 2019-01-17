@@ -10,14 +10,24 @@ defmodule HippoWeb.LaneView do
   end
 
   def render("show.json", %{lane: lane}) do
-    %{data: render_one(lane, LaneView, "lane.json")}
+    %{data: render_one(lane, LaneView, "lane-with-cards.json")}
+  end
+
+  def render("create.json", %{lane: lane}) do
+    %{data: render("lane.json", %{lane: lane})}
   end
 
   def render("lane.json", %{lane: lane}) do
     %{
       id: lane.id,
       name: lane.name,
-      cards: render_many(lane.cards, CardView, "show.json")
+      cards: []
     }
+  end
+
+  def render("lane-with-cards.json", %{lane: lane}) do
+    render("lane.json", %{lane: lane}) |> Map.merge(%{
+      cards: render_many(lane.cards, CardView, "show.json")
+    })
   end
 end

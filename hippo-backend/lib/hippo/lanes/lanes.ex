@@ -1,5 +1,7 @@
 defmodule Hippo.Lanes do
+  import Ecto.Query, warn: false
   alias Hippo.Lanes.Lane
+  alias Hippo.Cards.Card
   alias Hippo.Repo
 
   @doc """
@@ -28,6 +30,14 @@ defmodule Hippo.Lanes do
 
   """
   def get_lane!(id), do: Repo.get!(Lane, id)
+  def get_lane!(id, :with_details) do
+    Repo.one(
+      from l in Lane,
+      where: l.id == ^id,
+      left_join: c in Card, on: c.lane_id == l.id,
+      preload: [cards: c]
+    )
+  end
 
   @doc """
   Creates a lane.
@@ -41,9 +51,10 @@ defmodule Hippo.Lanes do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_lane(attrs \\ %{}) do
+  def create_lane(attrs \\ %{}, for_project: project_id) do
+    attrs = attrs |> Map.put("project_id", project_id)
     %Lane{}
-    |> Lane.changeset(attrs)
+    |> Lane.changeset(attrs, :create)
     |> Repo.insert()
   end
 

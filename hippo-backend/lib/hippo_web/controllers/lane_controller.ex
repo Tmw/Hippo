@@ -11,17 +11,17 @@ defmodule HippoWeb.LaneController do
     render(conn, "index.json", lanes: lanes)
   end
 
-  def create(conn, %{"lane" => lane_params}) do
-    with {:ok, %Lane{} = lane} <- Lanes.create_lane(lane_params) do
+  def create(conn, %{"lane" => lane_params, "project_id" => project_id}) do
+    with {:ok, %Lane{} = lane} <- Lanes.create_lane(lane_params, for_project: project_id) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.lane_path(conn, :show, lane))
-      |> render("show.json", lane: lane)
+      |> render("create.json", lane: lane)
     end
   end
 
   def show(conn, %{"id" => id}) do
-    lane = Lanes.get_lane!(id)
+    lane = Lanes.get_lane!(id, :with_details)
     render(conn, "show.json", lane: lane)
   end
 
