@@ -1,5 +1,19 @@
 defmodule HippoWeb.Schema do
+  import Absinthe.Resolution.Helpers, only: [dataloader: 1]
   use Absinthe.Schema
+
+  def context(ctx) do
+    loader =
+      Dataloader.new
+      |> Dataloader.add_source(:lanes, HippoWeb.Resolvers.Project.data())
+      |> Dataloader.add_source(:cards, HippoWeb.Resolvers.Project.data())
+
+    Map.put(ctx, :loader, loader)
+  end
+
+  def plugins do
+    [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
+  end
 
   query do
     @desc "Query all projects known in the system"
@@ -8,26 +22,19 @@ defmodule HippoWeb.Schema do
       @desc "The projects ID"
       arg :id, :id
 
-      resolve &HippoWeb.Resolvers.Project.resolve/3
+      resolve &HippoWeb.Resolvers.Project.resolve/2
     end
   end
 
-  object :project do
-    field :id, :id
-    field :name, :string
-  end
-end
-
-defmodule HippoWeb.Resolvers.Project do
-  alias Hippo.Projects
-
-  @doc "Resolve by returning a single project by ID"
-  def resolve(_, %{id: id}, _) do
-    {:ok, Projects.get_project!(id)}
+  mutation do
+    @desc "create a new project"
+    field :create_project, :project do
+      arg :name, non_null(:string)
+      resolve &HippoWeb.Resolvers.Project.create/2
+    end
   end
 
-  @doc "Resolve by returning all projects"
-  def resolve(_, _, _) do
-    {:ok, Projects.list_projects()}
-  end
+  import_types __MODULE__.Types.Project
+  import_types __MODULE__.Types.Lane
+  import_types __MODULE__.Types.Card
 end
