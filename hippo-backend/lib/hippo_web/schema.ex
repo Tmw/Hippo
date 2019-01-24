@@ -32,6 +32,20 @@ defmodule HippoWeb.Schema do
       arg :name, non_null(:string)
       resolve &HippoWeb.Resolvers.Project.create/2
     end
+
+    @desc "create lane within project"
+    field :create_lane, :lane do
+      arg :project_id, non_null(:id)
+      arg :name, non_null(:string)
+      resolve &HippoWeb.Resolvers.Lane.create/2
+    end
+
+    @desc "create card within lane"
+    field :create_card, :card do
+      arg :lane_id, non_null(:id)
+      arg :content, non_null(:string)
+      resolve &HippoWeb.Resolvers.Card.create/2
+    end
   end
 
   import_types __MODULE__.Types.Project
