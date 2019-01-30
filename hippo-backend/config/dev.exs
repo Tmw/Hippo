@@ -47,8 +47,7 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :hippo, HippoWeb.Endpoint,
-  debug_errors: false
+config :hippo, HippoWeb.Endpoint, debug_errors: false
 
 # Configure your database
 config :hippo, Hippo.Repo,

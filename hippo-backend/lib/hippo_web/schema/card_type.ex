@@ -5,4 +5,8 @@ defmodule HippoWeb.Schema.Types.Card do
     field :id, :id
     field :content, :string
   end
+
+  input_object :card_input do
+    field :content, non_null(:string), description: "The content of the card"
+  end
 end

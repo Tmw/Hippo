@@ -43,6 +43,7 @@ defmodule Hippo.Cards do
   """
   def create_card(attrs \\ %{}, for_lane: lane_id) do
     attrs = attrs |> Map.put("lane_id", lane_id)
+
     %Card{}
     |> Card.changeset(attrs, :create)
     |> Repo.insert()

@@ -3,6 +3,7 @@ defmodule HippoWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
     plug Plug.Parsers,
       parsers: [:urlencoded, :multipart, :json],
       json_decoder: Jason

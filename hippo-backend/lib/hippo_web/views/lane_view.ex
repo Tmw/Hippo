@@ -1,5 +1,6 @@
 defmodule HippoWeb.LaneView do
   use HippoWeb, :view
+
   alias HippoWeb.{
     LaneView,
     CardView
@@ -26,7 +27,8 @@ defmodule HippoWeb.LaneView do
   end
 
   def render("lane-with-cards.json", %{lane: lane}) do
-    render("lane.json", %{lane: lane}) |> Map.merge(%{
+    render("lane.json", %{lane: lane})
+    |> Map.merge(%{
       cards: render_many(lane.cards, CardView, "show.json")
     })
   end

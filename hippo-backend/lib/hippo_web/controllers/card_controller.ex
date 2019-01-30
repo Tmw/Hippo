@@ -12,7 +12,7 @@ defmodule HippoWeb.CardController do
   end
 
   def create(conn, %{"card" => card_params, "lane_id" => lane_id}) do
-    with {:ok, %Card{} = card} <-Cards.create_card(card_params, for_lane: lane_id) do
+    with {:ok, %Card{} = card} <- Cards.create_card(card_params, for_lane: lane_id) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.card_path(conn, :show, card))

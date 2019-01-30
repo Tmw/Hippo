@@ -7,6 +7,5 @@ defmodule Hippo.Repo.Migrations.CreateProjects do
 
       timestamps()
     end
-
   end
 end

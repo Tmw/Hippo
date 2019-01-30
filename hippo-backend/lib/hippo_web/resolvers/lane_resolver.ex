@@ -9,8 +9,8 @@ defmodule HippoWeb.Resolvers.Lane do
   #   queryable
   # end
 
-  def create(%{name: name, project_id: project_id}, _) do
-    case Lanes.create_lane(%{"name" => name}, for_project: project_id) do
+  def create(%{lane: params, project_id: project_id}, _) do
+    case Lanes.create_lane(params, for_project: project_id) do
       {:ok, _} = result -> result
       {:error, changeset} -> {:error, "Something blew up"}
     end

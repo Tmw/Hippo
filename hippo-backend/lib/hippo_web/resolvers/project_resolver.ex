@@ -10,16 +10,16 @@ defmodule HippoWeb.Resolvers.Project do
   end
 
   @doc "Resolve by returning a single project by ID"
-  def resolve(%{id: id}, _) do
+  def find(%{id: id}, _) do
     {:ok, Projects.get_project!(id)}
   end
 
   @doc "Resolve by returning all projects"
-  def resolve(_, _) do
+  def find(_, _) do
     {:ok, Projects.list_projects()}
   end
 
-  def create(params, _) do
+  def create(%{project: params}, _) do
     case Projects.create_project(params) do
       {:ok, project} = result -> result
       {:error, _changeset} -> {:error, "Something blew up"}

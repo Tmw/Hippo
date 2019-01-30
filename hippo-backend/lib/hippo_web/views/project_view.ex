@@ -1,5 +1,6 @@
 defmodule HippoWeb.ProjectView do
   use HippoWeb, :view
+
   alias HippoWeb.{
     ProjectView,
     LaneView
