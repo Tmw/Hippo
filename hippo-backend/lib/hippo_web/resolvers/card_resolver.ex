@@ -12,7 +12,11 @@ defmodule HippoWeb.Resolvers.Card do
   def create(%{card: params, lane_id: lane_id}, _) do
     case Cards.create_card(params, for_lane: lane_id) do
       {:ok, _} = result -> result
-      {:error, changeset} -> {:error, "Something blew up"}
+      {:error, _} -> {:error, "Something blew up"}
     end
+  end
+
+  def update(%{card: params, card_id: card_id}, _) do
+    Cards.get_card!(card_id) |> Cards.update_card(params)
   end
 end
