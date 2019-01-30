@@ -15,4 +15,8 @@ defmodule HippoWeb.Resolvers.Lane do
       {:error, changeset} -> {:error, "Something blew up"}
     end
   end
+
+  def update(%{lane_id: lane_id, lane: params}, _) do
+    Lanes.get_lane!(lane_id) |> Lanes.update_lane(params)
+  end
 end

@@ -38,6 +38,13 @@ defmodule HippoWeb.Schema do
       resolve(&HippoWeb.Resolvers.Lane.create/2)
     end
 
+    @desc "update an existing lane"
+    field :update_lane, :lane do
+      arg(:lane_id, non_null(:id), description: "the lane to update")
+      arg(:lane, non_null(:lane_input))
+      resolve(&HippoWeb.Resolvers.Lane.update/2)
+    end
+
     @desc "create card within lane"
     field :create_card, :card do
       arg(:lane_id, non_null(:id), description: "the parent lane ID to create the card into")
@@ -45,6 +52,7 @@ defmodule HippoWeb.Schema do
       resolve(&HippoWeb.Resolvers.Card.create/2)
     end
 
+    @desc "update an existing card"
     field :update_card, :card do
       arg(:card_id, non_null(:id), description: "which card do we want to update")
       arg(:card, non_null(:card_input), description: "updated card parameters")
