@@ -9,8 +9,8 @@ defmodule HippoWeb.Resolvers.Card do
   #   queryable
   # end
 
-  def create(%{content: content, lane_id: lane_id}, _) do
-    case Cards.create_card(%{"content" => content}, for_lane: lane_id) do
+  def create(%{card: params, lane_id: lane_id}, _) do
+    case Cards.create_card(params, for_lane: lane_id) do
       {:ok, _} = result -> result
       {:error, changeset} -> {:error, "Something blew up"}
     end

@@ -41,7 +41,8 @@ defmodule HippoWeb.Schema do
     @desc "create card within lane"
     field :create_card, :card do
       arg(:lane_id, non_null(:id), description: "the parent lane ID to create the card into")
-      arg(:content, non_null(:card_input))
+
+      arg(:card, non_null(:card_input))
       resolve(&HippoWeb.Resolvers.Card.create/2)
     end
   end
