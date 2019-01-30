@@ -30,6 +30,13 @@ defmodule HippoWeb.Schema do
       resolve(&HippoWeb.Resolvers.Project.create/2)
     end
 
+    @desc "update an existing project"
+    field :update_project, :project do
+      arg(:project_id, non_null(:id))
+      arg(:project, non_null(:project_input))
+      resolve(&HippoWeb.Resolvers.Project.update/2)
+    end
+
     @desc "create lane within project"
     field :create_lane, :lane do
       arg(:project_id, non_null(:id), description: "the parent project ID to create the lane into")
