@@ -10,7 +10,11 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias Hippo.Projects.{Lane, Project, Card}
+alias Hippo.{
+  Lanes.Lane,
+  Projects.Project,
+  Cards.Card
+}
 alias Hippo.Repo
 
 require Ecto.Query
