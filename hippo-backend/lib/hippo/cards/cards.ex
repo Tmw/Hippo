@@ -1,6 +1,8 @@
 defmodule Hippo.Cards do
   alias Hippo.Cards.Card
   alias Hippo.Repo
+  import Ecto.Query
+
 
   @doc """
   Returns the list of cards.
@@ -81,6 +83,11 @@ defmodule Hippo.Cards do
   """
   def delete_card(%Card{} = card) do
     Repo.delete(card)
+  end
+
+  def delete_card_by_id(id) do
+    from(c in Card, where: c.id == ^id)
+    |> Repo.delete_all()
   end
 
   @doc """

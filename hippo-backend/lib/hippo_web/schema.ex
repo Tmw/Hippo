@@ -65,6 +65,18 @@ defmodule HippoWeb.Schema do
       arg(:card, non_null(:card_input), description: "updated card parameters")
       resolve(&HippoWeb.Resolvers.Card.update/2)
     end
+
+    @desc "delete a card by its ID"
+    field :delete_card, :delete_card_result do
+      arg(:card_id, non_null(:id), description: "the id of the card to delete")
+      resolve(&HippoWeb.Resolvers.Card.delete/2)
+    end
+
+    @desc "delete a lane by its ID"
+    field :delete_lane, :delete_lane_result do
+      arg(:lane_id, non_null(:id), description: "the id of the lane to delete")
+      resolve(&HippoWeb.Resolvers.Lane.delete/2)
+    end
   end
 
   import_types(__MODULE__.Types.Project)

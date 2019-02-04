@@ -4,6 +4,8 @@ defmodule Hippo.Lanes do
   alias Hippo.Cards.Card
   alias Hippo.Repo
 
+  import Ecto.Query
+
   @doc """
   Returns the list of lanes.
 
@@ -93,6 +95,13 @@ defmodule Hippo.Lanes do
   """
   def delete_lane(%Lane{} = lane) do
     Repo.delete(lane)
+  end
+
+  def delete_with_contents(lane_id) do
+    Ecto.Multi.new()
+    |> Ecto.Multi.delete_all(:cards, from(c in Card, where: c.lane_id == ^lane_id))
+    |> Ecto.Multi.delete_all(:lane, from(l in Lane, where: l.id == ^lane_id))
+    |> Repo.transaction()
   end
 
   @doc """

@@ -19,4 +19,11 @@ defmodule HippoWeb.Resolvers.Lane do
   def update(%{lane_id: lane_id, lane: params}, _) do
     Lanes.get_lane!(lane_id) |> Lanes.update_lane(params)
   end
+
+  def delete(%{lane_id: lane_id}, _ctx) do
+    case Lanes.delete_with_contents(lane_id) do
+      {:ok, _} -> {:ok, %{success: true, message: "lane and its card deleted"}}
+      {:error, _} -> {:ok, %{success: false, message: "lane and its cards not deleted"}}
+    end
+  end
 end
