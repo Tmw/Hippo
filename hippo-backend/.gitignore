@@ -37,3 +37,4 @@ hippo-*.tar
 
 # ignore postgres volumes mounted using docker-compose
 .postgres
+.elixir_ls
