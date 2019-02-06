@@ -29,4 +29,11 @@ defmodule HippoWeb.Resolvers.Project do
   def update(%{project_id: project_id, project: params}, _) do
     Projects.get_project!(project_id) |> Projects.update_project(params)
   end
+
+  def delete(%{project_id: project_id}, _ctx) do
+    case Projects.delete_with_contents(project_id) do
+      {:ok, _} -> {:ok, "Project and its contents deleted"}
+      {:error, _} -> {:error, "something blew up while deleting project and contents"}
+    end
+  end
 end

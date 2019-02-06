@@ -110,6 +110,39 @@ defmodule Hippo.Projects do
     Repo.delete(project)
   end
 
+  def lane_ids_for_project_id(project_id) do
+    from l in Lane,
+      where: l.project_id == ^project_id,
+      select: l.id
+  end
+
+  def card_ids_for_lane_ids(lane_ids) do
+    from c in Card,
+      where: c.lane_id in ^lane_ids,
+      select: c.id
+  end
+
+  def delete_with_contents(project_id) do
+    lane_ids = project_id
+    |> lane_ids_for_project_id
+    |> Repo.all
+
+    card_ids = lane_ids
+    |> card_ids_for_lane_ids()
+    |> Repo.all
+
+    # write one big multi that drops all the things.
+    Ecto.Multi.new()
+    |> Ecto.Multi.delete_all(:drop_cards, from(c in Card, where: c.id in ^card_ids))
+    |> Ecto.Multi.delete_all(:drop_lanes, from(l in Lane, where: l.id in ^lane_ids))
+    |> Ecto.Multi.delete_all(:drop_project, from(p in Project, where: p.id == ^project_id))
+    |> Repo.transaction()
+    |> case do
+       {:ok, _} -> {:ok, message: "Things are gone"}
+       {:error, _} = err -> err
+    end
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking project changes.
 

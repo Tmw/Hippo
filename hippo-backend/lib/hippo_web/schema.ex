@@ -77,6 +77,12 @@ defmodule HippoWeb.Schema do
       arg(:lane_id, non_null(:id), description: "the id of the lane to delete")
       resolve(&HippoWeb.Resolvers.Lane.delete/2)
     end
+
+    @desc "delete a project by its ID"
+    field :delete_project, :delete_project_result do
+      arg(:project_id, non_null(:id), description: "the id of the project to delete")
+      resolve(&HippoWeb.Resolvers.Project.delete/2)
+    end
   end
 
   import_types(__MODULE__.Types.Project)
