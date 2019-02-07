@@ -18,7 +18,6 @@ alias Hippo.{
 alias Hippo.Repo
 
 require Ecto.Query
-import Ecto.Query
 
 defmodule Truncater do
   def truncate(tables) when is_list(tables) do
