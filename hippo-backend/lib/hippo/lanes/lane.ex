@@ -6,6 +6,7 @@ defmodule Hippo.Lanes.Lane do
   @foreign_key_type :binary_id
   schema "lanes" do
     field :name, :string
+    field :description, :string
 
     belongs_to :project, Hippo.Projects.Project
     has_many :cards, Hippo.Cards.Card
@@ -23,7 +24,7 @@ defmodule Hippo.Lanes.Lane do
   @doc false
   def changeset(lane, attrs) do
     lane
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :description])
     |> validate_required([:name])
   end
 end
