@@ -15,6 +15,7 @@ alias Hippo.{
   Projects.Project,
   Cards.Card
 }
+
 alias Hippo.Repo
 
 require Ecto.Query
@@ -39,17 +40,34 @@ Truncater.truncate([:projects, :lanes, :cards])
 
 tree = %Project{
   name: "First Project",
+  description: "This is the first proejct in the list. It does Projecty things",
   lanes: [
     %Lane{
       name: "To-Do",
+      description: "This lane contains all cards that have the state To-Do",
       cards: [
-        %Card{content: "Move these"},
-        %Card{content: "Cards to the"},
-        %Card{content: "Done Lane"}
+        %Card{
+          content: "Move these",
+          description: "Some arbitrary description of the first card",
+        },
+        %Card{
+          content: "Cards to the",
+          description: "Some arbitrary description of the secon dcard",
+        },
+        %Card{
+          content: "Done Lane",
+          description: "Some arbitrary description of the third card",
+        }
       ]
     },
-    %Lane{name: "Doing"},
-    %Lane{name: "Done"}
+    %Lane{
+      name: "Doing",
+      description: "This lane contains all cards that have the state Doing"
+    },
+    %Lane{
+      name: "Done",
+      description: "This lane contains all cards that have the state Done"
+    }
   ]
 }
 
