@@ -9,20 +9,6 @@ defmodule HippoWeb.Router do
       json_decoder: Jason
   end
 
-  scope "/api", HippoWeb do
-    pipe_through :api
-
-    resources "/projects", ProjectController, except: [:new, :edit] do
-      resources "/lanes", LaneController, only: [:create]
-    end
-
-    resources "/lanes", LaneController, only: [:update, :delete, :show] do
-      resources "/cards", CardController, only: [:create]
-    end
-
-    resources "/cards", CardController, only: [:update, :delete, :show]
-  end
-
   scope "/" do
     pipe_through :api
 
