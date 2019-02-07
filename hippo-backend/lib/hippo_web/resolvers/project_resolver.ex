@@ -21,7 +21,7 @@ defmodule HippoWeb.Resolvers.Project do
 
   def create(%{project: params}, _) do
     case Projects.create_project(params) do
-      {:ok, _ } = result -> result
+      {:ok, _} = result -> result
       {:error, _changeset} -> {:error, "Something blew up"}
     end
   end

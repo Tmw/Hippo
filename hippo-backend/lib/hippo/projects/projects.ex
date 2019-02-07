@@ -123,13 +123,15 @@ defmodule Hippo.Projects do
   end
 
   def delete_with_contents(project_id) do
-    lane_ids = project_id
-    |> lane_ids_for_project_id
-    |> Repo.all
+    lane_ids =
+      project_id
+      |> lane_ids_for_project_id
+      |> Repo.all()
 
-    card_ids = lane_ids
-    |> card_ids_for_lane_ids()
-    |> Repo.all
+    card_ids =
+      lane_ids
+      |> card_ids_for_lane_ids()
+      |> Repo.all()
 
     # write one big multi that drops all the things.
     Ecto.Multi.new()
@@ -138,8 +140,8 @@ defmodule Hippo.Projects do
     |> Ecto.Multi.delete_all(:drop_project, from(p in Project, where: p.id == ^project_id))
     |> Repo.transaction()
     |> case do
-       {:ok, _} -> {:ok, message: "Things are gone"}
-       {:error, _} = err -> err
+      {:ok, _} -> {:ok, message: "Things are gone"}
+      {:error, _} = err -> err
     end
   end
 

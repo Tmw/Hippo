@@ -3,7 +3,6 @@ defmodule Hippo.Cards do
   alias Hippo.Repo
   import Ecto.Query
 
-
   @doc """
   Returns the list of cards.
 
