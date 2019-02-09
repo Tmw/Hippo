@@ -1,4 +1,4 @@
-defmodule HippoWeb.Schema.Types.Card do
+defmodule Hippo.GraphQL.Types.Card do
   use Absinthe.Schema.Notation
 
   object :card do

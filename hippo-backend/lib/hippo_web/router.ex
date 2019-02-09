@@ -13,11 +13,11 @@ defmodule HippoWeb.Router do
     pipe_through :api
 
     forward "/graphql", Absinthe.Plug,
-      schema: HippoWeb.Schema,
+      schema: Hippo.GraphQL.Schema,
       json_codec: Jason
 
     forward "/graphiql", Absinthe.Plug.GraphiQL,
-      schema: HippoWeb.Schema,
+      schema: Hippo.GraphQL.Schema,
       interface: :playground,
       json_codec: Jason
   end

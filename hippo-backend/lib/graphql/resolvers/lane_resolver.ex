@@ -1,4 +1,4 @@
-defmodule HippoWeb.Resolvers.Lane do
+defmodule Hippo.GraphQL.Resolvers.Lane do
   alias Hippo.Lanes
 
   # def data() do

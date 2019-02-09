@@ -1,4 +1,4 @@
-defmodule HippoWeb.Resolvers.Project do
+defmodule Hippo.GraphQL.Resolvers.Project do
   alias Hippo.Projects
 
   def data() do

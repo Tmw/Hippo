@@ -1,4 +1,4 @@
-defmodule HippoWeb.Schema.Types.Project do
+defmodule Hippo.GraphQL.Types.Project do
   use Absinthe.Schema.Notation
 
   object :project do

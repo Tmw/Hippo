@@ -1,4 +1,4 @@
-defmodule HippoWeb.Resolvers.Card do
+defmodule Hippo.GraphQL.Resolvers.Card do
   alias Hippo.Cards
 
   # def data() do

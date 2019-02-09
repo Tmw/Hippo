@@ -1,4 +1,4 @@
-defmodule HippoWeb.Schema.Types.Lane do
+defmodule Hippo.GraphQL.Types.Lane do
   use Absinthe.Schema.Notation
 
   object :lane do
