@@ -10,7 +10,9 @@ defmodule HippoWeb.Schema.Types.Lane do
 
   input_object :lane_input do
     field :title, non_null(:string), description: "The title of the lane. eg. `To-Do`"
-    field :description, :string, description: "Optional description of the lane. eg. 'Items that are to be done'"
+
+    field :description, :string,
+      description: "Optional description of the lane. eg. 'Items that are to be done'"
   end
 
   object :delete_lane_result do

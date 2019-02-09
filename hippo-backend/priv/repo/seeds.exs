@@ -48,15 +48,15 @@ tree = %Project{
       cards: [
         %Card{
           content: "Move these",
-          description: "Some arbitrary description of the first card",
+          description: "Some arbitrary description of the first card"
         },
         %Card{
           content: "Cards to the",
-          description: "Some arbitrary description of the secon dcard",
+          description: "Some arbitrary description of the secon dcard"
         },
         %Card{
           content: "Done Lane",
-          description: "Some arbitrary description of the third card",
+          description: "Some arbitrary description of the third card"
         }
       ]
     },
