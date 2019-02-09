@@ -4,7 +4,7 @@ defmodule Hippo.Repo.Migrations.CreateLanes do
   def change do
     create table(:lanes, primary_key: false) do
       add :id, :uuid, primary_key: true
-      add :name, :string
+      add :title, :string
       add :description, :string, size: 500
       add :project_id, references(:projects, on_delete: :nothing, type: :uuid)
 
