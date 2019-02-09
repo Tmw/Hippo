@@ -3,7 +3,7 @@ defmodule HippoWeb.Schema.Types.Project do
 
   object :project do
     field :id, :id
-    field :name, :string
+    field :title, :string
     field :description, :string
 
     # NOTE: I think at least this resolve step can be replaced with assoc?
@@ -11,7 +11,7 @@ defmodule HippoWeb.Schema.Types.Project do
   end
 
   input_object :project_input do
-    field :name, non_null(:string), description: "how shall we name your new project"
+    field :title, non_null(:string), description: "how shall we title your new project"
     field :description, :string, description: "Give your project an optional description"
   end
 

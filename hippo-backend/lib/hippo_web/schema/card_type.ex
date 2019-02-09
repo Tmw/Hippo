@@ -3,12 +3,12 @@ defmodule HippoWeb.Schema.Types.Card do
 
   object :card do
     field :id, :id
-    field :content, :string
+    field :title, :string
     field :description, :string
   end
 
   input_object :card_input do
-    field :content, non_null(:string), description: "The content of the card"
+    field :title, non_null(:string), description: "The title of the card"
     field :description, :string, description: "a more detailed description of the card"
   end
 
