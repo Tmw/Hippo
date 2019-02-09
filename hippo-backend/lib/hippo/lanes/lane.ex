@@ -5,7 +5,7 @@ defmodule Hippo.Lanes.Lane do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "lanes" do
-    field :name, :string
+    field :title, :string
     field :description, :string
 
     belongs_to :project, Hippo.Projects.Project
@@ -24,7 +24,7 @@ defmodule Hippo.Lanes.Lane do
   @doc false
   def changeset(lane, attrs) do
     lane
-    |> cast(attrs, [:name, :description])
-    |> validate_required([:name])
+    |> cast(attrs, [:title, :description])
+    |> validate_required([:title])
   end
 end

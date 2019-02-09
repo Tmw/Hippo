@@ -5,7 +5,7 @@ defmodule Hippo.Cards.Card do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "cards" do
-    field :content, :string
+    field :title, :string
     field :description, :string
 
     belongs_to :lane, Hippo.Lanes.Lane
@@ -23,7 +23,7 @@ defmodule Hippo.Cards.Card do
   @doc false
   def changeset(card, attrs) do
     card
-    |> cast(attrs, [:content, :description])
-    |> validate_required([:content])
+    |> cast(attrs, [:title, :description])
+    |> validate_required([:title])
   end
 end

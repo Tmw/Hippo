@@ -4,7 +4,7 @@ defmodule Hippo.Projects.Project do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "projects" do
-    field :name, :string
+    field :title, :string
     field :description, :string
 
     has_many :lanes, Hippo.Lanes.Lane
@@ -16,7 +16,7 @@ defmodule Hippo.Projects.Project do
   @doc false
   def changeset(project, attrs) do
     project
-    |> cast(attrs, [:name, :description])
-    |> validate_required([:name])
+    |> cast(attrs, [:title, :description])
+    |> validate_required([:title])
   end
 end
