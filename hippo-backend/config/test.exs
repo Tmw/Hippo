@@ -11,8 +11,8 @@ config :logger, level: :warn
 
 # Configure your database
 config :hippo, Hippo.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "hippo_test",
+  username: "hippo",
+  password: "hippo",
+  database: "hippo-test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
