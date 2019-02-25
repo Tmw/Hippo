@@ -33,6 +33,7 @@ defmodule Hippo.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:ex_machina, "~> 2.2", only: :test},
       {:phoenix, "~> 1.4.0"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},
