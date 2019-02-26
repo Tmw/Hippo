@@ -1,4 +1,4 @@
-defmodule Hippo.Grapql.ProjectMutationsTest do
+defmodule Hippo.Grapql.ProjectQueriesTest do
   use HippoWeb.ConnCase
   import Hippo.Test.Factory
 
