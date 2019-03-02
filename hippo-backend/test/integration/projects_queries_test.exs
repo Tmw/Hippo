@@ -1,5 +1,5 @@
 defmodule Hippo.Grapql.ProjectQueriesTest do
-  use HippoWeb.ConnCase
+  use HippoWeb.GraphqlCase
   import Hippo.Test.Factory
 
   setup %{conn: conn} do
@@ -8,20 +8,6 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
   end
 
   describe "ProjectQuery" do
-    defp skeleton(query, variables \\ %{}) do
-      %{
-        "operationName" => nil,
-        "query" => query,
-        "variables" => variables
-      }
-    end
-
-    defp gql(conn, query) do
-      conn
-      |> put_req_header("content-type", "application/json")
-      |> post("/graphql", query)
-    end
-
     @query """
       query Projects {
         projects {

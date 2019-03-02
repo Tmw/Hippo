@@ -1,5 +1,5 @@
 defmodule Hippo.Grapql.ProjectMutationsTest do
-  use HippoWeb.ConnCase
+  use HippoWeb.GraphqlCase
   import Hippo.Test.Factory
 
   alias Hippo.Repo
@@ -18,20 +18,6 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
   end
 
   describe "create_project_mutation" do
-    defp skeleton(query, variables \\ %{}) do
-      %{
-        "operationName" => nil,
-        "query" => query,
-        "variables" => variables
-      }
-    end
-
-    defp gql(conn, query) do
-      conn
-      |> put_req_header("content-type", "application/json")
-      |> post("/graphql", query)
-    end
-
     @query """
       mutation CreateProject($project: ProjectInput!) {
         project:createProject(project: $project) {
@@ -40,34 +26,93 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
       }
     """
 
-    test "create a project", %{conn: conn, project_params: project_params} do
-      params = %{"project" => project_params}
-      conn = conn |> gql(skeleton(@query, params))
+    test "creates a project if all is well", %{conn: conn, project_params: project_params} do
+      variables = %{"project" => project_params}
+      conn = conn |> gql(skeleton(@query, variables))
 
       response =
         json_response(conn, 200)
         |> Map.get("data")
         |> Map.get("project")
 
-      persisted_project = Repo.get(Project, response["id"])
+      expected =
+        Project
+        |> Repo.get(response["id"])
+        |> Map.take(~w(title description)a)
 
-      with persisted <- Map.from_struct(persisted_project),
-           %{title: title, description: description} <- persisted do
-        assert title == project_params[:title]
-        assert description == project_params[:description]
-      else
-        _ -> assert false
-      end
+      assert project_params == expected
+    end
+  end
+
+  describe "UpdateProject mutation" do
+    @query """
+    mutation UpdateProject($projectId: ID!, $params: ProjectInput!) {
+      project: updateProject(projectId: $projectId, project: $params) {
+        id
+        title
+        description
+      }
+    }
+    """
+
+    test "update a project", %{conn: conn, project: project, project_params: project_params} do
+      variables = %{
+        "projectId" => project.id,
+        "params" => project_params
+      }
+
+      conn = conn |> gql(skeleton(@query, variables))
+
+      response =
+        json_response(conn, 200)
+        |> Map.get("data")
+        |> Map.get("project")
+
+      expected =
+        Project
+        |> Repo.get(response["id"])
+        |> Map.take(~w(title description)a)
+
+      assert project_params == expected
+    end
+  end
+
+  describe "DeleteProject mutation" do
+    @query """
+    mutation DeleteProject($projectId: ID!) {
+      deleteProject(projectId: $projectId) {
+        success
+        message
+      }
+    }
+    """
+
+    test "responds with success message", %{conn: conn, project: project} do
+      variables = %{"projectId" => project.id}
+      conn = conn |> gql(skeleton(@query, variables))
+
+      response =
+        json_response(conn, 200)
+        |> Map.get("data")
+        |> Map.get("deleteProject")
+
+      assert response["success"]
+      assert response["message"] =~ ~r/project and its contents deleted/i
     end
 
     @tag :skip
-    test "update a project", %{conn: conn, project: project} do
-      # to be implemented
+    test "returns with 404 when project does not exist", %{conn: conn} do
+      variables = %{"projectId" => "non-existent"}
+      conn = conn |> gql(skeleton(@query, variables))
+
+      IO.inspect(conn, label: "ze connection!")
     end
 
-    @tag :skip
-    test "delete a project", %{conn: conn, project: project} do
-      # to be implemented
+    test "deletes from database", %{conn: conn, project: project} do
+      variables = %{"projectId" => project.id}
+      conn |> gql(skeleton(@query, variables))
+
+      refute Repo.get(Project, project.id)
     end
   end
 end
