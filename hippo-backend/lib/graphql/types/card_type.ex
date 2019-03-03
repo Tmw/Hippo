@@ -2,7 +2,7 @@ defmodule Hippo.GraphQL.Types.Card do
   use Absinthe.Schema.Notation
 
   object :card do
-    field :id, :id
+    field :id, :UUID
     field :title, :string
     field :description, :string
   end

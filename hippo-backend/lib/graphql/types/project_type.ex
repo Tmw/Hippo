@@ -2,7 +2,7 @@ defmodule Hippo.GraphQL.Types.Project do
   use Absinthe.Schema.Notation
 
   object :project do
-    field :id, :id
+    field :id, :UUID
     field :title, :string
     field :description, :string
 

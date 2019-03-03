@@ -46,7 +46,7 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
   describe "UpdateProject mutation" do
     @query """
-    mutation UpdateProject($projectId: ID!, $params: ProjectInput!) {
+    mutation UpdateProject($projectId: UUID!, $params: ProjectInput!) {
       project: updateProject(projectId: $projectId, project: $params) {
         id
         title
@@ -79,7 +79,7 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
   describe "DeleteProject mutation" do
     @query """
-    mutation DeleteProject($projectId: ID!) {
+    mutation DeleteProject($projectId: UUID!) {
       deleteProject(projectId: $projectId) {
         success
         message

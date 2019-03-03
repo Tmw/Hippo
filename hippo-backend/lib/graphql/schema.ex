@@ -4,6 +4,8 @@ defmodule Hippo.GraphQL.Schema do
 
   alias Hippo.GraphQL.Resolvers
 
+  import_types(Hippo.GraphQL.Types.UUID)
+
   def context(ctx) do
     loader =
       Dataloader.new()
@@ -20,7 +22,7 @@ defmodule Hippo.GraphQL.Schema do
   query do
     @desc "Query all projects known in the system"
     field :projects, list_of(:project) do
-      arg(:id, :id, description: "the projects ID")
+      arg(:id, :UUID, description: "the projects ID")
       resolve(&Resolvers.Project.find/2)
     end
   end
