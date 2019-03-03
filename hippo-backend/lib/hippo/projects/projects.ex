@@ -123,25 +123,33 @@ defmodule Hippo.Projects do
   end
 
   def delete_with_contents(project_id) do
-    lane_ids =
-      project_id
-      |> lane_ids_for_project_id
-      |> Repo.all()
+    project = Project |> Repo.get(project_id)
 
-    card_ids =
-      lane_ids
-      |> card_ids_for_lane_ids()
-      |> Repo.all()
+    case project do
+      nil ->
+        {:error, message: "project not found"}
 
-    # write one big multi that drops all the things.
-    Ecto.Multi.new()
-    |> Ecto.Multi.delete_all(:drop_cards, from(c in Card, where: c.id in ^card_ids))
-    |> Ecto.Multi.delete_all(:drop_lanes, from(l in Lane, where: l.id in ^lane_ids))
-    |> Ecto.Multi.delete_all(:drop_project, from(p in Project, where: p.id == ^project_id))
-    |> Repo.transaction()
-    |> case do
-      {:ok, _} -> {:ok, message: "Things are gone"}
-      {:error, _} = err -> err
+      project ->
+        lane_ids =
+          project.id
+          |> lane_ids_for_project_id()
+          |> Repo.all()
+
+        card_ids =
+          lane_ids
+          |> card_ids_for_lane_ids()
+          |> Repo.all()
+
+        # write one big multi that drops all the things.
+        Ecto.Multi.new()
+        |> Ecto.Multi.delete_all(:drop_cards, from(c in Card, where: c.id in ^card_ids))
+        |> Ecto.Multi.delete_all(:drop_lanes, from(l in Lane, where: l.id in ^lane_ids))
+        |> Ecto.Multi.delete_all(:drop_project, from(p in Project, where: p.id == ^project_id))
+        |> Repo.transaction()
+        |> case do
+          {:ok, _} -> {:ok, message: "Projects and contents deleted"}
+          {:error, _} = err -> err
+        end
     end
   end
 

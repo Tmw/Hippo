@@ -100,12 +100,16 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
       assert response["message"] =~ ~r/project and its contents deleted/i
     end
 
-    @tag :skip
-    test "returns with 404 when project does not exist", %{conn: conn} do
-      variables = %{"projectId" => "non-existent"}
+    test "returns not found when invalid id", %{conn: conn, project: project} do
+      variables = %{"projectId" => Ecto.UUID.generate()}
       conn = conn |> gql(skeleton(@query, variables))
 
-      IO.inspect(conn, label: "ze connection!")
+      errors =
+        json_response(conn, 200)
+        |> Map.get("errors")
+        |> Enum.at(0)
+
+      assert errors["message"] =~ "project not found"
     end
 
     test "deletes from database", %{conn: conn, project: project} do
