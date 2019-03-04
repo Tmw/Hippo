@@ -8,11 +8,20 @@ defmodule Hippo.GraphQL.Types.Lane do
     field :cards, list_of(:card), resolve: Absinthe.Resolution.Helpers.dataloader(:cards)
   end
 
-  input_object :lane_input do
-    field :title, non_null(:string), description: "The title of the lane. eg. `To-Do`"
+  input_object :lane_create_params do
+    @desc "title of the lane. Eg. `to-do`"
+    field :title, non_null(:string)
 
-    field :description, :string,
-      description: "Optional description of the lane. eg. 'Items that are to be done'"
+    @desc "description of the lane. eg 'items to be done'"
+    field :description, :string
+  end
+
+  input_object :lane_update_params do
+    @desc "updated title of the lane"
+    field :title, :string
+
+    @desc "updated description of the lane"
+    field :description, :string
   end
 
   object :delete_lane_result do
