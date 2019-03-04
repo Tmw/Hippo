@@ -5,14 +5,14 @@ defmodule Hippo.GraphQL.Mutations.Project do
   object :project_mutations do
     @desc "create a new project"
     field :create_project, :project do
-      arg(:project, non_null(:project_input))
+      arg(:project, non_null(:project_create_params))
       resolve(&Resolvers.Project.create/2)
     end
 
     @desc "update an existing project"
     field :update_project, :project do
       arg(:project_id, non_null(:UUID))
-      arg(:project, non_null(:project_input))
+      arg(:project, non_null(:project_update_params))
       resolve(&Resolvers.Project.update/2)
     end
 

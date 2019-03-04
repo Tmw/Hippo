@@ -7,26 +7,25 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
   setup %{conn: conn} do
     project = insert(:project)
-    project_params = params_for(:project)
 
     {:ok,
      %{
        conn: conn,
-       project: project,
-       project_params: project_params
+       project: project
      }}
   end
 
   describe "create_project_mutation" do
     @query """
-      mutation CreateProject($project: ProjectInput!) {
+      mutation CreateProject($project: ProjectCreateParams!) {
         project:createProject(project: $project) {
           id
         }
       }
     """
 
-    test "creates a project if all is well", %{conn: conn, project_params: project_params} do
+    test "creates a project if params are OK", %{conn: conn} do
+      project_params = params_for(:project)
       variables = %{"project" => project_params}
       conn = conn |> gql(skeleton(@query, variables))
 
@@ -42,11 +41,24 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
       assert project_params == expected
     end
+
+    test "responds with error if params are not OK", %{conn: conn} do
+      project_params = %{"description" => "title is required too"}
+      variables = %{"project" => project_params}
+      conn = conn |> gql(skeleton(@query, variables))
+
+      error =
+        json_response(conn, 200)
+        |> Map.get("errors")
+        |> Enum.at(0)
+
+      assert error["message"] =~ ~r/"project" has invalid value/
+    end
   end
 
   describe "UpdateProject mutation" do
     @query """
-    mutation UpdateProject($projectId: UUID!, $params: ProjectInput!) {
+    mutation UpdateProject($projectId: UUID!, $params: ProjectUpdateParams!) {
       project: updateProject(projectId: $projectId, project: $params) {
         id
         title
@@ -55,7 +67,9 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
     }
     """
 
-    test "update a project", %{conn: conn, project: project, project_params: project_params} do
+    test "updates successfully when params are OK", %{conn: conn, project: project} do
+      project_params = params_for(:project)
+
       variables = %{
         "projectId" => project.id,
         "params" => project_params
@@ -75,6 +89,44 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
       assert project_params == expected
     end
+
+    test "updates when only one param is present", %{conn: conn, project: project} do
+      variables = %{
+        "projectId" => project.id,
+        "params" => %{
+          "description" => "some new description"
+        }
+      }
+
+      conn = conn |> gql(skeleton(@query, variables))
+
+      errors =
+        json_response(conn, 200)
+        |> Map.get("errors")
+
+      assert is_nil(errors)
+
+      updated_project = Repo.get(Project, project.id)
+      assert updated_project.description == "some new description"
+    end
+
+    test "fails when project_id is invalid", %{conn: conn} do
+      variables = %{
+        "projectId" => Ecto.UUID.generate(),
+        "params" => %{
+          "title" => "lol, nope!"
+        }
+      }
+
+      conn = conn |> gql(skeleton(@query, variables))
+
+      error =
+        json_response(conn, 200)
+        |> Map.get("errors")
+        |> Enum.at(0)
+
+      assert error["message"] == "project not found"
+    end
   end
 
   describe "DeleteProject mutation" do
@@ -87,7 +139,7 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
     }
     """
 
-    test "responds with success message", %{conn: conn, project: project} do
+    test "delets from database", %{conn: conn, project: project} do
       variables = %{"projectId" => project.id}
       conn = conn |> gql(skeleton(@query, variables))
 
@@ -98,9 +150,11 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
       assert response["success"]
       assert response["message"] =~ ~r/project and its contents deleted/i
+
+      assert Repo.get(Project, project.id) == nil
     end
 
-    test "returns not found when invalid id", %{conn: conn, project: project} do
+    test "returns not found when invalid id", %{conn: conn} do
       variables = %{"projectId" => Ecto.UUID.generate()}
       conn = conn |> gql(skeleton(@query, variables))
 
@@ -110,13 +164,6 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
         |> Enum.at(0)
 
       assert errors["message"] =~ "project not found"
-    end
-
-    test "deletes from database", %{conn: conn, project: project} do
-      variables = %{"projectId" => project.id}
-      conn |> gql(skeleton(@query, variables))
-
-      refute Repo.get(Project, project.id)
     end
   end
 end

@@ -21,6 +21,8 @@ defmodule Hippo.Projects do
   """
   def list_projects, do: Repo.all(Project)
 
+  def get_project(id), do: Repo.get(Project, id)
+
   @doc """
   Gets a single project.
 

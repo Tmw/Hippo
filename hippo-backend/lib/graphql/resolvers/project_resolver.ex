@@ -27,7 +27,10 @@ defmodule Hippo.GraphQL.Resolvers.Project do
   end
 
   def update(%{project_id: project_id, project: params}, _) do
-    Projects.get_project!(project_id) |> Projects.update_project(params)
+    case Projects.get_project(project_id) do
+      nil -> {:error, "project not found"}
+      project -> project |> Projects.update_project(params)
+    end
   end
 
   def delete(%{project_id: project_id}, _ctx) do
