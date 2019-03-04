@@ -33,7 +33,7 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
         json_response(conn, 200)
         |> Map.get("data")
         |> Map.get("projects")
-        |> hd()
+        |> Enum.at(0)
 
       assert project_response["id"] == project.id
       assert project_response["title"] == project.title
@@ -58,9 +58,7 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
       }
     }
     """
-    test "query specified project", %{conn: conn, projects: projects} do
-      project = projects |> Enum.at(1)
-
+    test "query specified project", %{conn: conn, projects: [project | _]} do
       conn = conn |> gql(skeleton(@query, %{"id" => project.id}))
 
       project_response =

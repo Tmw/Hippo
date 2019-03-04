@@ -4,7 +4,7 @@ defmodule Hippo.GraphQL.Resolvers.Card do
   def create(%{card: params, lane_id: lane_id}, _) do
     case Cards.create_card(params, for_lane: lane_id) do
       {:ok, _} = result -> result
-      {:error, _} -> {:error, "Something blew up"}
+      {:error, error} -> {:error, error}
     end
   end
 
