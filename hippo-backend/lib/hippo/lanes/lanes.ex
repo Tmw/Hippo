@@ -1,5 +1,6 @@
 defmodule Hippo.Lanes do
   import Ecto.Query, warn: false
+  alias Hippo.Projects.Project
   alias Hippo.Lanes.Lane
   alias Hippo.Cards.Card
   alias Hippo.Repo
@@ -56,11 +57,15 @@ defmodule Hippo.Lanes do
 
   """
   def create_lane(attrs \\ %{}, for_project: project_id) do
-    attrs = attrs |> Map.put(:project_id, project_id)
+    case Repo.get(Project, project_id) do
+      nil ->
+        {:error, "project not found"}
 
-    %Lane{}
-    |> Lane.changeset(attrs, :create)
-    |> Repo.insert()
+      project ->
+        project
+        |> Ecto.build_assoc(:lanes, attrs)
+        |> Repo.insert()
+    end
   end
 
   @doc """
