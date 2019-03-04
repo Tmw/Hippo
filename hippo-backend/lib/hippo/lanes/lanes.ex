@@ -18,6 +18,8 @@ defmodule Hippo.Lanes do
   """
   def list_lanes, do: Repo.all(Lane)
 
+  def get_lane(id), do: Repo.get(Lane, id)
+
   @doc """
   Gets a single lane.
 
@@ -103,10 +105,16 @@ defmodule Hippo.Lanes do
   end
 
   def delete_with_contents(lane_id) do
-    Ecto.Multi.new()
-    |> Ecto.Multi.delete_all(:cards, from(c in Card, where: c.lane_id == ^lane_id))
-    |> Ecto.Multi.delete_all(:lane, from(l in Lane, where: l.id == ^lane_id))
-    |> Repo.transaction()
+    case Repo.get(Lane, lane_id) do
+      nil ->
+        {:error, "lane not found"}
+
+      lane ->
+        Ecto.Multi.new()
+        |> Ecto.Multi.delete_all(:cards, from(c in Card, where: c.lane_id == ^lane.id))
+        |> Ecto.Multi.delete(:lane, lane)
+        |> Repo.transaction()
+    end
   end
 
   @doc """
