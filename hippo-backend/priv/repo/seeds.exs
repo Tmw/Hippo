@@ -39,33 +39,33 @@ end
 Truncater.truncate([:projects, :lanes, :cards])
 
 tree = %Project{
-  name: "First Project",
+  title: "First Project",
   description: "This is the first proejct in the list. It does Projecty things",
   lanes: [
     %Lane{
-      name: "To-Do",
+      title: "To-Do",
       description: "This lane contains all cards that have the state To-Do",
       cards: [
         %Card{
-          content: "Move these",
+          title: "Move these",
           description: "Some arbitrary description of the first card"
         },
         %Card{
-          content: "Cards to the",
+          title: "Cards to the",
           description: "Some arbitrary description of the secon dcard"
         },
         %Card{
-          content: "Done Lane",
+          title: "Done Lane",
           description: "Some arbitrary description of the third card"
         }
       ]
     },
     %Lane{
-      name: "Doing",
+      title: "Doing",
       description: "This lane contains all cards that have the state Doing"
     },
     %Lane{
-      name: "Done",
+      title: "Done",
       description: "This lane contains all cards that have the state Done"
     }
   ]
