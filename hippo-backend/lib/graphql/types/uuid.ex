@@ -1,18 +1,11 @@
-defmodule Hippo.GraphQL.Types.UUID do
+defmodule Hippo.GraphQL.Types.Identifier do
   @moduledoc """
-  The UUID4 scalar type allows UUID4 compliant strings to be passed in and out.
-  Requires `{ :ecto, ">= 0.0.0" }` package: https://github.com/elixir-ecto/ecto
+  ULID is a sortable equivalent of UUID.
   """
   use Absinthe.Schema.Notation
 
-  alias Ecto.UUID
-
-  scalar :UUID, name: "UUID" do
-    description("""
-    The `UUID4` scalar type represents UUID4 compliant string data, represented as UTF-8
-    character sequences. The UUID4 type is most often used to represent unique
-    human-readable ID strings.
-    """)
+  scalar :identifier, name: "identifier" do
+    description("identifier is represented by an ULID compliant string data.")
 
     serialize(&encode/1)
     parse(&decode/1)
@@ -21,7 +14,7 @@ defmodule Hippo.GraphQL.Types.UUID do
   @spec decode(Absinthe.Blueprint.Input.String.t()) :: {:ok, term()} | :error
   @spec decode(Absinthe.Blueprint.Input.Null.t()) :: {:ok, nil}
   defp decode(%Absinthe.Blueprint.Input.String{value: value}) do
-    UUID.cast(value)
+    Ecto.ULID.cast(value)
   end
 
   defp decode(%Absinthe.Blueprint.Input.Null{}) do

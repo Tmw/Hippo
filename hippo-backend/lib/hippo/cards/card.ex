@@ -2,8 +2,8 @@ defmodule Hippo.Cards.Card do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
+  @primary_key {:id, Ecto.ULID, autogenerate: true}
+  @foreign_key_type Ecto.ULID
   schema "cards" do
     field :title, :string
     field :description, :string

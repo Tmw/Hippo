@@ -2,7 +2,7 @@ defmodule Hippo.Projects.Project do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
+  @primary_key {:id, Ecto.ULID, autogenerate: true}
   schema "projects" do
     field :title, :string
     field :description, :string

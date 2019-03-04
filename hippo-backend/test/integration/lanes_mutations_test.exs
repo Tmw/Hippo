@@ -19,7 +19,7 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
   describe "create_lane_mutation" do
     @query """
-      mutation CreateLane($projectId: UUID!, $lane: LaneCreateParams!) {
+      mutation CreateLane($projectId: identifier!, $lane: LaneCreateParams!) {
         createLane(projectId: $projectId, lane: $lane) {
           id
           title
@@ -67,7 +67,7 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
     test "responds with error if project is not found", %{conn: conn} do
       variables = %{
-        "projectId" => Ecto.UUID.generate(),
+        "projectId" => Ecto.ULID.generate(),
         "lane" => params_for(:lane)
       }
 
@@ -84,7 +84,7 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
   describe "update_lane_mutation" do
     @query """
-      mutation UpdateLane($laneId: UUID!, $lane: LaneUpdateParams!){
+      mutation UpdateLane($laneId: identifier!, $lane: LaneUpdateParams!){
         updateLane(laneId: $laneId, lane: $lane) {
           id
           title
@@ -137,7 +137,7 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
     test "errors when lane_id is invalid", %{conn: conn} do
       variables = %{
-        "laneId" => Ecto.UUID.generate(),
+        "laneId" => Ecto.ULID.generate(),
         "lane" => params_for(:lane)
       }
 
@@ -154,7 +154,7 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
   describe "delete_lane_mutation" do
     @query """
-      mutation DeleteLane($laneId: UUID!) {
+      mutation DeleteLane($laneId: identifier!) {
         deleteLane(laneId: $laneId) {
           success
           message
@@ -176,7 +176,7 @@ defmodule Hippo.Grapql.LanesMutationsTest do
     end
 
     test "errors when lane_id is invalid", %{conn: conn} do
-      variables = %{"laneId" => Ecto.UUID.generate()}
+      variables = %{"laneId" => Ecto.ULID.generate()}
       conn = conn |> gql(skeleton(@query, variables))
 
       error =

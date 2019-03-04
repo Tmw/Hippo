@@ -58,7 +58,7 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
   describe "UpdateProject mutation" do
     @query """
-    mutation UpdateProject($projectId: UUID!, $params: ProjectUpdateParams!) {
+    mutation UpdateProject($projectId: identifier!, $params: ProjectUpdateParams!) {
       project: updateProject(projectId: $projectId, project: $params) {
         id
         title
@@ -112,7 +112,7 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
     test "fails when project_id is invalid", %{conn: conn} do
       variables = %{
-        "projectId" => Ecto.UUID.generate(),
+        "projectId" => Ecto.ULID.generate(),
         "params" => %{
           "title" => "lol, nope!"
         }
@@ -131,7 +131,7 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
   describe "DeleteProject mutation" do
     @query """
-    mutation DeleteProject($projectId: UUID!) {
+    mutation DeleteProject($projectId: identifier!) {
       deleteProject(projectId: $projectId) {
         success
         message
@@ -155,7 +155,7 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
     end
 
     test "returns not found when invalid id", %{conn: conn} do
-      variables = %{"projectId" => Ecto.UUID.generate()}
+      variables = %{"projectId" => Ecto.ULID.generate()}
       conn = conn |> gql(skeleton(@query, variables))
 
       errors =

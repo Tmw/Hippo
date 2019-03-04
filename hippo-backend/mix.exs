@@ -38,6 +38,7 @@ defmodule Hippo.MixProject do
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.0"},
+      {:ecto_ulid, "~> 0.2.0"},
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},

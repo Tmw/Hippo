@@ -2,7 +2,7 @@ defmodule Hippo.GraphQL.Types.Lane do
   use Absinthe.Schema.Notation
 
   object :lane do
-    field :id, :UUID
+    field :id, :identifier
     field :title, :string
     field :description, :string
     field :cards, list_of(:card), resolve: Absinthe.Resolution.Helpers.dataloader(:cards)

@@ -5,7 +5,7 @@ defmodule Hippo.GraphQL.Mutations.Lane do
   object :lane_mutations do
     @desc "create lane within project"
     field :create_lane, :lane do
-      arg(:project_id, non_null(:UUID),
+      arg(:project_id, non_null(:identifier),
         description: "the parent project ID to create the lane into"
       )
 
@@ -15,14 +15,14 @@ defmodule Hippo.GraphQL.Mutations.Lane do
 
     @desc "update an existing lane"
     field :update_lane, :lane do
-      arg(:lane_id, non_null(:UUID), description: "the lane to update")
+      arg(:lane_id, non_null(:identifier), description: "the lane to update")
       arg(:lane, non_null(:lane_update_params))
       resolve(&Resolvers.Lane.update/2)
     end
 
     @desc "delete a lane by its ID"
     field :delete_lane, :delete_lane_result do
-      arg(:lane_id, non_null(:UUID), description: "the id of the lane to delete")
+      arg(:lane_id, non_null(:identifier), description: "the id of the lane to delete")
       resolve(&Resolvers.Lane.delete/2)
     end
   end
