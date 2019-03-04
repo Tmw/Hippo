@@ -14,13 +14,6 @@ defmodule Hippo.Lanes.Lane do
     timestamps()
   end
 
-  def changeset(lane, attrs, :create) do
-    changeset(lane, attrs)
-    |> cast(attrs, [:project_id])
-    |> validate_required([:project_id])
-    |> foreign_key_constraint(:project_id)
-  end
-
   @doc false
   def changeset(lane, attrs) do
     lane
