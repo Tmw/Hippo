@@ -9,7 +9,10 @@ defmodule Hippo.GraphQL.Resolvers.Card do
   end
 
   def update(%{card: params, card_id: card_id}, _) do
-    Cards.get_card!(card_id) |> Cards.update_card(params)
+    case Cards.get_card(card_id) do
+      nil -> {:error, "card not found"}
+      card -> card |> Cards.update_card(params)
+    end
   end
 
   def delete(%{card_id: card_id}, _ctx) do

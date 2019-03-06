@@ -81,4 +81,82 @@ defmodule Hippo.Grapql.CardsMutationsTest do
       assert error["message"] =~ "lane not found"
     end
   end
+
+  describe "update_card_mutation" do
+    @query """
+      mutation UpdateCard($cardId: identifier!, $card: CardUpdateParams!){
+        updateCard(cardId: $cardId, card: $card) {
+          id
+          title
+          description
+        }
+      }
+    """
+
+    test "updates the card when paramms are OK", %{conn: conn, card: card} do
+      card_params = params_for(:card)
+
+      variables = %{
+        "cardId" => card.id,
+        "card" => card_params
+      }
+
+      conn = conn |> gql(skeleton(@query, variables))
+
+      response =
+        json_response(conn, 200)
+        |> Map.get("data")
+        |> Map.get("updateCard")
+
+      persisted =
+        Repo.get(Card, response["id"])
+        |> Map.take(~w(title description)a)
+
+      assert persisted == card_params
+    end
+
+    test "updates the card with only one param present", %{conn: conn, card: card} do
+      variables = %{
+        "cardId" => card.id,
+        "card" => %{
+          "description" => "updated description"
+        }
+      }
+
+      conn = conn |> gql(skeleton(@query, variables))
+
+      response =
+        json_response(conn, 200)
+        |> Map.get("data")
+        |> Map.get("updateCard")
+
+      persisted =
+        Repo.get(Card, response["id"])
+        |> Map.take(~w(title description)a)
+
+      assert %{
+               title: card.title,
+               description: "updated description"
+             } == persisted
+    end
+
+    test "returns error when card ID is invalid", %{conn: conn} do
+      variables = %{
+        "cardId" => Ecto.ULID.generate(),
+        "card" => %{
+          "description" => "updated description"
+        }
+      }
+
+      conn = conn |> gql(skeleton(@query, variables))
+
+      error =
+        json_response(conn, 200)
+        |> Map.get("errors")
+        |> Enum.at(0)
+        |> Map.get("message")
+
+      assert error =~ "card not found"
+    end
+  end
 end

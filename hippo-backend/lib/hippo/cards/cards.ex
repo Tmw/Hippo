@@ -15,6 +15,7 @@ defmodule Hippo.Cards do
 
   """
   def list_cards, do: Repo.all(Card)
+  def get_card(id), do: Repo.get(Card, id)
 
   @doc """
   Gets a single card.
