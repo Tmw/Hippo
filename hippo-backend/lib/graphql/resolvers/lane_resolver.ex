@@ -15,8 +15,6 @@ defmodule Hippo.GraphQL.Resolvers.Lane do
     end
   end
 
-  @spec delete(%{lane_id: any()}, any()) ::
-          {:ok, %{message: <<_::200, _::_*40>>, success: boolean()}}
   def delete(%{lane_id: lane_id}, _ctx) do
     case Lanes.delete_with_contents(lane_id) do
       {:ok, _} -> {:ok, %{success: true, message: "lane and its card deleted"}}
