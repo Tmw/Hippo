@@ -92,8 +92,10 @@ defmodule Hippo.Cards do
   end
 
   def delete_card_by_id(id) do
-    from(c in Card, where: c.id == ^id)
-    |> Repo.delete_all()
+    case Repo.get(Card, id) do
+      nil -> {:error, "card not found"}
+      card -> Repo.delete(card)
+    end
   end
 
   @doc """

@@ -159,4 +159,40 @@ defmodule Hippo.Grapql.CardsMutationsTest do
       assert error =~ "card not found"
     end
   end
+
+  describe "delete_card_mutation" do
+    @query """
+      mutation DeleteCard($cardId: identifier!) {
+        deleteCard(cardId: $cardId) {
+          success
+          message
+        }
+      }
+    """
+
+    test "deletes the card", %{conn: conn, card: card} do
+      variables = %{"cardId" => card.id}
+      conn = conn |> gql(skeleton(@query, variables))
+
+      response =
+        json_response(conn, 200)
+        |> Map.get("data")
+        |> Map.get("deleteCard")
+
+      assert response["success"] == true
+      assert Repo.get(Card, card.id) == nil
+    end
+
+    test "errors when card_id is invalid", %{conn: conn} do
+      variables = %{"cardId" => Ecto.ULID.generate()}
+      conn = conn |> gql(skeleton(@query, variables))
+
+      error =
+        json_response(conn, 200)
+        |> Map.get("errors")
+        |> Enum.at(0)
+
+      assert error["message"] =~ "card not found"
+    end
+  end
 end

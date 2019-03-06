@@ -17,8 +17,8 @@ defmodule Hippo.GraphQL.Resolvers.Card do
 
   def delete(%{card_id: card_id}, _ctx) do
     case Cards.delete_card_by_id(card_id) do
-      {0, _} -> {:ok, %{success: false, message: "no cards deleted"}}
-      _ -> {:ok, %{success: true, message: "card deleted"}}
+      {:ok, _} -> {:ok, %{success: true, message: "card deleted"}}
+      {:error, error} -> {:error, message: error}
     end
   end
 end
