@@ -4,16 +4,20 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
   alias Hippo.Repo
   alias Hippo.Lanes.Lane
+  import Ecto.Query
 
   setup %{conn: conn} do
     project = insert(:project)
     lane = insert(:lane, project: project)
 
+    lanes = insert_list(3, :lane, project: project)
+
     {:ok,
      %{
        conn: conn,
        project: project,
-       lane: lane
+       lane: lane,
+       lanes: lanes
      }}
   end
 
@@ -185,6 +189,51 @@ defmodule Hippo.Grapql.LanesMutationsTest do
         |> Enum.at(0)
 
       assert error["message"] =~ "lane not found"
+    end
+  end
+
+  describe "reposition_lane_mutation" do
+    @query """
+      mutation RepositionLane($laneId: identifier!, $position: Int!) {
+        repositionLane(laneId: $laneId, position: $position) {
+          id
+        }
+      }
+    """
+
+    test "repositions the lane", %{conn: conn, lanes: lanes} do
+      [first, second, third] = lanes
+
+      variables = %{laneId: second.id, position: 3}
+      conn |> gql(skeleton(@query, variables))
+      ids = lanes |> Enum.map(&Map.get(&1, :id))
+
+      expected =
+        [first, third, second]
+        |> Enum.map(&Map.get(&1, :id))
+
+      actual =
+        from(l in Lane,
+          where: l.id in ^ids,
+          order_by: [:rank],
+          select: [:id]
+        )
+        |> Repo.all()
+        |> Enum.map(&Map.get(&1, :id))
+
+      assert actual == expected
+    end
+
+    test "errors when lane is not found", %{conn: conn} do
+      variables = %{laneId: Ecto.ULID.generate(), position: 3}
+      conn = conn |> gql(skeleton(@query, variables))
+
+      errors =
+        json_response(conn, 200)
+        |> Map.get("errors")
+        |> Enum.at(0)
+
+      assert errors["message"] =~ "lane not found"
     end
   end
 end
