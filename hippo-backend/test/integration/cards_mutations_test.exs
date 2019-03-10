@@ -5,16 +5,34 @@ defmodule Hippo.Grapql.CardsMutationsTest do
   alias Hippo.Repo
   alias Hippo.Cards.Card
 
+  import Ecto.Query
+
   setup %{conn: conn} do
     project = insert(:project)
-    lane = insert(:lane, project: project)
-    card = insert(:card, lane: lane)
+    lanes = insert_list(2, :lane, project: project)
+
+    lanes =
+      lanes
+      |> Enum.map(fn lane ->
+        Map.put(lane, :cards, [
+          insert(:card, lane: lane, rank: 0),
+          insert(:card, lane: lane, rank: 1),
+          insert(:card, lane: lane, rank: 2)
+        ])
+      end)
+
+    cards =
+      lanes
+      |> Enum.at(0)
+      |> Map.get(:cards)
 
     {:ok,
      %{
        conn: conn,
-       lane: lane,
-       card: card
+       lane: Enum.at(lanes, 0),
+       lanes: lanes,
+       card: Enum.at(cards, 0),
+       cards: cards
      }}
   end
 
@@ -193,6 +211,86 @@ defmodule Hippo.Grapql.CardsMutationsTest do
         |> Enum.at(0)
 
       assert error["message"] =~ "card not found"
+    end
+  end
+
+  describe "reposition_card_mutation" do
+    @query """
+      mutation RepositionCard($cardId: identifier!, $laneId: identifier!, $position: Int!) {
+        repositionCard(cardId: $cardId, laneId: $laneId, position: $position) {
+          id
+        }
+      }
+    """
+
+    test "repositions the card within the same lane", %{conn: conn, cards: cards, lane: lane} do
+      [first, second, third] = cards
+      variables = %{cardId: second.id, laneId: lane.id, position: 3}
+      conn |> gql(skeleton(@query, variables))
+
+      actual =
+        from(c in Card,
+          where: c.lane_id == ^lane.id,
+          order_by: [:rank],
+          select: [:id]
+        )
+        |> Repo.all()
+        |> Enum.map(&Map.get(&1, :id))
+
+      expected =
+        [first, third, second]
+        |> Enum.map(&Map.get(&1, :id))
+
+      assert actual == expected
+    end
+
+    test "move the card to another lane", %{conn: conn, lanes: [source_lane, target_lane]} do
+      card = source_lane.cards |> Enum.at(0)
+
+      # move the first card of the first lane to the third position in the last lane
+      variables = %{cardId: card.id, laneId: target_lane.id, position: 3}
+      conn |> gql(skeleton(@query, variables))
+
+      # grab results from database, see what happened
+      expected =
+        target_lane.cards
+        |> Enum.map(&Map.get(&1, :id))
+        |> Kernel.++([card.id])
+
+      actual =
+        from(c in Card,
+          where: c.lane_id == ^target_lane.id,
+          order_by: [:rank],
+          select: [:id]
+        )
+        |> Repo.all()
+        |> Enum.map(&Map.get(&1, :id))
+
+      assert actual == expected
+    end
+
+    test "errors when card is not found", %{conn: conn, lane: lane} do
+      variables = %{cardId: Ecto.ULID.generate(), laneId: lane.id, position: 3}
+      conn = conn |> gql(skeleton(@query, variables))
+
+      error =
+        json_response(conn, 200)
+        |> Map.get("errors")
+        |> Enum.at(0)
+
+      assert error["message"] =~ "card not found"
+    end
+
+    test "errors when lane is not found", %{conn: conn, card: card} do
+      variables = %{cardId: card.id, laneId: Ecto.ULID.generate(), position: 3}
+      conn = conn |> gql(skeleton(@query, variables))
+
+      error =
+        json_response(conn, 200)
+        |> Map.get("errors")
+        |> Enum.at(0)
+
+      assert error["message"] =~ "lane not found"
     end
   end
 end

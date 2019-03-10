@@ -25,5 +25,13 @@ defmodule Hippo.GraphQL.Mutations.Card do
       arg(:card_id, non_null(:identifier), description: "the id of the card to delete")
       resolve(&Resolvers.Card.delete/2)
     end
+
+    @desc "reposition the card. Within same lane or between lanes"
+    field :reposition_card, :card do
+      arg(:card_id, non_null(:identifier), description: "the id of the card to reposition")
+      arg(:lane_id, non_null(:identifier), description: "the target lane id to drop the card in")
+      arg(:position, non_null(:integer), description: "new position of the card")
+      resolve(&Resolvers.Card.reposition/2)
+    end
   end
 end

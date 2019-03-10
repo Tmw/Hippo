@@ -21,4 +21,14 @@ defmodule Hippo.GraphQL.Resolvers.Card do
       {:error, error} -> {:error, message: error}
     end
   end
+
+  def reposition(%{card_id: card_id, lane_id: lane_id, position: position}, _ctx) do
+    case Cards.reposition_card(card_id, lane_id, position) do
+      {:ok, card} ->
+        {:ok, card}
+
+      {:error, error} ->
+        {:error, message: error}
+    end
+  end
 end

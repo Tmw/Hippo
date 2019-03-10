@@ -3,7 +3,6 @@ defmodule Hippo.Cards do
   alias Hippo.Lanes.Lane
 
   alias Hippo.Repo
-  import Ecto.Query
 
   @doc """
   Returns the list of cards.
@@ -95,6 +94,22 @@ defmodule Hippo.Cards do
     case Repo.get(Card, id) do
       nil -> {:error, "card not found"}
       card -> Repo.delete(card)
+    end
+  end
+
+  def reposition_card(card_id, lane_id, position) do
+    case Repo.get(Lane, lane_id) do
+      nil ->
+        {:error, "lane not found"}
+
+      lane ->
+        case Repo.get(Card, card_id) do
+          nil ->
+            {:error, "card not found"}
+
+          card ->
+            update_card(card, %{position: position, lane_id: lane.id})
+        end
     end
   end
 

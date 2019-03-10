@@ -25,5 +25,12 @@ defmodule Hippo.GraphQL.Mutations.Lane do
       arg(:lane_id, non_null(:identifier), description: "the id of the lane to delete")
       resolve(&Resolvers.Lane.delete/2)
     end
+
+    @desc "reposition the lane within a project"
+    field :reposition_lane, :lane do
+      arg(:lane_id, non_null(:identifier), description: "the id of the lane to reposition")
+      arg(:position, non_null(:integer), description: "new position of the lane")
+      resolve(&Resolvers.Lane.reposition/2)
+    end
   end
 end
