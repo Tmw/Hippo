@@ -18,7 +18,8 @@ defmodule Hippo.Cards.Card do
   @doc false
   def changeset(card, attrs) do
     card
-    |> cast(attrs, [:title, :description, :position])
+    |> cast(attrs, [:title, :description, :position, :lane_id])
+    |> foreign_key_constraint(:lane_id)
     |> validate_required([:title])
     |> set_rank(scope: :lane_id)
   end

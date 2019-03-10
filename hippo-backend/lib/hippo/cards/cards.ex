@@ -97,6 +97,22 @@ defmodule Hippo.Cards do
     end
   end
 
+  def reposition_card(card_id, lane_id, position) do
+    case Repo.get(Lane, lane_id) do
+      nil ->
+        {:error, "lane not found"}
+
+      lane ->
+        case Repo.get(Card, card_id) do
+          nil ->
+            {:error, "card not found"}
+
+          card ->
+            update_card(card, %{position: position, lane_id: lane.id})
+        end
+    end
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking card changes.
 
