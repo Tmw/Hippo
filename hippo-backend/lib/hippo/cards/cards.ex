@@ -108,7 +108,10 @@ defmodule Hippo.Cards do
             {:error, "card not found"}
 
           card ->
-            update_card(card, %{position: position, lane_id: lane.id})
+            card
+            |> Card.changeset(%{position: position})
+            |> Card.change_lane(lane.id)
+            |> Repo.update()
         end
     end
   end

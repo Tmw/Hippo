@@ -18,9 +18,12 @@ defmodule Hippo.Cards.Card do
   @doc false
   def changeset(card, attrs) do
     card
-    |> cast(attrs, [:title, :description, :position, :lane_id])
-    |> foreign_key_constraint(:lane_id)
+    |> cast(attrs, [:title, :description, :position])
     |> validate_required([:title])
     |> set_rank(scope: :lane_id)
+  end
+
+  def change_lane(%Ecto.Changeset{} = changeset, lane_id) do
+    changeset |> Ecto.Changeset.put_change(:lane_id, lane_id)
   end
 end
