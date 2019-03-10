@@ -29,7 +29,7 @@ defmodule Hippo.GraphQL.Mutations.Lane do
     @desc "reposition the lane within a project"
     field :reposition_lane, :lane do
       arg(:lane_id, non_null(:identifier), description: "the id of the lane to reposition")
-      arg(:position, non_null(:integer), description: "New position of the lane")
+      arg(:position, non_null(:integer), description: "new position of the lane")
       resolve(&Resolvers.Lane.reposition/2)
     end
   end
