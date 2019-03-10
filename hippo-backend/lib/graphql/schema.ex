@@ -1,11 +1,9 @@
 defmodule Hippo.GraphQL.Schema do
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
   use Absinthe.Schema
-
   alias Hippo.GraphQL.Resolvers
 
-  import_types(Hippo.GraphQL.Types.Identifier)
-
+  # setup dataloader
   def context(ctx) do
     loader =
       Dataloader.new()
@@ -15,29 +13,23 @@ defmodule Hippo.GraphQL.Schema do
     Map.put(ctx, :loader, loader)
   end
 
+  # hook dataloader into Absinthe
   def plugins do
     [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
   end
 
-  query do
-    @desc "Query all projects known in the system"
-    field :projects, list_of(:project) do
-      arg(:id, :identifier, description: "the projects ID")
-      resolve(&Resolvers.Project.find/2)
-    end
-  end
+  # import and setup all types, queries and mutations
+  import_types(Hippo.GraphQL.Types)
+  import_types(Hippo.GraphQL.Queries)
+  import_types(Hippo.GraphQL.Mutations)
 
-  import_types(Hippo.GraphQL.Mutations.Project)
-  import_types(Hippo.GraphQL.Mutations.Lane)
-  import_types(Hippo.GraphQL.Mutations.Card)
+  query do
+    import_fields(:projects_index_query)
+  end
 
   mutation do
     import_fields(:project_mutations)
     import_fields(:lane_mutations)
     import_fields(:card_mutations)
   end
-
-  import_types(Hippo.GraphQL.Types.Project)
-  import_types(Hippo.GraphQL.Types.Lane)
-  import_types(Hippo.GraphQL.Types.Card)
 end
