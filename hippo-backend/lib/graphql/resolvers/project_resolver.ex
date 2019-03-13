@@ -25,10 +25,7 @@ defmodule Hippo.GraphQL.Resolvers.Project do
   end
 
   def create(%{project: params}, _) do
-    case Projects.create_project(params) do
-      {:ok, _} = result -> result
-      {:error, _changeset} -> {:error, "Something blew up"}
-    end
+    Projects.create_project(params)
   end
 
   def update(%{project_id: project_id, project: params}, _) do
