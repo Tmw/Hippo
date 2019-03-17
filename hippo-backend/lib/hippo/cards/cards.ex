@@ -98,21 +98,15 @@ defmodule Hippo.Cards do
   end
 
   def reposition_card(card_id, lane_id, position) do
-    case Repo.get(Lane, lane_id) do
-      nil ->
-        {:error, "lane not found"}
-
-      lane ->
-        case Repo.get(Card, card_id) do
-          nil ->
-            {:error, "card not found"}
-
-          card ->
-            card
-            |> Card.changeset(%{position: position})
-            |> Card.change_lane(lane.id)
-            |> Repo.update()
-        end
+    with {:lane, %Lane{} = lane} <- {:lane, Repo.get(Lane, lane_id)},
+         {:card, %Card{} = card} <- {:card, Repo.get(Card, card_id)} do
+      card
+      |> Card.changeset(%{position: position})
+      |> Card.change_lane(lane.id)
+      |> Repo.update()
+    else
+      {:lane, nil} -> {:error, "lane not found"}
+      {:card, nil} -> {:error, "card not found"}
     end
   end
 
