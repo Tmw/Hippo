@@ -25,20 +25,24 @@ defmodule Hippo.GraphQL.Resolvers.Project do
   end
 
   def create(%{project: params}, _) do
-    Projects.create_project(params)
+    case Projects.create_project(params) do
+      {:ok, project} -> {:ok, project: project}
+      error -> error
+    end
   end
 
   def update(%{project_id: project_id, project: params}, _) do
     case Projects.get_project(project_id) do
-      nil -> {:error, "project not found"}
-      project -> project |> Projects.update_project(params)
+      nil ->
+        {:error, "project not found"}
+
+      project ->
+        {:ok, project} = project |> Projects.update_project(params)
+        {:ok, project: project}
     end
   end
 
   def delete(%{project_id: project_id}, _ctx) do
-    case Projects.delete_with_contents(project_id) do
-      {:ok, _} -> {:ok, %{success: true, message: "Project and its contents deleted"}}
-      {:error, err} -> {:error, err}
-    end
+    Projects.delete_with_contents(project_id)
   end
 end

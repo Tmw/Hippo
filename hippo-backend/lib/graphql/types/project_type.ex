@@ -19,10 +19,4 @@ defmodule Hippo.GraphQL.Types.Project do
     field :title, :string, description: "updated title for your project"
     field :description, :string, description: "updated description for your project"
   end
-
-  object :delete_project_result do
-    @desc "object that describes wether deletion of the project succeeded"
-    field :success, :boolean
-    field :message, :string
-  end
 end

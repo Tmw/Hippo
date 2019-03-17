@@ -4,6 +4,8 @@ defmodule Hippo.GraphQL.Mutations.Project do
   import Freight.Payload
 
   define_payload(:create_project_payload, project: :project)
+  define_payload(:update_project_payload, project: :project)
+  define_payload(:delete_project_payload)
 
   object :project_mutations do
     @desc "create a new project"
@@ -14,16 +16,18 @@ defmodule Hippo.GraphQL.Mutations.Project do
     end
 
     @desc "update an existing project"
-    field :update_project, :project do
+    field :update_project, :update_project_payload do
       arg(:project_id, non_null(:identifier))
       arg(:project, non_null(:project_update_params))
       resolve(&Resolvers.Project.update/2)
+      middleware(&build_payload/2)
     end
 
     @desc "delete a project by its ID"
-    field :delete_project, :delete_project_result do
+    field :delete_project, :delete_project_payload do
       arg(:project_id, non_null(:identifier), description: "the id of the project to delete")
       resolve(&Resolvers.Project.delete/2)
+      middleware(&build_payload/2)
     end
   end
 end

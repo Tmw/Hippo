@@ -18,8 +18,14 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
   describe "create_project_mutation" do
     @query """
       mutation CreateProject($project: ProjectCreateParams!) {
-        project:createProject(project: $project) {
-          id
+        createProject(project: $project) {
+          successful
+          errors {
+            message
+          }
+          project {
+            id
+          }
         }
       }
     """
@@ -31,8 +37,7 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("project")
+        |> get_in(["data", "createProject", "project"])
 
       expected =
         Project
@@ -59,14 +64,19 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
   describe "UpdateProject mutation" do
     @query """
     mutation UpdateProject($projectId: identifier!, $params: ProjectUpdateParams!) {
-      project: updateProject(projectId: $projectId, project: $params) {
-        id
-        title
-        description
+      updateProject(projectId: $projectId, project: $params) {
+        successful
+        errors {
+          message
+        }
+        project {
+          id
+          title
+          description
+        }
       }
     }
     """
-
     test "updates successfully when params are OK", %{conn: conn, project: project} do
       project_params = params_for(:project)
 
@@ -79,8 +89,7 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("project")
+        |> get_in(["data", "updateProject", "project"])
 
       expected =
         Project
@@ -122,7 +131,7 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
 
       error =
         json_response(conn, 200)
-        |> Map.get("errors")
+        |> get_in(["data", "updateProject", "errors"])
         |> Enum.at(0)
 
       assert error["message"] == "project not found"
@@ -133,23 +142,24 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
     @query """
     mutation DeleteProject($projectId: identifier!) {
       deleteProject(projectId: $projectId) {
-        success
-        message
+        successful
+        errors {
+          message
+        }
       }
     }
     """
 
-    test "delets from database", %{conn: conn, project: project} do
+    test "deletes from database", %{conn: conn, project: project} do
       variables = %{"projectId" => project.id}
       conn = conn |> gql(skeleton(@query, variables))
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("deleteProject")
+        |> get_in(["data", "deleteProject"])
 
-      assert response["success"]
-      assert response["message"] =~ ~r/project and its contents deleted/i
+      assert response["errors"] |> Enum.empty?()
+      assert response["successful"]
 
       assert Repo.get(Project, project.id) == nil
     end
@@ -158,12 +168,12 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
       variables = %{"projectId" => Ecto.ULID.generate()}
       conn = conn |> gql(skeleton(@query, variables))
 
-      errors =
+      response =
         json_response(conn, 200)
-        |> Map.get("errors")
-        |> Enum.at(0)
+        |> get_in(["data", "deleteProject"])
 
-      assert errors["message"] =~ "project not found"
+      refute response["successful"]
+      assert response["errors"] |> hd() |> Map.get("message") =~ "project not found"
     end
   end
 end
