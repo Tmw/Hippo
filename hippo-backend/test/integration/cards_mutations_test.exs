@@ -40,9 +40,15 @@ defmodule Hippo.Grapql.CardsMutationsTest do
     @query """
       mutation CreateCard($laneId: identifier!, $card: CardCreateParams!) {
         createCard(laneId: $laneId, card: $card) {
-          id
-          title
-          description
+          successful
+          errors {
+            message
+          }
+          card {
+            id
+            title
+            description
+          }
         }
       }
     """
@@ -58,8 +64,7 @@ defmodule Hippo.Grapql.CardsMutationsTest do
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("createCard")
+        |> get_in(["data", "createCard", "card"])
 
       card = Repo.get!(Card, response["id"])
       assert card |> Map.take(~w(title description)a) == card_params
@@ -93,7 +98,7 @@ defmodule Hippo.Grapql.CardsMutationsTest do
 
       error =
         json_response(conn, 200)
-        |> Map.get("errors")
+        |> get_in(["data", "createCard", "errors"])
         |> Enum.at(0)
 
       assert error["message"] =~ "lane not found"
@@ -104,9 +109,15 @@ defmodule Hippo.Grapql.CardsMutationsTest do
     @query """
       mutation UpdateCard($cardId: identifier!, $card: CardUpdateParams!){
         updateCard(cardId: $cardId, card: $card) {
-          id
-          title
-          description
+          successful,
+          errors {
+            message
+          }
+          card {
+            id
+            title
+            description
+          }
         }
       }
     """
@@ -123,8 +134,7 @@ defmodule Hippo.Grapql.CardsMutationsTest do
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("updateCard")
+        |> get_in(["data", "updateCard", "card"])
 
       persisted =
         Repo.get(Card, response["id"])
@@ -145,8 +155,7 @@ defmodule Hippo.Grapql.CardsMutationsTest do
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("updateCard")
+        |> get_in(["data", "updateCard", "card"])
 
       persisted =
         Repo.get(Card, response["id"])
@@ -170,11 +179,10 @@ defmodule Hippo.Grapql.CardsMutationsTest do
 
       error =
         json_response(conn, 200)
-        |> Map.get("errors")
-        |> Enum.at(0)
-        |> Map.get("message")
+        |> get_in(["data", "updateCard", "errors"])
+        |> hd()
 
-      assert error =~ "card not found"
+      assert error["message"] =~ "card not found"
     end
   end
 
@@ -182,8 +190,10 @@ defmodule Hippo.Grapql.CardsMutationsTest do
     @query """
       mutation DeleteCard($cardId: identifier!) {
         deleteCard(cardId: $cardId) {
-          success
-          message
+          successful
+          errors {
+            message
+          }
         }
       }
     """
@@ -194,10 +204,9 @@ defmodule Hippo.Grapql.CardsMutationsTest do
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("deleteCard")
+        |> get_in(["data", "deleteCard"])
 
-      assert response["success"] == true
+      assert response["successful"] == true
       assert Repo.get(Card, card.id) == nil
     end
 
@@ -207,8 +216,8 @@ defmodule Hippo.Grapql.CardsMutationsTest do
 
       error =
         json_response(conn, 200)
-        |> Map.get("errors")
-        |> Enum.at(0)
+        |> get_in(["data", "deleteCard", "errors"])
+        |> hd()
 
       assert error["message"] =~ "card not found"
     end
@@ -218,7 +227,13 @@ defmodule Hippo.Grapql.CardsMutationsTest do
     @query """
       mutation RepositionCard($cardId: identifier!, $laneId: identifier!, $position: Int!) {
         repositionCard(cardId: $cardId, laneId: $laneId, position: $position) {
-          id
+          successful
+          errors {
+            message
+          }
+          card {
+            id
+          }
         }
       }
     """
@@ -226,7 +241,14 @@ defmodule Hippo.Grapql.CardsMutationsTest do
     test "repositions the card within the same lane", %{conn: conn, cards: cards, lane: lane} do
       [first, second, third] = cards
       variables = %{cardId: second.id, laneId: lane.id, position: 3}
-      conn |> gql(skeleton(@query, variables))
+      conn = conn |> gql(skeleton(@query, variables))
+
+      # assert the card is actually included in the payload
+      response =
+        json_response(conn, 200)
+        |> get_in(["data", "repositionCard"])
+
+      refute is_nil(response["card"])
 
       actual =
         from(c in Card,
@@ -275,8 +297,8 @@ defmodule Hippo.Grapql.CardsMutationsTest do
 
       error =
         json_response(conn, 200)
-        |> Map.get("errors")
-        |> Enum.at(0)
+        |> get_in(["data", "repositionCard", "errors"])
+        |> hd()
 
       assert error["message"] =~ "card not found"
     end
@@ -287,8 +309,8 @@ defmodule Hippo.Grapql.CardsMutationsTest do
 
       error =
         json_response(conn, 200)
-        |> Map.get("errors")
-        |> Enum.at(0)
+        |> get_in(["data", "repositionCard", "errors"])
+        |> hd()
 
       assert error["message"] =~ "lane not found"
     end
