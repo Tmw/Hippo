@@ -25,9 +25,15 @@ defmodule Hippo.Grapql.LanesMutationsTest do
     @query """
       mutation CreateLane($projectId: identifier!, $lane: LaneCreateParams!) {
         createLane(projectId: $projectId, lane: $lane) {
-          id
-          title
-          description
+          successful
+          errors {
+            message
+          }
+          lane {
+            id
+            title
+            description
+          }
         }
       }
     """
@@ -44,8 +50,7 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("createLane")
+        |> get_in(["data", "createLane", "lane"])
 
       lane = Repo.get!(Lane, response["id"])
       assert lane |> Map.take(~w(title description)a) == lane_params
@@ -63,8 +68,8 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
       error =
         json_response(conn, 200)
-        |> Map.get("errors")
-        |> Enum.at(0)
+        |> get_in(["errors"])
+        |> hd()
 
       assert error["message"] =~ ~r/"lane" has invalid value/
     end
@@ -79,8 +84,8 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
       error =
         json_response(conn, 200)
-        |> Map.get("errors")
-        |> Enum.at(0)
+        |> get_in(["data", "createLane", "errors"])
+        |> hd()
 
       assert error["message"] =~ "project not found"
     end
@@ -90,9 +95,15 @@ defmodule Hippo.Grapql.LanesMutationsTest do
     @query """
       mutation UpdateLane($laneId: identifier!, $lane: LaneUpdateParams!){
         updateLane(laneId: $laneId, lane: $lane) {
-          id
-          title
-          description
+          successful
+          errors {
+            message
+          }
+          lane {
+            id
+            title
+            description
+          }
         }
       }
     """
@@ -109,8 +120,7 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("updateLane")
+        |> get_in(["data", "updateLane", "lane"])
 
       expected =
         Lane
@@ -132,8 +142,7 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("updateLane")
+        |> get_in(["data", "updateLane", "lane"])
 
       lane = Repo.get(Lane, response["id"])
       assert lane.description == lane_params["description"]
@@ -149,8 +158,8 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
       error =
         json_response(conn, 200)
-        |> Map.get("errors")
-        |> Enum.at(0)
+        |> get_in(["data", "updateLane", "errors"])
+        |> hd()
 
       assert error["message"] =~ "lane not found"
     end
@@ -160,8 +169,10 @@ defmodule Hippo.Grapql.LanesMutationsTest do
     @query """
       mutation DeleteLane($laneId: identifier!) {
         deleteLane(laneId: $laneId) {
-          success
-          message
+          successful
+          errors {
+            message
+          }
         }
       }
     """
@@ -172,10 +183,9 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
       response =
         json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("deleteLane")
+        |> get_in(["data", "deleteLane"])
 
-      assert response["success"] == true
+      assert response["successful"] == true
       assert Repo.get(Lane, lane.id) == nil
     end
 
@@ -185,8 +195,8 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
       error =
         json_response(conn, 200)
-        |> Map.get("errors")
-        |> Enum.at(0)
+        |> get_in(["data", "deleteLane", "errors"])
+        |> hd()
 
       assert error["message"] =~ "lane not found"
     end
@@ -196,7 +206,13 @@ defmodule Hippo.Grapql.LanesMutationsTest do
     @query """
       mutation RepositionLane($laneId: identifier!, $position: Int!) {
         repositionLane(laneId: $laneId, position: $position) {
-          id
+          successful
+          errors {
+            message
+          }
+          lane {
+            id
+          }
         }
       }
     """
@@ -205,7 +221,16 @@ defmodule Hippo.Grapql.LanesMutationsTest do
       [first, second, third] = lanes
 
       variables = %{laneId: second.id, position: 3}
-      conn |> gql(skeleton(@query, variables))
+      conn = conn |> gql(skeleton(@query, variables))
+
+      # assert lane is included in response
+      response =
+        json_response(conn, 200)
+        |> get_in(["data", "repositionLane"])
+
+      refute is_nil(response["lane"])
+
+      # grab all lane IDs
       ids = lanes |> Enum.map(&Map.get(&1, :id))
 
       expected =
@@ -230,8 +255,8 @@ defmodule Hippo.Grapql.LanesMutationsTest do
 
       errors =
         json_response(conn, 200)
-        |> Map.get("errors")
-        |> Enum.at(0)
+        |> get_in(["data", "repositionLane", "errors"])
+        |> hd()
 
       assert errors["message"] =~ "lane not found"
     end
