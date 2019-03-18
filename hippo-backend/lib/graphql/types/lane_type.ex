@@ -23,10 +23,4 @@ defmodule Hippo.GraphQL.Types.Lane do
     @desc "updated description of the lane"
     field :description, :string
   end
-
-  object :delete_lane_result do
-    @desc "object that describes wether deletion of the lane succeeded"
-    field :success, :boolean
-    field :message, :string
-  end
 end
