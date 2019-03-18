@@ -16,10 +16,4 @@ defmodule Hippo.GraphQL.Types.Card do
     field :title, :string, description: "updated title of the card"
     field :description, :string, description: "updated description of card"
   end
-
-  object :delete_card_result do
-    @desc "object that describes wether deletion of the card succeeded"
-    field :success, :boolean
-    field :message, :string
-  end
 end
