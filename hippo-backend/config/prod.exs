@@ -10,9 +10,9 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :hippo, HippoWeb.Endpoint,
-  http: [:inet6, port: System.get_env("PORT") || 4000],
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  http: [:inet6, port: 4000],
+  server: true,
+  url: [host: "localhost", port: 4000]
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -68,4 +68,15 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs which should be versioned
 # separately.
-import_config "prod.secret.exs"
+# import_config "prod.secret.exs"
+
+config :hippo, HippoWeb.Endpoint,
+  secret_key_base: "CRXWQ5t9IF+1Eq8/nQQe6+ZmRxOJ/O031z7gpFgT7M3KEqQaJixmKkz2KHPIR2gD"
+
+# Configure your database
+config :hippo, Hippo.Repo,
+  username: "${DB_USER}",
+  password: "${DB_PASS}",
+  database: "${DB_NAME}",
+  hostname: "${DB_HOST}",
+  pool_size: 10
