@@ -1,7 +1,7 @@
 version: "2"
 
 services:
-  postgres:
+  db:
     image: postgres
     environment:
       POSTGRES_DB: hippo
