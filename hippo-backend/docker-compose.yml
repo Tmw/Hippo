@@ -1,7 +1,7 @@
 version: "2"
 
 services:
-  postgres:
+  db:
     image: postgres
     environment:
       POSTGRES_DB: hippo
@@ -11,3 +11,18 @@ services:
       - 5432:5432
     volumes:
       - ./.postgres:/var/lib/postgresql/data
+
+  api:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: hippo
+      DB_PASS: hippo
+      DB_NAME: hippo
+
+    ports:
+      - 4000:4000
+    links:
+      - db
