@@ -2,13 +2,29 @@
   width: 100%;
   height: 56px;
   padding: 0;
+  display: flex;
 }
 
 .header h1 {
   margin: 0;
-  padding: 0 15px;
+  padding-left: 15px;
   font-size: 24px;
   line-height: 56px;
   font-weight: 400;
   color: #673ab7;
+}
+.header h2 {
+  font-size: 24px;
+  line-height: 56px;
+  font-weight: 400;
+  margin-left: 30px;
+  position: relative;
+}
+
+.header h2:before {
+  display: block;
+  content: "·";
+  height: 100%;
+  left: -15px;
+  position: absolute;
 }
