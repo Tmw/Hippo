@@ -1,29 +1,26 @@
-import { h, Component } from 'preact';
+import { h } from 'preact';
 import { Router } from 'preact-router';
+import client from '../graphql/client';
+import { ApolloProvider } from 'react-apollo';
 
 import Header from './header';
 
 // Code-splitting is automated for routes
+import Home from '../routes/home';
 import Projects from '../routes/project';
+import NewProject from '../routes/new-project';
 
-export default class App extends Component {
+const App = () => (
+	<ApolloProvider client={client}>
+		<div id="app">
+			<Header />
+			<Router>
+				<Home path="/" />
+				<NewProject path="/new-project" />
+				<Projects path="/projects/:projectId" />
+			</Router>
+		</div>
+	</ApolloProvider>
+);
 
-	/** Gets fired when the route changes.
-	 *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
-	 *	@param {string} event.url	The newly routed URL
-	 */
-	handleRoute = e => {
-		this.currentUrl = e.url;
-	};
-
-	render() {
-		return (
-			<div id="app">
-				<Header />
-				<Router onChange={this.handleRoute}>
-					<Projects path="/" />
-				</Router>
-			</div>
-		);
-	}
-}
+export default App;
