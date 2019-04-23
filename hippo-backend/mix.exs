@@ -36,6 +36,7 @@ defmodule Hippo.MixProject do
       {:ex_machina, "~> 2.2", only: :test},
       {:phoenix, "~> 1.4.0"},
       {:phoenix_pubsub, "~> 1.1"},
+      {:corsica, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.0"},
       {:ecto_ranked, "~> 0.4.0"},
