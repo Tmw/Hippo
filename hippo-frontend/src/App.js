@@ -1,18 +1,24 @@
 import React from "react";
 
-import { Pane, Heading, Text } from "evergreen-ui";
+import { Pane, Heading, Paragraph } from "evergreen-ui";
 import "./App.css";
 
 const navbarHeight = 56;
 
 const Header = () => (
-  <Pane display="flex" padding={16} height={navbarHeight} background="tint2">
+  <Pane display="flex" padding={16} height={navbarHeight} background="white">
     <Heading size={600}>Hippo</Heading>
   </Pane>
 );
 
 const Project = () => (
-  <Pane width="100%" height="100%" display="flex" overflowX="scroll">
+  <Pane
+    width="100%"
+    height="100%"
+    display="flex"
+    overflowX="scroll"
+    padding="25px"
+  >
     <Lane title="Backlog" />
     <Lane title="Bug" />
     <Lane title="Feature Request" />
@@ -29,12 +35,16 @@ const Card = ({ title, description }) => (
   <Pane
     width="100%"
     minHeight="150px"
-    border="muted"
-    elevation="1"
+    borderRadius="5px"
     marginBottom="15px"
+    background="white"
+    elevation="1"
+    padding="15px"
   >
-    <Heading size={400}>{title}</Heading>
-    <Text>{description}</Text>
+    <Heading size={500} align="left" marginBottom="10px">
+      {title}
+    </Heading>
+    <Paragraph align="left">{description}</Paragraph>
   </Pane>
 );
 const Lane = ({ title }) => (
@@ -42,10 +52,11 @@ const Lane = ({ title }) => (
     minWidth={350}
     height="100%"
     marginRight={15}
-    padding={10}
-    borderRight="muted"
+    padding={25}
+    className="Lane"
+    borderRadius="5px"
   >
-    <Heading size={500} marginBottom={10}>
+    <Heading size={500} marginBottom={10} align="left">
       {title}
     </Heading>
 
