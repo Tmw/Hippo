@@ -5,13 +5,59 @@ import "./App.css";
 
 const navbarHeight = 56;
 
+const getId = () =>
+  Math.random()
+    .toString(36)
+    .substr(2, 9);
+
+const data = {
+  lanes: [
+    {
+      id: getId(),
+      title: "Backlog"
+    },
+    {
+      id: getId(),
+      title: "Bug"
+    },
+    {
+      id: getId(),
+      title: "Feature Request"
+    },
+    {
+      id: getId(),
+      title: "This Sprint"
+    },
+    {
+      id: getId(),
+      title: "Doing"
+    },
+    {
+      id: getId(),
+      title: "For Review"
+    },
+    {
+      id: getId(),
+      title: "QA"
+    },
+    {
+      id: getId(),
+      title: "Next Release"
+    },
+    {
+      id: getId(),
+      title: "Blocked"
+    }
+  ]
+};
+
 const Header = () => (
   <Pane display="flex" padding={16} height={navbarHeight} background="white">
     <Heading size={600}>Hippo</Heading>
   </Pane>
 );
 
-const Project = () => (
+const Project = ({ data: { lanes } }) => (
   <Pane
     width="100%"
     height="100%"
@@ -19,15 +65,9 @@ const Project = () => (
     overflowX="scroll"
     padding="25px"
   >
-    <Lane title="Backlog" />
-    <Lane title="Bug" />
-    <Lane title="Feature Request" />
-    <Lane title="This Sprint" />
-    <Lane title="Doing" />
-    <Lane title="For Review" />
-    <Lane title="QA" />
-    <Lane title="Next Release" />
-    <Lane title="Blocked" />
+    {lanes.map(lane => (
+      <Lane title={lane.title} key={lane.id} />
+    ))}
   </Pane>
 );
 
@@ -38,7 +78,7 @@ const Card = ({ title, description }) => (
     borderRadius="5px"
     marginBottom="15px"
     background="white"
-    elevation="1"
+    elevation={1}
     padding="15px"
   >
     <Heading size={500} align="left" marginBottom="10px">
@@ -74,7 +114,7 @@ const App = () => {
     <div className="App">
       <Header />
       <Pane width="100%" height={`calc(100vh - ${navbarHeight}px)`}>
-        <Project />
+        <Project data={data} />
       </Pane>
     </div>
   );
