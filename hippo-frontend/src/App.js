@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
+import React from "react";
 
-import { Pane, Heading, Paragraph, Spinner } from "evergreen-ui";
-import { either, pipe, head, prop, isNil, isEmpty } from "ramda";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
-import ApolloClient, { gql } from "apollo-boost";
-import { Query } from "react-apollo";
+import { Pane, Heading, Paragraph } from "evergreen-ui";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
+
+import Home from "./routes/Home";
 
 import "./App.css";
 
@@ -356,46 +356,6 @@ const Lane = ({ data: { title, cards } }) => (
   </Pane>
 );
 
-const GET_PROJECTS = gql`
-  {
-    projects {
-      id
-      title
-      description
-    }
-  }
-`;
-
-const AnotherComponent = () => {
-  const HandleQuery = useCallback(({ loading, error, data }) => {
-    if (loading) return <Spinner />;
-    if (error) return <div>Uh, oh :(</div>;
-
-    const shouldRenderEmptyView = pipe(
-      prop("projects"),
-      either(isEmpty, isNil)
-    )(data);
-    if (shouldRenderEmptyView) {
-      return <div>Nothing to show here..</div>;
-    }
-
-    const project = head(data.projects);
-    const id = prop("id", project);
-    return <Redirect to={`/projects/${id}`} />;
-  }, []);
-
-  return (
-    <Pane
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="100%"
-    >
-      <Query query={GET_PROJECTS}>{HandleQuery}</Query>
-    </Pane>
-  );
-};
-
 const ProjectView = () => <Project data={data} />;
 
 const client = new ApolloClient({ uri: "http://localhost:4000/graphql" });
@@ -407,7 +367,7 @@ const App = () => {
         <Header />
         <Pane width="100%" height={`calc(100vh - ${navbarHeight}px)`}>
           <Router>
-            <Route path="/" exact component={AnotherComponent} />
+            <Route path="/" exact component={Home} />
             <Route path="/projects/:projectId" component={ProjectView} />
           </Router>
         </Pane>
