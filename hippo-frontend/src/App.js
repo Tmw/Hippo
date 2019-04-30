@@ -14,39 +14,277 @@ const data = {
   lanes: [
     {
       id: getId(),
-      title: "Backlog"
+      title: "Backlog",
+      cards: [
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        }
+      ]
     },
     {
       id: getId(),
-      title: "Bug"
+      title: "Bug",
+      cards: [
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        }
+      ]
     },
     {
       id: getId(),
-      title: "Feature Request"
+      title: "Feature Request",
+      cards: [
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        }
+      ]
     },
     {
       id: getId(),
-      title: "This Sprint"
+      title: "This Sprint",
+      cards: [
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        }
+      ]
     },
     {
       id: getId(),
-      title: "Doing"
+      title: "Doing",
+      cards: [
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        }
+      ]
     },
     {
       id: getId(),
-      title: "For Review"
+      title: "For Review",
+      cards: [
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        }
+      ]
     },
     {
       id: getId(),
-      title: "QA"
+      title: "QA",
+      cards: [
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        }
+      ]
     },
     {
       id: getId(),
-      title: "Next Release"
+      title: "Next Release",
+      cards: [
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        }
+      ]
     },
     {
       id: getId(),
-      title: "Blocked"
+      title: "Blocked",
+      cards: [
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        },
+        {
+          id: getId(),
+          title: "something",
+          description: "something else"
+        }
+      ]
     }
   ]
 };
@@ -66,12 +304,12 @@ const Project = ({ data: { lanes } }) => (
     padding="25px"
   >
     {lanes.map(lane => (
-      <Lane title={lane.title} key={lane.id} />
+      <Lane data={lane} key={lane.id} />
     ))}
   </Pane>
 );
 
-const Card = ({ title, description }) => (
+const Card = ({ data: { title, description } }) => (
   <Pane
     width="100%"
     minHeight="150px"
@@ -87,7 +325,7 @@ const Card = ({ title, description }) => (
     <Paragraph align="left">{description}</Paragraph>
   </Pane>
 );
-const Lane = ({ title }) => (
+const Lane = ({ data: { title, cards } }) => (
   <Pane
     minWidth={350}
     height="100%"
@@ -104,11 +342,10 @@ const Lane = ({ title }) => (
       {title}
     </Heading>
 
-    <Pane height="100%">
-      <Card title="This is some title" description="yeah it is" />
-      <Card title="This is some title" description="yeah it is" />
-      <Card title="This is some title" description="yeah it is" />
-      <Card title="This is some title" description="yeah it is" />
+    <Pane paddingRight="20px" overflowY="scroll">
+      {cards.map(c => (
+        <Card data={c} key={c.id} />
+      ))}
     </Pane>
   </Pane>
 );
