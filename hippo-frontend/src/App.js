@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
+import React from "react";
 
-import { Pane, SideSheet, Position } from "evergreen-ui";
+import { Pane } from "evergreen-ui";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
