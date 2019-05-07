@@ -79,7 +79,7 @@ const ProjectComponent = ({ project: { lanes } }) => (
   </Pane>
 );
 
-const Project = ({ match: { params } }) => {
+const Project = ({ match: { params }, match }) => {
   const HandleQuery = useCallback(({ loading, error, data }) => {
     if (loading) return <strong>hold on..</strong>;
     if (error) return <strong>Uh-oh..</strong>;
