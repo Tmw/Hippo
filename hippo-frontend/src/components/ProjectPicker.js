@@ -34,7 +34,7 @@ const ProjectPicker = props => {
     return (
       <ul>
         {data.projects.map(p => (
-          <li>
+          <li key={"p-" + p.id}>
             <Link to={"projects/" + p.id}>{p.title}</Link>
           </li>
         ))}
