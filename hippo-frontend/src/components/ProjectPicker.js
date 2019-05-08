@@ -48,7 +48,7 @@ const ProjectPicker = props => {
           height={240}
           padding={20}
           cursor="pointer"
-          onClick={() => props.history.push("projects/" + p.id)}
+          onClick={() => props.history.push("/projects/" + p.id)}
         >
           <Heading size={500}>{p.title}</Heading>
           <Paragraph>{p.description}</Paragraph>
