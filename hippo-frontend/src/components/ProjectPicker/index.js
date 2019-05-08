@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import {
+  IconButton,
   Card,
   SideSheet,
   Position,
@@ -11,7 +12,6 @@ import {
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 import { either, pipe, prop, isNil, isEmpty } from "ramda";
-import { Link } from "react-router-dom";
 
 const GET_PROJECTS = gql`
   {
@@ -45,13 +45,33 @@ const ProjectPicker = props => {
           key={"pp-" + p.id}
           backgroundColor="white"
           elevation={0}
-          height={240}
+          height={120}
+          display="flex"
+          flexDirection="column"
           padding={20}
+          marginBottom={10}
           cursor="pointer"
+          className="project-picker-card"
           onClick={() => props.history.push("/projects/" + p.id)}
         >
-          <Heading size={500}>{p.title}</Heading>
-          <Paragraph>{p.description}</Paragraph>
+          <Pane flexGrow="1">
+            <Heading size={500}>{p.title}</Heading>
+            <Paragraph>{p.description}</Paragraph>
+          </Pane>
+
+          <Pane
+            height="24"
+            display="flex"
+            className="project-picker-card-actions"
+          >
+            <IconButton
+              icon="edit"
+              appearance="minimal"
+              height="24"
+              marginRight={10}
+            />
+            <IconButton icon="trash" appearance="minimal" height="24" />
+          </Pane>
         </Card>
       ));
     },

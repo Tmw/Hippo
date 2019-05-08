@@ -8,7 +8,7 @@ import { ApolloProvider } from "react-apollo";
 import Home from "./routes/Home";
 import Project from "./routes/Project";
 import Header from "./components/Header";
-import ProjectPicker from "./components/ProjectPicker";
+import ProjectPicker from "./components/ProjectPicker/index";
 
 import "./App.css";
 

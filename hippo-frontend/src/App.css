@@ -2,3 +2,10 @@
   text-align: center;
   background-color: #fcfcfc;
 }
+
+.project-picker-card-actions {
+  visibility: hidden;
+}
+.project-picker-card:hover .project-picker-card-actions {
+  visibility: visible;
+}
