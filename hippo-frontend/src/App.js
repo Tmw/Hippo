@@ -24,7 +24,14 @@ const App = () => {
           <Header height={navbarHeight} triggerTitle="Some Project" />
           <Pane width="100%" height={`calc(100vh - ${navbarHeight}px)`}>
             <Route path="/" exact component={Home} />
-            <Route path="/projects" exact component={ProjectPicker} />
+            <Route
+              path={[
+                "/projects-picker",
+                "/projects/:projectId/projects-picker"
+              ]}
+              exact
+              component={ProjectPicker}
+            />
             <Route path="/projects/:projectId" component={Project} />
           </Pane>
         </Router>
