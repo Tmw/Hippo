@@ -38,37 +38,39 @@ end
 
 Truncater.truncate([:projects, :lanes, :cards])
 
-tree = %Project{
-  title: "First Project",
-  description: "This is the first proejct in the list. It does Projecty things",
-  lanes: [
-    %Lane{
-      title: "To-Do",
-      description: "This lane contains all cards that have the state To-Do",
-      cards: [
-        %Card{
-          title: "Move these",
-          description: "Some arbitrary description of the first card"
-        },
-        %Card{
-          title: "Cards to the",
-          description: "Some arbitrary description of the secon dcard"
-        },
-        %Card{
-          title: "Done Lane",
-          description: "Some arbitrary description of the third card"
-        }
-      ]
-    },
-    %Lane{
-      title: "Doing",
-      description: "This lane contains all cards that have the state Doing"
-    },
-    %Lane{
-      title: "Done",
-      description: "This lane contains all cards that have the state Done"
+# very bare bones helper module to setup some fake projects and data
+defmodule ProjectSeeder do
+  def project() do
+    %Project{
+      title: "Project - #{rand_id()}",
+      description: "Some Description goes here - #{rand_id()}",
+      lanes: Enum.map(0..5, fn _idx -> lane() end)
     }
-  ]
-}
+  end
 
-Repo.insert!(tree)
+  def lane() do
+    %Lane{
+      title: "Lane Title #{rand_id()}",
+      description: "A lane description #{rand_id()}",
+      cards: Enum.map(0..5, fn _idx -> card() end)
+    }
+  end
+
+  def card() do
+    %Card{
+      title: "Card title #{rand_id()}",
+      description: "some card description #{rand_id()}"
+    }
+  end
+
+  defp rand_id() do
+    :crypto.strong_rand_bytes(6) |> Base.encode16()
+  end
+end
+
+# make 25 projects to test with
+make_project = fn _idx ->
+  ProjectSeeder.project() |> Hippo.Repo.insert()
+end
+
+Enum.each(0..25, make_project)
