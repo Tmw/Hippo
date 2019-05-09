@@ -54,24 +54,8 @@ const ProjectPicker = props => {
           className="project-picker-card"
           onClick={() => props.history.push("/projects/" + p.id)}
         >
-          <Pane flexGrow="1">
-            <Heading size={500}>{p.title}</Heading>
-            <Paragraph>{p.description}</Paragraph>
-          </Pane>
-
-          <Pane
-            height="24"
-            display="flex"
-            className="project-picker-card-actions"
-          >
-            <IconButton
-              icon="edit"
-              appearance="minimal"
-              height="24"
-              marginRight={10}
-            />
-            <IconButton icon="trash" appearance="minimal" height="24" />
-          </Pane>
+          <Heading size={500}>{p.title}</Heading>
+          <Paragraph>{p.description}</Paragraph>
         </Card>
       ));
     },
