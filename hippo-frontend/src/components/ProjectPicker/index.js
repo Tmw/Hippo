@@ -52,7 +52,6 @@ const ProjectPicker = props => {
           padding={20}
           marginBottom={10}
           cursor="pointer"
-          className="project-picker-card"
           onClick={() => props.history.push("/projects/" + p.id)}
         >
           <Heading size={500}>{p.title}</Heading>
