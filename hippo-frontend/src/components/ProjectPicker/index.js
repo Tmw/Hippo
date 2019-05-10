@@ -46,7 +46,9 @@ const ProjectPicker = props => {
           elevation={0}
           height={120}
           display="flex"
+          justifyContent="center"
           flexDirection="column"
+          hoverElevation={1}
           padding={20}
           marginBottom={10}
           cursor="pointer"
