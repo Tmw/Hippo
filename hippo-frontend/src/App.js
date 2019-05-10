@@ -9,6 +9,7 @@ import Home from "./routes/Home";
 import Project from "./routes/Project";
 import Header from "./components/Header";
 import ProjectPicker from "./components/ProjectPicker/index";
+import EditProject from "./components/EditProject/index";
 
 import "./App.css";
 
@@ -24,7 +25,10 @@ const App = () => {
           <Header height={navbarHeight} triggerTitle="Some Project" />
           <Pane width="100%" height={`calc(100vh - ${navbarHeight}px)`}>
             <Route path="/" exact component={Home} />
-            <Route
+            <Route path="/projects/:projectId" component={Project} />
+
+	    {/* Sidepanel routes */}
+	    <Route
               path={[
                 "/projects-picker",
                 "/projects/:projectId/projects-picker"
@@ -32,7 +36,7 @@ const App = () => {
               exact
               component={ProjectPicker}
             />
-            <Route path="/projects/:projectId" component={Project} />
+            <Route path="/projects/:projectId/edit" component={EditProject} />
           </Pane>
         </Router>
       </div>
