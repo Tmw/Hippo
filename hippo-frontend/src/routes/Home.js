@@ -2,18 +2,9 @@ import React, { useCallback } from "react";
 import { Pane, Spinner } from "evergreen-ui";
 import { Query } from "react-apollo";
 import { either, pipe, head, prop, isNil, isEmpty } from "ramda";
-import { gql } from "apollo-boost";
 import { Redirect } from "react-router-dom";
 
-const GET_PROJECTS = gql`
-  {
-    projects {
-      id
-      title
-      description
-    }
-  }
-`;
+import GET_PROJECTS from "../graphql/get_projects_query";
 
 const shouldRenderEmptyView = pipe(
   prop("projects"),

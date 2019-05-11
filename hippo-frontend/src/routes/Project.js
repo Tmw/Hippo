@@ -1,27 +1,7 @@
 import React, { useCallback } from "react";
 import { Pane, Heading, Paragraph } from "evergreen-ui";
 import { Query } from "react-apollo";
-import { gql } from "apollo-boost";
-
-const GET_PROJECT = gql`
-  query Projects($id: identifier!) {
-    projects(id: $id) {
-      id
-      title
-      description
-      lanes {
-        id
-        title
-        description
-        cards {
-          id
-          title
-          description
-        }
-      }
-    }
-  }
-`;
+import GET_PROJECT from "../graphql/get_project_query";
 
 const Card = ({ data: { title, description } }) => (
   <Pane
