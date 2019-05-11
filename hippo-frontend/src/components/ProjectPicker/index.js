@@ -25,10 +25,11 @@ const ProjectPicker = props => {
         return <div>Nothing to show here..</div>;
       }
 
-      return data.projects.map(p => (
+      return data.projects.map(project => (
         <ProjectCard
-          project={p}
-          onClick={() => props.history.push("/projects/" + p.id)}
+          key={project.id}
+          project={project}
+          onClick={() => props.history.push("/projects/" + project.id)}
         />
       ));
     },

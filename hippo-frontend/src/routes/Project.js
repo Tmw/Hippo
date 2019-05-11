@@ -1,49 +1,9 @@
 import React, { useCallback } from "react";
-import { Pane, Heading, Paragraph } from "evergreen-ui";
+import { Pane } from "evergreen-ui";
 import { Query } from "react-apollo";
 import GET_PROJECT from "../graphql/get_project_query";
 
-const Card = ({ data: { title, description } }) => (
-  <Pane
-    width="100%"
-    minHeight="150px"
-    borderRadius="5px"
-    marginBottom="15px"
-    background="white"
-    elevation={1}
-    padding="15px"
-  >
-    <Heading size={500} align="left" marginBottom="10px">
-      {title}
-    </Heading>
-    <Paragraph align="left">{description}</Paragraph>
-  </Pane>
-);
-
-const Lane = ({ data: { title, cards } }) => (
-  <Pane
-    minWidth={350}
-    height="100%"
-    marginRight={15}
-    padding={25}
-    paddingRight={5}
-    background="#f6f6f6"
-    className="Lane"
-    borderRadius="5px"
-    display="flex"
-    flexDirection="column"
-  >
-    <Heading size={500} marginBottom={10} align="left">
-      {title}
-    </Heading>
-
-    <Pane paddingRight="20px" overflowY="scroll">
-      {cards.map(c => (
-        <Card data={c} key={c.id} />
-      ))}
-    </Pane>
-  </Pane>
-);
+import Lane from "../components/Lane";
 
 const ProjectComponent = ({ project: { lanes } }) => (
   <Pane
