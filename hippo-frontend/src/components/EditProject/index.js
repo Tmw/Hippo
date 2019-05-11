@@ -1,14 +1,21 @@
 import React, { useCallback } from "react";
-import {
-  Button,
-  SideSheet,
-  Heading,
-  TextInputField,
-  Textarea,
-  Label,
-  Position,
-  Pane
-} from "evergreen-ui";
+import { Button, TextInputField, Textarea, Label, Pane } from "evergreen-ui";
+import SidePanel from "../SidePanel";
+
+const ProjectFormFields = props => (
+  <React.Fragment>
+    <TextInputField
+      tabindex={0}
+      label="Project Title"
+      placeholder="Project Title"
+      required
+    />
+    <Label htmlFor="description" marginBottom={4} display="block">
+      Project Description
+    </Label>
+    <Textarea name="description" placeholder="Project Description" />
+  </React.Fragment>
+);
 
 const EditProject = props => {
   const closeHandler = useCallback(() => {
@@ -16,40 +23,23 @@ const EditProject = props => {
   }, [props.history]);
 
   return (
-    <SideSheet
-      isShown={true}
-      onCloseComplete={closeHandler}
-      position={Position.LEFT}
-      containerProps={{
-        display: "flex",
-        flex: 1,
-        flexDirection: "column"
-      }}
-    >
-      <Pane zIndex={1} flexShrink={0} elevation={0} backgroundColor="white">
-        <Pane padding={16}>
-          <Heading size={600}>Edit Project</Heading>
-        </Pane>
-      </Pane>
-      <Pane flex="1" flexGrow={1} background="tint1" padding={16}>
-        <form>
-          <TextInputField
-            label="Project Title"
-            placeholder="Project Title"
-            required
-          />
-          <Label htmlFor="description" marginBottom={4} display="block">
-            Project Description
-          </Label>
-          <Textarea name="description" placeholder="Project Description" />
+    <SidePanel onClose={closeHandler} title="Edit Project">
+      <form>
+        <ProjectFormFields />
+        <Pane display="flex" marginTop={16}>
+          <Pane>
+            <Button appearance="minimal" iconBefore="trash" intent="danger">
+              Delete Project
+            </Button>
+          </Pane>
 
-          <Pane align="right" marginTop={16}>
+          <Pane flex={1} align="right">
             <Button marginRight={12}>Cancel</Button>
             <Button appearance="primary">Save</Button>
           </Pane>
-        </form>
-      </Pane>
-    </SideSheet>
+        </Pane>
+      </form>
+    </SidePanel>
   );
 };
 

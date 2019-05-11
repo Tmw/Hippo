@@ -1,17 +1,11 @@
 import React, { useCallback } from "react";
-import {
-  Card,
-  SideSheet,
-  Position,
-  Pane,
-  Paragraph,
-  Heading,
-  Spinner
-} from "evergreen-ui";
+import { Card, Pane, Paragraph, Heading, Spinner } from "evergreen-ui";
+
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 import { either, pipe, prop, isNil, isEmpty } from "ramda";
 
+import SidePanel from "../SidePanel";
 const GET_PROJECTS = gql`
   {
     projects {
@@ -63,25 +57,9 @@ const ProjectPicker = props => {
   );
 
   return (
-    <SideSheet
-      isShown={true}
-      onCloseComplete={closeHandler}
-      position={Position.LEFT}
-      containerProps={{
-        display: "flex",
-        flex: "1",
-        flexDirection: "column"
-      }}
-    >
-      <Pane zIndex={1} flexShrink={0} elevation={0} backgroundColor="white">
-        <Pane padding={16}>
-          <Heading size={600}>Switch to Project</Heading>
-        </Pane>
-      </Pane>
-      <Pane flex="1" overflowY="scroll" background="tint1" padding={16}>
-        <Query query={GET_PROJECTS}>{HandleQuery}</Query>
-      </Pane>
-    </SideSheet>
+    <SidePanel onClose={closeHandler} title="Switch to Project">
+      <Query query={GET_PROJECTS}>{HandleQuery}</Query>
+    </SidePanel>
   );
 };
 
