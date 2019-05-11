@@ -1,21 +1,7 @@
 import React, { useCallback } from "react";
-import { Button, TextInputField, Textarea, Label, Pane } from "evergreen-ui";
+import { Button, Pane } from "evergreen-ui";
 import SidePanel from "../SidePanel";
-
-const ProjectFormFields = props => (
-  <React.Fragment>
-    <TextInputField
-      tabindex={0}
-      label="Project Title"
-      placeholder="Project Title"
-      required
-    />
-    <Label htmlFor="description" marginBottom={4} display="block">
-      Project Description
-    </Label>
-    <Textarea name="description" placeholder="Project Description" />
-  </React.Fragment>
-);
+import ProjectFormFields from "../Forms/ProjectFormFields";
 
 const EditProject = props => {
   const closeHandler = useCallback(() => {
