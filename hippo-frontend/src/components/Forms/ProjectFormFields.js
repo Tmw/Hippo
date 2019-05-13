@@ -4,7 +4,7 @@ import { TextInputField, Textarea, Label } from "evergreen-ui";
 const ProjectFormFields = () => (
   <React.Fragment>
     <TextInputField
-      tabindex={0}
+      tabIndex={0}
       label="Project Title"
       placeholder="Project Title"
       required
