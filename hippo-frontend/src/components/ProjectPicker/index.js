@@ -3,9 +3,9 @@ import { Spinner } from "evergreen-ui";
 import { Query } from "react-apollo";
 import { either, pipe, prop, isNil, isEmpty } from "ramda";
 
-import SidePanel from "../SidePanel";
-import ProjectCard from "./ProjectCard";
-import GET_PROJECTS from "../../graphql/get_projects_query";
+import SidePanel from "components/SidePanel";
+import ProjectCard from "components/ProjectPicker/ProjectCard";
+import GET_PROJECTS from "graphql/get_projects_query";
 
 const shouldRenderEmptyView = pipe(
   prop("projects"),

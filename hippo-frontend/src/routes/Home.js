@@ -4,7 +4,7 @@ import { Query } from "react-apollo";
 import { either, pipe, head, prop, isNil, isEmpty } from "ramda";
 import { Redirect } from "react-router-dom";
 
-import GET_PROJECTS from "../graphql/get_projects_query";
+import GET_PROJECTS from "graphql/get_projects_query";
 
 const shouldRenderEmptyView = pipe(
   prop("projects"),

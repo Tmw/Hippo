@@ -7,10 +7,10 @@ import { ApolloProvider } from "react-apollo";
 
 import Home from "./routes/Home";
 import Project from "./routes/Project";
-import Header from "./components/Header";
-import ProjectPicker from "./components/ProjectPicker/index";
-import EditProject from "./components/EditProject/index";
-
+import Header from "components/Header";
+import ProjectPicker from "components/ProjectPicker/index";
+import EditProject from "components/EditProject/index";
+import NewProject from "routes/NewProject";
 import "./App.css";
 
 const navbarHeight = 56;

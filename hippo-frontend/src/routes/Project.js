@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
 import { Pane } from "evergreen-ui";
 import { Query } from "react-apollo";
-import GET_PROJECT from "../graphql/get_project_query";
+import GET_PROJECT from "graphql/get_project_query";
 
-import Lane from "../components/Lane";
+import Lane from "components/Lane";
 
 const ProjectComponent = ({ project: { lanes } }) => (
   <Pane

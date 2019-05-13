@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Button, Pane } from "evergreen-ui";
-import SidePanel from "../SidePanel";
-import ProjectFormFields from "../Forms/ProjectFormFields";
+import SidePanel from "components/SidePanel";
+import ProjectFormFields from "components/Forms/ProjectFormFields";
 
 const EditProject = props => {
   const closeHandler = useCallback(() => {

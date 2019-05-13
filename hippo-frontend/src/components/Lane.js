@@ -1,6 +1,6 @@
 import React from "react";
 import { Pane, Heading } from "evergreen-ui";
-import Card from "../components/Card";
+import Card from "components/Card";
 
 const Lane = ({ data: { title, cards } }) => (
   <Pane
