@@ -1,5 +1,13 @@
 import React from "react";
-import { SideSheet, Pane, Heading, Position } from "evergreen-ui";
+import {
+  IconButton,
+  Tooltip,
+  SideSheet,
+  Pane,
+  Heading,
+  Position
+} from "evergreen-ui";
+import { Link } from "react-router-dom";
 
 const SidePanel = ({ children, title, onClose }) => (
   <SideSheet
@@ -12,9 +20,18 @@ const SidePanel = ({ children, title, onClose }) => (
       flexDirection: "column"
     }}
   >
-    <Pane zIndex={1} flexShrink={0} elevation={0} backgroundColor="white">
-      <Pane padding={16}>
-        <Heading size={600}>{title}</Heading>
+    <Pane zIndex={1} flexShrink={0} backgroundColor="white">
+      <Pane padding={16} display="flex">
+        <Heading size={600} flex={1}>
+          {title}
+        </Heading>
+        <Pane>
+          <Tooltip content="Start new Project">
+            <Link to="/projects/new">
+              <IconButton appearance="minimal" icon="plus" />
+            </Link>
+          </Tooltip>
+        </Pane>
       </Pane>
     </Pane>
     <Pane flex="1" flexGrow={1} background="tint1" padding={16}>

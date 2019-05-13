@@ -27,15 +27,13 @@ const App = () => {
             <Route path="/" exact component={Home} />
             <Route path="/projects/:projectId" component={Project} />
 
-	    {/* Sidepanel routes */}
-	    <Route
-              path={[
-                "/projects-picker",
-                "/projects/:projectId/projects-picker"
-              ]}
+            {/* Sidepanel routes */}
+            <Route
+              path="/projects/:projectId/projects-picker"
               exact
               component={ProjectPicker}
             />
+            <Route path="/projects/new" exact component={NewProject} />
             <Route path="/projects/:projectId/edit" component={EditProject} />
           </Pane>
         </Router>
