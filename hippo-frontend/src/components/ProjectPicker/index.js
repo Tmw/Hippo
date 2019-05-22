@@ -50,7 +50,7 @@ const ProjectPicker = props => {
     <SidePanel
       onClose={closeHandler}
       title="Switch to Project"
-      panelActions={[<SideSheetActionNewProject />]}
+      panelActions={[<SideSheetActionNewProject key="new-project-button" />]}
     >
       <Query query={GET_PROJECTS}>{HandleQuery}</Query>
     </SidePanel>

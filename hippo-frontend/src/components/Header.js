@@ -14,7 +14,7 @@ const EditProjectButton = ({ onEditClicked }) => {
 
 // The main Header component renders the header at the top of the page.
 // by default it displays the current project name, and
-const Header = ({ height, triggerTitle, history }) => {
+const Header = ({ history, triggerTitle }) => {
   // to make links relative, we need the current URL we're looking at.
   const basePath = history.location.pathname;
 
@@ -28,7 +28,7 @@ const Header = ({ height, triggerTitle, history }) => {
   );
 
   return (
-    <Pane display="flex" padding={16} height={height} background="white">
+    <Pane display="flex" padding={16} width="100%" background="white">
       <Heading size={600} align="left" flexGrow={1} marginLeft={10}>
         Hippo ·{" "}
         <Text size={600}>
