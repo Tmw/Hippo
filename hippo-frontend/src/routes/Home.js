@@ -1,5 +1,8 @@
 import React, { useCallback } from "react";
-import { Pane, Spinner } from "evergreen-ui";
+import { Pane } from "evergreen-ui";
+import SpinnerWithText from "components/SpinnerWithText";
+import ErrorWithText from "components/ErrorWithText";
+
 import { Query } from "react-apollo";
 import { either, pipe, head, prop, isNil, isEmpty } from "ramda";
 import { Redirect } from "react-router-dom";
@@ -18,8 +21,11 @@ const idOfFirstProject = pipe(
 
 const Home = () => {
   const HandleQuery = useCallback(({ loading, error, data }) => {
-    if (loading) return <Spinner />;
-    if (error) return <div>Uh, oh :(</div>;
+    if (loading) return <SpinnerWithText text="Hold on.." />;
+    if (error)
+      return (
+        <ErrorWithText text="Uh oh.." description="Error fetching projects.." />
+      );
     if (shouldRenderEmptyView(data)) {
       return <div>Nothing to show here..</div>;
     }

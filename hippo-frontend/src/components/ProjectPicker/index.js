@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
-import { Spinner } from "evergreen-ui";
 import { Query } from "react-apollo";
+import SpinnerWithText from "components/SpinnerWithText";
+import ErrorWithText from "components/ErrorWithText";
 import { either, pipe, prop, isNil, isEmpty } from "ramda";
 
 import SidePanel from "components/SidePanel";
@@ -29,8 +30,15 @@ const ProjectPicker = props => {
 
   const HandleQuery = useCallback(
     ({ loading, error, data }) => {
-      if (loading) return <Spinner />;
-      if (error) return <div>Uh, oh :(</div>;
+      if (loading) return <SpinnerWithText text="Hold on.." />;
+      if (error)
+        return (
+          <ErrorWithText
+            text="Uh oh!"
+            description="Error fetching Projects.."
+          />
+        );
+
       if (shouldRenderEmptyView(data)) {
         return <div>Nothing to show here..</div>;
       }
