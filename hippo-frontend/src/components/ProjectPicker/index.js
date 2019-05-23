@@ -17,16 +17,14 @@ const shouldRenderEmptyView = pipe(
 
 const SideSheetActionNewProject = () => (
   <Tooltip content="Start new Project">
-    <Link to="/projects/new">
+    <Link to="/projects/new" tabIndex={0}>
       <IconButton appearance="minimal" icon="plus" />
     </Link>
   </Tooltip>
 );
 
-const ProjectPicker = props => {
-  const closeHandler = useCallback(() => {
-    props.history.goBack();
-  }, [props]);
+const ProjectPicker = ({ history }) => {
+  const closeHandler = useCallback(() => history.goBack(), [history]);
 
   const HandleQuery = useCallback(({ loading, error, data }) => {
     if (loading) return <SpinnerWithText text="Hold on.." />;

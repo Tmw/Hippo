@@ -13,23 +13,22 @@ import NewProject from "routes/NewProject";
 import "./App.css";
 
 const client = new ApolloClient({ uri: "http://localhost:4000/graphql" });
-const MainContentRoutes = () => (
-  <Switch>
-    <Route path="/" exact component={Home} />
-    <Route path="/projects/:projectId" component={Project} />
-  </Switch>
-);
-
-const SidePanelRoutes = () => (
-  <Switch>
+const Routes = () => (
+  <React.Fragment>
     <Route
       path="/projects/:projectId/projects-picker"
       exact
       component={ProjectPicker}
     />
-    <Route path="/projects/new" exact component={NewProject} />
     <Route path="/projects/:projectId/edit" component={EditProject} />
-  </Switch>
+
+    <Switch>
+      <Route path="/projects/new" exact component={NewProject} />
+      <Route path="/projects/:projectId" component={Project} />
+    </Switch>
+
+    <Route path="/" exact component={Home} />
+  </React.Fragment>
 );
 
 const App = () => {
@@ -38,8 +37,7 @@ const App = () => {
       <div className="App">
         <Router>
           <Pane width="100%">
-            <MainContentRoutes />
-            <SidePanelRoutes />
+            <Routes />
           </Pane>
         </Router>
       </div>

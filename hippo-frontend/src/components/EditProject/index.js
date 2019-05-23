@@ -3,10 +3,10 @@ import { Button, Pane } from "evergreen-ui";
 import SidePanel from "components/SidePanel";
 import ProjectFormFields from "components/Forms/ProjectFormFields";
 
-const EditProject = props => {
+const EditProject = ({ history }) => {
   const closeHandler = useCallback(() => {
-    props.history.goBack();
-  }, [props.history]);
+    history.goBack();
+  }, [history]);
 
   return (
     <SidePanel onClose={closeHandler} title="Edit Project">
