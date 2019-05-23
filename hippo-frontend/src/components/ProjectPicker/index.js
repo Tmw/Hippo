@@ -28,31 +28,21 @@ const ProjectPicker = props => {
     props.history.goBack();
   }, [props]);
 
-  const HandleQuery = useCallback(
-    ({ loading, error, data }) => {
-      if (loading) return <SpinnerWithText text="Hold on.." />;
-      if (error)
-        return (
-          <ErrorWithText
-            text="Uh oh!"
-            description="Error fetching Projects.."
-          />
-        );
+  const HandleQuery = useCallback(({ loading, error, data }) => {
+    if (loading) return <SpinnerWithText text="Hold on.." />;
+    if (error)
+      return (
+        <ErrorWithText text="Uh oh!" description="Error fetching Projects.." />
+      );
 
-      if (shouldRenderEmptyView(data)) {
-        return <div>Nothing to show here..</div>;
-      }
+    if (shouldRenderEmptyView(data)) {
+      return <div>Nothing to show here..</div>;
+    }
 
-      return data.projects.map(project => (
-        <ProjectCard
-          key={project.id}
-          project={project}
-          onClick={() => props.history.push("/projects/" + project.id)}
-        />
-      ));
-    },
-    [props.history]
-  );
+    return data.projects.map(project => (
+      <ProjectCard key={project.id} project={project} />
+    ));
+  }, []);
 
   return (
     <SidePanel
