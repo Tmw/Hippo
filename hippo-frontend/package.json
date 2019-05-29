@@ -9,7 +9,7 @@
     "graphql": "^14.2.1",
     "ramda": "^0.26.1",
     "react": "^16.8.6",
-    "react-apollo": "^2.5.5",
+    "react-apollo-hooks": "^0.4.5",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.0"
