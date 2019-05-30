@@ -1,5 +1,12 @@
-import React, { useCallback } from "react";
-import { Pane, Button, TextInputField, Label, Textarea } from "evergreen-ui";
+import React, { useCallback, useState } from "react";
+import {
+  Pane,
+  Button,
+  TextInputField,
+  Label,
+  Textarea,
+  toaster
+} from "evergreen-ui";
 import { Formik, Form } from "formik";
 import SidePanel from "components/SidePanel";
 import FormikField from "components/FormikField";
@@ -17,15 +24,28 @@ const NewProject = ({ history }) => {
     history.goBack();
   }, [history]);
 
+  const [isSubmitting, setSubmitting] = useState(false);
+
   const createProject = useMutation(CREATE_PROJECT_MUTATION, {
     refetchQueries: [{ query: GET_PROJECTS }]
   });
 
   const submitHandler = useCallback(
     values => {
-      createProject({ variables: { project: values } });
+      setSubmitting(true);
+      createProject({ variables: { project: values } })
+        .then(({ data }) => {
+          setSubmitting(false);
+          const projectId = data.createProject.project.id;
+          history.push(`${projectId}`);
+        })
+        .catch(error => {
+          setSubmitting(false);
+          console.error(error);
+          toaster.danger("There was an error saving the project");
+        });
     },
-    [createProject]
+    [createProject, history]
   );
 
   return (
@@ -52,10 +72,11 @@ const NewProject = ({ history }) => {
 
           <Pane display="flex" marginTop={16}>
             <Pane flex={1} align="right">
-              <Button type="button" marginRight={12} onClick={closeHandler}>
-                Cancel
-              </Button>
-              <Button type="submit" appearance="primary">
+              <Button
+                type="submit"
+                appearance="primary"
+                isLoading={isSubmitting}
+              >
                 Save
               </Button>
             </Pane>
