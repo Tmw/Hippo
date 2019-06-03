@@ -1,9 +1,10 @@
 import React from "react";
 import { SideSheet, Pane, Heading, Position } from "evergreen-ui";
 
-const SidePanel = ({ children, title, onClose, panelActions }) => (
+const SidePanel = ({ children, title, onClose, panelActions, closeOnEsc }) => (
   <SideSheet
     isShown={true}
+    shouldCloseOnEscapePress={closeOnEsc}
     onCloseComplete={onClose}
     position={Position.LEFT}
     containerProps={{

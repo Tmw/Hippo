@@ -8,7 +8,7 @@ import { ApolloProvider } from "react-apollo-hooks";
 import Home from "./routes/Home";
 import Project from "./routes/Project";
 import ProjectPicker from "routes/ProjectPicker";
-import EditProject from "components/EditProject/index";
+import EditProject from "routes/EditProject";
 import NewProject from "routes/NewProject";
 import "./App.css";
 
