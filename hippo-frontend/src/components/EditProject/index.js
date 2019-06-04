@@ -8,6 +8,7 @@ import {
   TextInputField,
   toaster
 } from "evergreen-ui";
+
 import { Formik, Form } from "formik";
 import { withRouter } from "react-router-dom";
 import { useQuery, useMutation } from "react-apollo-hooks";
@@ -15,6 +16,7 @@ import { useQuery, useMutation } from "react-apollo-hooks";
 import GET_PROJECT from "graphql/get_project_query";
 import GET_PROJECTS from "graphql/get_projects_query";
 import DELETE_PROJECT from "graphql/delete_project_mutation";
+import UPDATE_PROJECT from "graphql/update_project_mutation";
 
 import FormikField from "components/FormikField";
 import SpinnerWithText from "components/SpinnerWithText";
@@ -33,9 +35,30 @@ const EditProjectSheetContents = ({ projectId, onClose, history }) => {
     refetchQueries: [{ query: GET_PROJECTS }]
   });
 
-  const submitHandler = useCallback(values => {
-    console.log("[TODO] Submit new values..:", values);
-  }, []);
+  const updateProject = useMutation(UPDATE_PROJECT, {
+    variables: { projectId },
+    refetchQueries: [{ query: GET_PROJECT, variables: { id: projectId } }]
+  });
+
+  const submitHandler = useCallback(
+    params => {
+      updateProject({
+        variables: {
+          projectId,
+          params
+        }
+      })
+        .then(() => {
+          onClose();
+          toaster.success("Project succesfully updated", { duration: 2 });
+        })
+        .catch(error => {
+          console.error(error);
+          toaster.danger("Error updating project.. Please try again");
+        });
+    },
+    [onClose, projectId, updateProject]
+  );
 
   const handleDeleteProject = useCallback(() => {
     setProjectDeleting(true);
@@ -58,10 +81,7 @@ const EditProjectSheetContents = ({ projectId, onClose, history }) => {
   if (loading) return <SpinnerWithText text="Hold on.." />;
   if (error) return <ErrorWithText text="Uh-oh.." description={error} />;
 
-  // TODO: This can be improved, but i'm sleepy now.
-  const projects = data.projects || [];
-  const project = projects[0];
-
+  const project = data.projects[0];
   const initialValues = {
     title: project.title,
     description: project.description
