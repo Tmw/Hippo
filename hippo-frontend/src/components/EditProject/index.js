@@ -5,30 +5,55 @@ import {
   Pane,
   Label,
   Textarea,
-  TextInputField
+  TextInputField,
+  toaster
 } from "evergreen-ui";
 import { Formik, Form } from "formik";
-import { useQuery } from "react-apollo-hooks";
+import { withRouter } from "react-router-dom";
+import { useQuery, useMutation } from "react-apollo-hooks";
+
 import GET_PROJECT from "graphql/get_project_query";
+import GET_PROJECTS from "graphql/get_projects_query";
+import DELETE_PROJECT from "graphql/delete_project_mutation";
 
 import FormikField from "components/FormikField";
 import SpinnerWithText from "components/SpinnerWithText";
 import ErrorWithText from "components/ErrorWithText";
 
-const EditProjectSheetContents = ({ projectId, onClose }) => {
+const EditProjectSheetContents = ({ projectId, onClose, history }) => {
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [isProjectDeleting, setProjectDeleting] = useState(false);
+
+  const { data, error, loading } = useQuery(GET_PROJECT, {
+    variables: { id: projectId }
+  });
+
+  const deleteProject = useMutation(DELETE_PROJECT, {
+    variables: { projectId },
+    refetchQueries: [{ query: GET_PROJECTS }]
+  });
+
   const submitHandler = useCallback(values => {
     console.log("[TODO] Submit new values..:", values);
   }, []);
 
   const handleDeleteProject = useCallback(() => {
-    console.log("[TODO] dropping project..");
-  }, []);
+    setProjectDeleting(true);
+    deleteProject()
+      .then(() => {
+        // first get rid of the loading state and close the dialog
+        setProjectDeleting(false);
+        setDialogVisible(false);
 
-  const [dialogVisible, setDialogVisible] = useState(false);
-
-  const { data, error, loading } = useQuery(GET_PROJECT, {
-    variables: { id: projectId }
-  });
+        // Navigate back to home, so it'll pick the first available project again
+        history.push("/");
+      })
+      .catch(error => {
+        setProjectDeleting(false);
+        console.error(error);
+        toaster.danger("There was an error deleting the project");
+      });
+  }, [deleteProject, history]);
 
   if (loading) return <SpinnerWithText text="Hold on.." />;
   if (error) return <ErrorWithText text="Uh-oh.." description={error} />;
@@ -96,7 +121,7 @@ const EditProjectSheetContents = ({ projectId, onClose }) => {
         intent="danger"
         onCloseComplete={() => setDialogVisible(false)}
         onConfirm={handleDeleteProject}
-        isConfirmLoading={true}
+        isConfirmLoading={isProjectDeleting}
         confirmLabel="Delete Project"
       >
         Are you sure you want to delete this project?
@@ -105,4 +130,4 @@ const EditProjectSheetContents = ({ projectId, onClose }) => {
   );
 };
 
-export default EditProjectSheetContents;
+export default withRouter(EditProjectSheetContents);
