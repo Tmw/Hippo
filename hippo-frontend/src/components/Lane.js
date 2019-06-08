@@ -1,6 +1,18 @@
 import React from "react";
-import { Pane, Heading } from "evergreen-ui";
+import { IconButton, Pane, Heading } from "evergreen-ui";
 import Card from "components/Card";
+
+const LaneHeader = ({ title }) => (
+  <Pane display="flex" marginRight={20} marginBottom={10} alignItems="center">
+    <Heading size={500} flexGrow={1} align="left">
+      {title}
+    </Heading>
+
+    <Pane align="right">
+      <IconButton appearance="minimal" icon="plus" />
+    </Pane>
+  </Pane>
+);
 
 const Lane = ({ data: { title, cards } }) => (
   <Pane
@@ -15,9 +27,7 @@ const Lane = ({ data: { title, cards } }) => (
     display="flex"
     flexDirection="column"
   >
-    <Heading size={500} marginBottom={10} align="left">
-      {title}
-    </Heading>
+    <LaneHeader title={title} />
 
     <Pane paddingRight="20px" overflowY="scroll">
       {cards.map(c => (
