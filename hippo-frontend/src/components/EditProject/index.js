@@ -36,7 +36,6 @@ const EditProjectSheetContents = ({ projectId, onClose, history }) => {
   });
 
   const updateProject = useMutation(UPDATE_PROJECT, {
-    variables: { projectId },
     refetchQueries: [{ query: GET_PROJECT, variables: { id: projectId } }]
   });
 
