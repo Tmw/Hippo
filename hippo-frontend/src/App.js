@@ -10,6 +10,7 @@ import Project from "./routes/Project";
 import ProjectPicker from "routes/ProjectPicker";
 import EditProject from "routes/EditProject";
 import NewProject from "routes/NewProject";
+import CreateLane from "routes/CreateLane";
 import "./App.css";
 
 const client = new ApolloClient({ uri: "http://localhost:4000/graphql" });
@@ -30,10 +31,10 @@ const Routes = () => (
   <React.Fragment>
     <Route
       path="/projects/:projectId/projects-picker"
-      exact
       component={ProjectPicker}
     />
     <Route path="/projects/:projectId/edit" component={EditProject} />
+    <Route path="/projects/:projectId/create-lane" component={CreateLane} />
 
     <Centered>
       <Switch>
