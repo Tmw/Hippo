@@ -1,14 +1,26 @@
 import React from "react";
 import { Button, Pane, Heading } from "evergreen-ui";
 import Lane from "components/Lane";
+import LaneWrapper from "components/Lane/Wrapper";
+
 import Header from "components/Header";
 
-const titleForAddLaneHeader = lanes => {
-  if (lanes.length > 0) {
-    return "Running out of space?";
-  } else {
-    return "Get started";
-  }
+const CreateLaneLane = ({ initial }) => {
+  const cta = initial ? "Get started!" : "Running out of space?";
+  return (
+    <LaneWrapper>
+      <Pane
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        height="100%"
+      >
+        <Heading marginBottom="10px">{cta}</Heading>
+        <Button iconBefore="plus">Add lane</Button>
+      </Pane>
+    </LaneWrapper>
+  );
 };
 
 const Project = ({ project: { lanes }, project }) => (
@@ -24,22 +36,7 @@ const Project = ({ project: { lanes }, project }) => (
       {lanes.map(lane => (
         <Lane data={lane} key={lane.id} />
       ))}
-      <Pane
-        minWidth={350}
-        height="100%"
-        marginRight={15}
-        padding={25}
-        background="#f6f6f6"
-        className="Lane"
-        borderRadius="5px"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Heading>{titleForAddLaneHeader(lanes)}</Heading>
-        <Button iconBefore="plus">Add lane</Button>
-      </Pane>
+      <CreateLaneLane initial={lanes.length === 0} />
     </Pane>
   </React.Fragment>
 );
