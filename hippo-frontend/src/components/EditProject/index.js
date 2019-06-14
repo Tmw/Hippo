@@ -136,7 +136,7 @@ const EditProjectSheetContents = ({ projectId, onClose, history }) => {
 
       <Dialog
         isShown={dialogVisible}
-        title="Danger intent"
+        title="Are you sure?"
         intent="danger"
         onCloseComplete={() => setDialogVisible(false)}
         onConfirm={handleDeleteProject}
