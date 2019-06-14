@@ -87,7 +87,7 @@ const EditProjectSheetContents = ({ projectId, onClose, history }) => {
   };
 
   return (
-    <>
+    <React.Fragment>
       <Formik onSubmit={submitHandler} initialValues={initialValues}>
         <Form>
           <FormikField
@@ -145,7 +145,7 @@ const EditProjectSheetContents = ({ projectId, onClose, history }) => {
       >
         Are you sure you want to delete this project?
       </Dialog>
-    </>
+    </React.Fragment>
   );
 };
 
