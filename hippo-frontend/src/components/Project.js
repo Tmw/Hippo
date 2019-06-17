@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { Button, Pane, Heading } from "evergreen-ui";
+import React, { useCallback, useState } from "react";
+import { Button, Pane, Heading, Dialog } from "evergreen-ui";
 import { withRouter } from "react-router-dom";
 
 import Lane from "components/Lane";
@@ -27,8 +27,33 @@ const CreateLaneLane = ({ initial, onAdd }) => {
 };
 
 const Project = ({ project: { lanes }, project, history }) => {
+  // Lane deletion state management, callbacks and GraphQL Mutation
+  const [isDeleteDialogVisible, setLaneDeletionDialogVisible] = useState(false);
+  const [isLaneDeleting, setLaneDeleting] = useState(false);
+
+  const [selectedLaneIdentifier, setSelectedLaneIdentifier] = useState(null);
+  // const deleteLane = useMutation(DELETE_LANE_MUTATION, {
+  //   variables: { laneId },
+  //   refetchQueries: { query: GET_PROJECT, variables: { ProjectId } }
+  // });
+
+  const handleDeleteLane = useCallback(laneId => {
+    setSelectedLaneIdentifier(laneId);
+    setLaneDeletionDialogVisible(true);
+    console.log("should toggle delete dialog for id", laneId);
+  }, []);
+
+  // State and callbacks for editing a lane
+  const handleEditLaneClicked = useCallback(
+    laneId => {
+      history.push(`/projects/${project.id}/lanes/${laneId}/edit`);
+    },
+    [history, project.id]
+  );
+
+  // Lane creation callback
   const handleAddClicked = useCallback(
-    () => history.push(`/projects/${project.id}/create-lane`),
+    () => history.push(`/projects/${project.id}/lanes/new`),
     [history, project.id]
   );
 
@@ -43,10 +68,27 @@ const Project = ({ project: { lanes }, project, history }) => {
         padding="25px"
       >
         {lanes.map(lane => (
-          <Lane data={lane} key={lane.id} />
+          <Lane
+            key={lane.id}
+            data={lane}
+            onLaneDelete={handleDeleteLane}
+            onLaneEdit={handleEditLaneClicked}
+          />
         ))}
         <CreateLaneLane initial={lanes.length === 0} onAdd={handleAddClicked} />
       </Pane>
+
+      <Dialog
+        isShown={isDeleteDialogVisible}
+        title="Are you sure?"
+        intent="danger"
+        onCloseComplete={() => setLaneDeletionDialogVisible(false)}
+        onConfirm={handleDeleteLane}
+        isConfirmLoading={isLaneDeleting}
+        confirmLabel="Delete Lane"
+      >
+        Are you sure you want to delete this lane?
+      </Dialog>
     </React.Fragment>
   );
 };

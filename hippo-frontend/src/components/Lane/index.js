@@ -6,14 +6,14 @@ import Header from "components/Lane/Header";
 import Wrapper from "components/Lane/Wrapper";
 import HeaderMenu from "components/Lane/HeaderMenu";
 
-const Lane = ({ data: { title, cards } }) => {
+const Lane = ({ data: { id, title, cards }, onLaneEdit, onLaneDelete }) => {
   const handleDeleteLaneClicked = useCallback(() => {
-    console.log("handeling delete lane click");
-  }, []);
+    onLaneDelete(id);
+  }, [id, onLaneDelete]);
 
   const handleEditLaneClicked = useCallback(() => {
-    console.log("handeling edit lane click");
-  }, []);
+    onLaneEdit(id);
+  }, [id, onLaneEdit]);
 
   return (
     <Wrapper>
