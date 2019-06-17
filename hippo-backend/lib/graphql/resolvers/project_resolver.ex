@@ -8,7 +8,7 @@ defmodule Hippo.GraphQL.Resolvers.Project do
 
   def query(queryable, _params)
       when queryable in [Hippo.Lanes.Lane, Hippo.Cards.Card] do
-    from(queryable, order_by: [:rank])
+    from(queryable, order_by: [:rank, :id])
   end
 
   # fallback queryable; no ordering here
