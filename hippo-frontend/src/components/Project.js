@@ -1,6 +1,11 @@
 import React, { useCallback, useState } from "react";
-import { Button, Pane, Heading, Dialog } from "evergreen-ui";
+import { Button, Pane, Heading, Dialog, toaster } from "evergreen-ui";
 import { withRouter } from "react-router-dom";
+
+import { useMutation } from "react-apollo-hooks";
+
+import DELETE_LANE_MUTATION from "graphql/delete_lane_mutation";
+import GET_PROJECT from "graphql/get_project_query";
 
 import Lane from "components/Lane";
 import LaneWrapper from "components/Lane/Wrapper";
@@ -30,17 +35,35 @@ const Project = ({ project: { lanes }, project, history }) => {
   // Lane deletion state management, callbacks and GraphQL Mutation
   const [isDeleteDialogVisible, setLaneDeletionDialogVisible] = useState(false);
   const [isLaneDeleting, setLaneDeleting] = useState(false);
-
   const [selectedLaneIdentifier, setSelectedLaneIdentifier] = useState(null);
-  // const deleteLane = useMutation(DELETE_LANE_MUTATION, {
-  //   variables: { laneId },
-  //   refetchQueries: { query: GET_PROJECT, variables: { ProjectId } }
-  // });
 
-  const handleDeleteLane = useCallback(laneId => {
+  // define the lane deletion mutation
+  const deleteLane = useMutation(DELETE_LANE_MUTATION, {
+    variables: { laneId: selectedLaneIdentifier },
+    refetchQueries: [{ query: GET_PROJECT, variables: { id: project.id } }]
+  });
+
+  // perform the actual lane deletion mutation
+  const handleDeleteLane = useCallback(() => {
+    setLaneDeleting(true);
+
+    deleteLane()
+      .then(() => {
+        setLaneDeleting(true);
+        setSelectedLaneIdentifier(null);
+        setLaneDeletionDialogVisible(false);
+        toaster.success("Lane succesfully deleted", { duration: 2 });
+      })
+      .catch(error => {
+        console.error(error);
+        toaster.danger("Error deleting lane.. Please try again");
+      });
+  }, [deleteLane]);
+
+  // toggle the lane deletion dialog
+  const toggleDeleteLaneDialog = useCallback(laneId => {
     setSelectedLaneIdentifier(laneId);
     setLaneDeletionDialogVisible(true);
-    console.log("should toggle delete dialog for id", laneId);
   }, []);
 
   // State and callbacks for editing a lane
@@ -71,7 +94,7 @@ const Project = ({ project: { lanes }, project, history }) => {
           <Lane
             key={lane.id}
             data={lane}
-            onLaneDelete={handleDeleteLane}
+            onLaneDelete={toggleDeleteLaneDialog}
             onLaneEdit={handleEditLaneClicked}
           />
         ))}
