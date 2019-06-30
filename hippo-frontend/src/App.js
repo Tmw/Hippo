@@ -2,7 +2,7 @@ import React from "react";
 
 import { Pane } from "evergreen-ui";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ApolloClient from "apollo-boost";
+import apolloClient from "graphql/client";
 import { ApolloProvider } from "react-apollo-hooks";
 
 import Home from "./routes/Home";
@@ -13,8 +13,6 @@ import NewProject from "routes/NewProject";
 import CreateLane from "routes/CreateLane";
 import EditLane from "routes/EditLane";
 import "./App.css";
-
-const client = new ApolloClient({ uri: "http://localhost:4000/graphql" });
 
 const Centered = ({ children }) => (
   <Pane
@@ -54,7 +52,7 @@ const Routes = () => (
 
 const App = () => {
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <div className="App">
         <Router>
           <Pane width="100%">
