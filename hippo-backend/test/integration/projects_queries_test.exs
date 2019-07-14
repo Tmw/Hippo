@@ -132,7 +132,7 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
         from(c in Card,
           where: c.lane_id == ^first_lane.id,
           select: [:id],
-          order_by: [:rank]
+          order_by: [asc: :rank, desc: :id]
         )
         |> Repo.all()
         |> Enum.map(&Map.get(&1, :id))
