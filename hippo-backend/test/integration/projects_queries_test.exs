@@ -106,7 +106,7 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
         from(l in Lane,
           where: l.project_id == ^project.id,
           select: [:id],
-          order_by: [:rank]
+          order_by: [:rank, :id]
         )
         |> Repo.all()
         |> Enum.map(&Map.get(&1, :id))
