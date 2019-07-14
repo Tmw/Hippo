@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { compose } from "ramda";
 import { Menu, IconButton, Popover, Position } from "evergreen-ui";
 
-const HeaderMenu = ({ onDeleteClick, onEditClick }) => {
+const HeaderMenu = ({ onDeleteClick, onEditClick, onAddClick }) => {
   const popoverMenu = useCallback(
     ({ close: closePopover }) => {
       const handleEditClick = compose(
@@ -40,7 +40,7 @@ const HeaderMenu = ({ onDeleteClick, onEditClick }) => {
 
   return (
     <React.Fragment>
-      <IconButton appearance="minimal" icon="plus" />
+      <IconButton appearance="minimal" icon="plus" onClick={onAddClick} />
 
       <Popover position={Position.BOTTOM_LEFT} content={popoverMenu}>
         <IconButton appearance="minimal" icon="more" />
