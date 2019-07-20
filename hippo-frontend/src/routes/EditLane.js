@@ -16,6 +16,7 @@ const EditLane = ({ history, match: { params } }) => {
   const { projectId, laneId } = params;
   const handleClose = useCallback(() => history.goBack(), [history]);
   const [dialogVisible, setDialogVisible] = useState(true);
+  const [mutationLoading, setMutationLoading] = useState(false);
 
   const updateLane = useMutation(UPDATE_LANE_MUTATION, {
     refetchQueries: [{ query: GET_PROJECT_QUERY, variables: { id: projectId } }]
@@ -25,12 +26,15 @@ const EditLane = ({ history, match: { params } }) => {
   // indicating success or failure.
   const handleSubmit = useCallback(
     lane => {
+      setMutationLoading(true);
       updateLane({ variables: { laneId, lane } })
         .then(() => {
+          setMutationLoading(false);
           toaster.success("Lane succesfully updated", { duration: 2 });
           setDialogVisible(false);
         })
         .catch(error => {
+          setMutationLoading(false);
           console.error(error);
           toaster.danger("Error updating lane.. Please try again");
         });
@@ -64,6 +68,7 @@ const EditLane = ({ history, match: { params } }) => {
           title="Edit Lane"
           onCloseComplete={handleClose}
           confirmLabel="Save"
+          isConfirmLoading={mutationLoading}
           onConfirm={submitForm}
         >
           <Form>
