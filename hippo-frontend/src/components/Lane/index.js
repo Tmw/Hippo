@@ -51,12 +51,13 @@ const Lane = ({
 
     deleteCard()
       .then(() => {
-        setCardDeleting(true);
+        setCardDeleting(false);
         setSelectedCardIdentifier(null);
         setCardDeletionDialogVisible(false);
         toaster.success("Card succesfully deleted", { duration: 2 });
       })
       .catch(error => {
+        setCardDeleting(false);
         console.error(error);
         toaster.danger("Error deleting card.. Please try again");
       });
