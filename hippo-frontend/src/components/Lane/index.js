@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Pane } from "evergreen-ui";
 
-import Card from "components/Card";
+import Card from "components/Card/Card";
 import Header from "components/Lane/Header";
 import Wrapper from "components/Lane/Wrapper";
 import HeaderMenu from "components/Lane/HeaderMenu";
@@ -10,6 +10,7 @@ import { AddCard, useAddCardState } from "components/Lane/AddCard";
 const Lane = ({ data: { id, title, cards }, onLaneEdit, onLaneDelete }) => {
   const { isVisible, toggleVisibility, hide } = useAddCardState(false);
 
+  // manage lane itself
   const handleDeleteLaneClicked = useCallback(() => {
     onLaneDelete(id);
   }, [id, onLaneDelete]);
@@ -17,6 +18,15 @@ const Lane = ({ data: { id, title, cards }, onLaneEdit, onLaneDelete }) => {
   const handleEditLaneClicked = useCallback(() => {
     onLaneEdit(id);
   }, [id, onLaneEdit]);
+
+  // callback from card-children
+  const handleCardDeleteClicked = useCallback(cardId => {
+    console.log("Handling delete card with id:", cardId);
+  }, []);
+
+  const handleCardEditClicked = useCallback(cardId => {
+    console.log("Handling edit card with id:", cardId);
+  }, []);
 
   return (
     <Wrapper>
@@ -36,8 +46,13 @@ const Lane = ({ data: { id, title, cards }, onLaneEdit, onLaneDelete }) => {
       />
 
       <Pane paddingRight="20px" overflowY="scroll">
-        {cards.map(c => (
-          <Card data={c} key={c.id} />
+        {cards.map(card => (
+          <Card
+            data={card}
+            key={card.id}
+            onCardDelete={handleCardDeleteClicked}
+            onCardEdit={handleCardEditClicked}
+          />
         ))}
       </Pane>
     </Wrapper>
