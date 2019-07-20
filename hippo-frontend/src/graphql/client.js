@@ -6,7 +6,10 @@ export default new ApolloClient({
   cacheRedirects: {
     Query: {
       lane: (_, { id }, { getCacheKey }) =>
-        getCacheKey({ __typename: "Lane", id })
+        getCacheKey({ __typename: "Lane", id }),
+
+      card: (_, { id }, { getCacheKey }) =>
+        getCacheKey({ __typename: "Card", id })
     }
   }
 });

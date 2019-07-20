@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { Pane } from "evergreen-ui";
+import { withRouter } from "react-router-dom";
 
 import Card from "components/Card/Card";
 import Header from "components/Lane/Header";
@@ -7,7 +8,12 @@ import Wrapper from "components/Lane/Wrapper";
 import HeaderMenu from "components/Lane/HeaderMenu";
 import { AddCard, useAddCardState } from "components/Lane/AddCard";
 
-const Lane = ({ data: { id, title, cards }, onLaneEdit, onLaneDelete }) => {
+const Lane = ({
+  data: { id, title, cards },
+  onLaneEdit,
+  onLaneDelete,
+  history
+}) => {
   const { isVisible, toggleVisibility, hide } = useAddCardState(false);
 
   // manage lane itself
@@ -24,9 +30,12 @@ const Lane = ({ data: { id, title, cards }, onLaneEdit, onLaneDelete }) => {
     console.log("Handling delete card with id:", cardId);
   }, []);
 
-  const handleCardEditClicked = useCallback(cardId => {
-    console.log("Handling edit card with id:", cardId);
-  }, []);
+  const handleCardEditClicked = useCallback(
+    cardId => {
+      history.push(`${history.location.pathname}/cards/${cardId}/edit`);
+    },
+    [history]
+  );
 
   return (
     <Wrapper>
@@ -59,4 +68,4 @@ const Lane = ({ data: { id, title, cards }, onLaneEdit, onLaneDelete }) => {
   );
 };
 
-export default Lane;
+export default withRouter(Lane);

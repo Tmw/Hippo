@@ -12,6 +12,7 @@ import EditProject from "routes/EditProject";
 import NewProject from "routes/NewProject";
 import CreateLane from "routes/CreateLane";
 import EditLane from "routes/EditLane";
+import EditCard from "routes/EditCard";
 import "./App.css";
 
 const Centered = ({ children }) => (
@@ -37,6 +38,10 @@ const Routes = () => (
     <Route
       path="/projects/:projectId/lanes/:laneId/edit"
       component={EditLane}
+    />
+    <Route
+      path="/projects/:projectId/cards/:cardId/edit"
+      component={EditCard}
     />
 
     <Centered>
