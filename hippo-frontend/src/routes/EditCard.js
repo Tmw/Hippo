@@ -17,6 +17,7 @@ const EditCard = ({ history, match: { params } }) => {
 
   const handleClose = useCallback(() => history.goBack(), [history]);
   const [dialogVisible, setDialogVisible] = useState(true);
+  const [mutationLoading, setMutationLoading] = useState(false);
 
   const updateCard = useMutation(UPDATE_CARD_MUTATION, {
     refetchQueries: [{ query: GET_PROJECT_QUERY, variables: { id: projectId } }]
@@ -26,13 +27,16 @@ const EditCard = ({ history, match: { params } }) => {
   // indicating success or failure.
   const handleSubmit = useCallback(
     card => {
+      setMutationLoading(true);
       updateCard({ variables: { cardId, card } })
         .then(() => {
           toaster.success("Card succesfully updated", { duration: 2 });
           setDialogVisible(false);
+          setMutationLoading(false);
         })
         .catch(error => {
           console.error(error);
+          setMutationLoading(false);
           toaster.danger("Error updating card.. Please try again");
         });
     },
@@ -65,6 +69,7 @@ const EditCard = ({ history, match: { params } }) => {
           title="Edit Card"
           onCloseComplete={handleClose}
           confirmLabel="Save"
+          isConfirmLoading={mutationLoading}
           onConfirm={submitForm}
         >
           <Form>
