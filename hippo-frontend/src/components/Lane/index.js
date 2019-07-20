@@ -1,6 +1,10 @@
-import React, { useCallback } from "react";
-import { Pane } from "evergreen-ui";
+import React, { useCallback, useState } from "react";
+import { Dialog, Pane, toaster } from "evergreen-ui";
 import { withRouter } from "react-router-dom";
+import { useMutation } from "react-apollo-hooks";
+
+import GET_PROJECT from "graphql/get_project_query";
+import DELETE_CARD_MUTATION from "graphql/delete_card_mutation";
 
 import Card from "components/Card/Card";
 import Header from "components/Lane/Header";
@@ -12,8 +16,10 @@ const Lane = ({
   data: { id, title, cards },
   onLaneEdit,
   onLaneDelete,
-  history
+  history,
+  match
 }) => {
+  const { projectId } = match.params;
   const { isVisible, toggleVisibility, hide } = useAddCardState(false);
 
   // manage lane itself
@@ -25,16 +31,48 @@ const Lane = ({
     onLaneEdit(id);
   }, [id, onLaneEdit]);
 
-  // callback from card-children
+  // callbacks from card-children
+
+  const [isCardDeleteDialogVisible, setCardDeletionDialogVisible] = useState(
+    false
+  );
+  const [isCardDeleting, setCardDeleting] = useState(false);
+  const [selectedCardIdentifier, setSelectedCardIdentifier] = useState(null);
+
+  // define the card deletion mutation
+  const deleteCard = useMutation(DELETE_CARD_MUTATION, {
+    variables: { cardId: selectedCardIdentifier },
+    refetchQueries: [{ query: GET_PROJECT, variables: { id: projectId } }]
+  });
+
+  // perform the actual lane deletion mutation
+  const handleDeleteCard = useCallback(() => {
+    setCardDeleting(true);
+
+    deleteCard()
+      .then(() => {
+        setCardDeleting(true);
+        setSelectedCardIdentifier(null);
+        setCardDeletionDialogVisible(false);
+        toaster.success("Card succesfully deleted", { duration: 2 });
+      })
+      .catch(error => {
+        console.error(error);
+        toaster.danger("Error deleting card.. Please try again");
+      });
+  }, [deleteCard]);
+
   const handleCardDeleteClicked = useCallback(cardId => {
-    console.log("Handling delete card with id:", cardId);
+    setSelectedCardIdentifier(cardId);
+    setCardDeletionDialogVisible(true);
   }, []);
 
   const handleCardEditClicked = useCallback(
     cardId => {
-      history.push(`${history.location.pathname}/cards/${cardId}/edit`);
+      const { projectId } = match.params;
+      history.push(`projects/${projectId}/cards/${cardId}/edit`);
     },
-    [history]
+    [history, match.params]
   );
 
   return (
@@ -64,6 +102,18 @@ const Lane = ({
           />
         ))}
       </Pane>
+
+      <Dialog
+        isShown={isCardDeleteDialogVisible}
+        title="Are you sure?"
+        intent="danger"
+        onCloseComplete={() => setCardDeletionDialogVisible(false)}
+        onConfirm={handleDeleteCard}
+        isConfirmLoading={isCardDeleting}
+        confirmLabel="Delete Card"
+      >
+        Are you sure you want to delete this card?
+      </Dialog>
     </Wrapper>
   );
 };
