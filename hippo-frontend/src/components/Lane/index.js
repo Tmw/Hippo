@@ -70,7 +70,7 @@ const Lane = ({
   const handleCardEditClicked = useCallback(
     cardId => {
       const { projectId } = match.params;
-      history.push(`projects/${projectId}/cards/${cardId}/edit`);
+      history.push(`/projects/${projectId}/cards/${cardId}/edit`);
     },
     [history, match.params]
   );
