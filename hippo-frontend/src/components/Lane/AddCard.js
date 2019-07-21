@@ -59,7 +59,7 @@ const AddCard = ({ isShown, onCancel, onSubmitted, laneId }) => {
         })
         .catch(error => {
           console.error(error);
-          toaster.danger("Error updating lane.. Please try again");
+          toaster.danger("Error creating card.. Please try again");
         });
     },
     [createCard, laneId, onSubmitted]
