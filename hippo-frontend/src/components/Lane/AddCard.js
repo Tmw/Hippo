@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Pane, TextInputField, Textarea, Button, toaster } from "evergreen-ui";
 import { Formik, Form } from "formik";
 
@@ -65,6 +65,14 @@ const AddCard = ({ isShown, onCancel, onSubmitted, laneId }) => {
     [createCard, laneId, onSubmitted]
   );
 
+  // cancel the form upon escape
+  const handleKeydown = useCallback(
+    event => {
+      if (event.key === "Escape") onCancel();
+    },
+    [onCancel]
+  );
+
   const [titleInputRef, setTitleInputRef] = useState(null);
   useEffect(() => {
     if (titleInputRef !== null) titleInputRef.focus();
@@ -81,7 +89,7 @@ const AddCard = ({ isShown, onCancel, onSubmitted, laneId }) => {
     <Formik onSubmit={handleSubmit} initialValues={initialValues}>
       {({ submitForm }) => (
         <Form>
-          <Pane marginRight="20px">
+          <Pane marginRight="20px" onKeyDown={handleKeydown}>
             <Pane
               width="100%"
               minHeight="150px"
