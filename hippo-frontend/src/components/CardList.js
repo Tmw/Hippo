@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 
-import { Dialog, Pane, toaster } from "evergreen-ui";
+import { Pane, toaster } from "evergreen-ui";
 import { useMutation } from "react-apollo-hooks";
 import { withRouter } from "react-router-dom";
 
@@ -8,42 +8,30 @@ import GET_PROJECT from "graphql/get_project_query";
 import DELETE_CARD_MUTATION from "graphql/delete_card_mutation";
 
 import Card from "components/Card/Card";
+import {
+  ConfirmAndMutate,
+  useConfirmAndMutationState
+} from "components/ConfirmAndMutate";
 
 const CardList = ({ cards, match, history }) => {
-  const [isDeleteDialogVisible, setDeletionDialogVisible] = useState(false);
-  const [isCardDeleting, setCardDeleting] = useState(false);
-  const [selectedCardIdentifier, setSelectedCardIdentifier] = useState(null);
+  const {
+    visible: dialogVisible,
+    identifier: selectedCardId,
+    showDialog,
+    closeDialog
+  } = useConfirmAndMutationState();
 
   // define the card deletion mutation
-  const deleteCard = useMutation(DELETE_CARD_MUTATION, {
-    variables: { cardId: selectedCardIdentifier },
+  const deleteCardMutation = useMutation(DELETE_CARD_MUTATION, {
+    variables: { cardId: selectedCardId },
     refetchQueries: [
       { query: GET_PROJECT, variables: { id: match.params.projectId } }
     ]
   });
 
-  // perform the actual lane deletion mutation
-  const handleDeleteCard = useCallback(() => {
-    setCardDeleting(true);
-
-    deleteCard()
-      .then(() => {
-        setCardDeleting(false);
-        setSelectedCardIdentifier(null);
-        setDeletionDialogVisible(false);
-        toaster.success("Card succesfully deleted", { duration: 2 });
-      })
-      .catch(error => {
-        setCardDeleting(false);
-        console.error(error);
-        toaster.danger("Error deleting card.. Please try again");
-      });
-  }, [deleteCard]);
-
-  const handleCardDeleteClicked = useCallback(cardId => {
-    setSelectedCardIdentifier(cardId);
-    setDeletionDialogVisible(true);
-  }, []);
+  const handleCardDeleteClicked = useCallback(cardId => showDialog(cardId), [
+    showDialog
+  ]);
 
   const handleCardEditClicked = useCallback(
     cardId => {
@@ -52,6 +40,14 @@ const CardList = ({ cards, match, history }) => {
     },
     [history, match.params]
   );
+
+  const onCardDeletionError = useCallback(() => {
+    toaster.danger("Error deleting card.. Please try again");
+  }, []);
+
+  const onCardDeletionSuccess = useCallback(() => {
+    toaster.success("Card succesfully deleted", { duration: 2 });
+  }, []);
 
   return (
     <React.Fragment>
@@ -66,17 +62,15 @@ const CardList = ({ cards, match, history }) => {
         ))}
       </Pane>
 
-      <Dialog
-        isShown={isDeleteDialogVisible}
+      <ConfirmAndMutate
+        mutation={deleteCardMutation}
         title="Are you sure?"
-        intent="danger"
-        onCloseComplete={() => setDeletionDialogVisible(false)}
-        onConfirm={handleDeleteCard}
-        isConfirmLoading={isCardDeleting}
-        confirmLabel="Delete Card"
-      >
-        Are you sure you want to delete this card?
-      </Dialog>
+        description="Are you sure you want to delete this card?"
+        isVisible={dialogVisible}
+        closeDialog={closeDialog}
+        onError={onCardDeletionError}
+        onSuccess={onCardDeletionSuccess}
+      />
     </React.Fragment>
   );
 };
