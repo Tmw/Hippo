@@ -3,7 +3,7 @@ import { Pane } from "evergreen-ui";
 
 const Wrapper = ({ children }) => (
   <Pane
-    minWidth={350}
+    width={350}
     height="100%"
     marginRight={15}
     padding={25}

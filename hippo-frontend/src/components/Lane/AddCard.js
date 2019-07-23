@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Pane, TextInputField, Textarea, Button, toaster } from "evergreen-ui";
 import { Formik, Form } from "formik";
 
