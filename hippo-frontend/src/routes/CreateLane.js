@@ -64,6 +64,7 @@ const CreateLane = ({ history, match: { params } }) => {
             <FormikField
               component={Textarea}
               name="description"
+              onCtrlEnter={submitForm}
               placeholder="Lane Description"
             />
           </Form>
