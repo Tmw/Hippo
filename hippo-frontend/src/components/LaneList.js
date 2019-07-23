@@ -47,14 +47,16 @@ const LaneList = ({ lanes, projectId, history }) => {
     toaster.success("Lane succesfully deleted", { duration: 2 });
   }, []);
 
-  return lanes.map(lane => (
+  return (
     <React.Fragment>
-      <Lane
-        key={lane.id}
-        data={lane}
-        onLaneDelete={toggleDeleteLaneDialog}
-        onLaneEdit={handleEditLaneClicked}
-      />
+      {lanes.map(lane => (
+        <Lane
+          key={lane.id}
+          data={lane}
+          onLaneDelete={toggleDeleteLaneDialog}
+          onLaneEdit={handleEditLaneClicked}
+        />
+      ))}
 
       <ConfirmAndMutate
         mutation={deleteLaneMutation}
@@ -67,6 +69,6 @@ const LaneList = ({ lanes, projectId, history }) => {
         onSuccess={onLaneDeletionSuccess}
       />
     </React.Fragment>
-  ));
+  );
 };
 export default withRouter(LaneList);
