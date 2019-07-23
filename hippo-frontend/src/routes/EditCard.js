@@ -89,6 +89,7 @@ const EditCard = ({ history, match: { params } }) => {
             <FormikField
               component={Textarea}
               name="description"
+              onCtrlEnter={submitForm}
               placeholder="Card Description"
             />
           </Form>
