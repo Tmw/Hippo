@@ -1,29 +1,35 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import { withRouter } from "react-router-dom";
-import { Dialog, toaster } from "evergreen-ui";
+import { toaster } from "evergreen-ui";
 import { useMutation } from "react-apollo-hooks";
+
+import {
+  ConfirmAndMutate,
+  useConfirmAndMutationState
+} from "components/ConfirmAndMutate";
 
 import DELETE_LANE_MUTATION from "graphql/delete_lane_mutation";
 import GET_PROJECT from "graphql/get_project_query";
 import Lane from "components/Lane";
 
 const LaneList = ({ lanes, projectId, history }) => {
-  // Lane deletion state management, callbacks and GraphQL Mutation
-  const [isDeleteDialogVisible, setLaneDeletionDialogVisible] = useState(false);
-  const [isLaneDeleting, setLaneDeleting] = useState(false);
-  const [selectedLaneIdentifier, setSelectedLaneIdentifier] = useState(null);
+  const {
+    visible: dialogVisible,
+    identifier: selectedLaneId,
+    showDialog,
+    closeDialog
+  } = useConfirmAndMutationState();
 
   // define the lane deletion mutation
-  const deleteLane = useMutation(DELETE_LANE_MUTATION, {
-    variables: { laneId: selectedLaneIdentifier },
+  const deleteLaneMutation = useMutation(DELETE_LANE_MUTATION, {
+    variables: { laneId: selectedLaneId },
     refetchQueries: [{ query: GET_PROJECT, variables: { id: projectId } }]
   });
 
   // toggle the lane deletion dialog
-  const toggleDeleteLaneDialog = useCallback(laneId => {
-    setSelectedLaneIdentifier(laneId);
-    setLaneDeletionDialogVisible(true);
-  }, []);
+  const toggleDeleteLaneDialog = useCallback(laneId => showDialog(laneId), [
+    showDialog
+  ]);
 
   // State and callbacks for editing a lane
   const handleEditLaneClicked = useCallback(
@@ -33,22 +39,13 @@ const LaneList = ({ lanes, projectId, history }) => {
     [history, projectId]
   );
 
-  // perform the actual lane deletion mutation
-  const handleDeleteLane = useCallback(() => {
-    setLaneDeleting(true);
+  const onLaneDeletionError = useCallback(() => {
+    toaster.danger("Error deleting lane.. Please try again");
+  }, []);
 
-    deleteLane()
-      .then(() => {
-        setLaneDeleting(true);
-        setSelectedLaneIdentifier(null);
-        setLaneDeletionDialogVisible(false);
-        toaster.success("Lane succesfully deleted", { duration: 2 });
-      })
-      .catch(error => {
-        console.error(error);
-        toaster.danger("Error deleting lane.. Please try again");
-      });
-  }, [deleteLane]);
+  const onLaneDeletionSuccess = useCallback(() => {
+    toaster.success("Lane succesfully deleted", { duration: 2 });
+  }, []);
 
   return lanes.map(lane => (
     <React.Fragment>
@@ -59,17 +56,16 @@ const LaneList = ({ lanes, projectId, history }) => {
         onLaneEdit={handleEditLaneClicked}
       />
 
-      <Dialog
-        isShown={isDeleteDialogVisible}
+      <ConfirmAndMutate
+        mutation={deleteLaneMutation}
         title="Are you sure?"
-        intent="danger"
-        onCloseComplete={() => setLaneDeletionDialogVisible(false)}
-        onConfirm={handleDeleteLane}
-        isConfirmLoading={isLaneDeleting}
-        confirmLabel="Delete Lane"
-      >
-        Are you sure you want to delete this lane?
-      </Dialog>
+        description="Are you sure you want to delete this lane?"
+        confirmActionTitle="Delete lane"
+        isVisible={dialogVisible}
+        closeDialog={closeDialog}
+        onError={onLaneDeletionError}
+        onSuccess={onLaneDeletionSuccess}
+      />
     </React.Fragment>
   ));
 };
