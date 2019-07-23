@@ -66,6 +66,7 @@ const CardList = ({ cards, match, history }) => {
         mutation={deleteCardMutation}
         title="Are you sure?"
         description="Are you sure you want to delete this card?"
+        confirmActionTitle="Delete card"
         isVisible={dialogVisible}
         closeDialog={closeDialog}
         onError={onCardDeletionError}
