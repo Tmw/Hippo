@@ -6,6 +6,7 @@ const ConfirmAndMutate = ({
   mutation,
   title,
   description,
+  confirmActionTitle,
   isVisible,
   closeDialog,
   onSuccess,
@@ -42,7 +43,7 @@ const ConfirmAndMutate = ({
       onCloseComplete={onCloseCompleteHandler}
       onConfirm={executeMutation}
       isConfirmLoading={isInFlight}
-      confirmLabel="Delete Card"
+      confirmLabel={confirmActionTitle}
     >
       {description}
     </Dialog>
