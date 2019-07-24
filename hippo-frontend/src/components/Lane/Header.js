@@ -7,6 +7,9 @@ const Header = ({ title, children, ...other }) => {
       display="flex"
       marginRight={20}
       marginBottom={10}
+      paddingTop={25}
+      paddingRight={5}
+      paddingLeft={25}
       alignItems="center"
       {...other}
     >

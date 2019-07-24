@@ -55,8 +55,10 @@ const CardList = ({ cards, laneId, match, history }) => {
       <Droppable droppableId={`lane:${laneId}`} type="CARD">
         {(provided, snapshot) => (
           <Pane
-            paddingRight="20px"
+            paddingRight={20}
             overflowY="scroll"
+            padding={25}
+            paddingTop={0}
             height="100%"
             innerRef={provided.innerRef}
           >
