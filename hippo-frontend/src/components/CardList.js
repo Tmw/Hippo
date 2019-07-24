@@ -52,14 +52,13 @@ const CardList = ({ cards, laneId, match, history }) => {
 
   return (
     <React.Fragment>
-      <Droppable droppableId={`lane:${laneId}`}>
+      <Droppable droppableId={`lane:${laneId}`} type="CARD">
         {(provided, snapshot) => (
           <Pane
             paddingRight="20px"
             overflowY="scroll"
+            height="100%"
             innerRef={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandle}
           >
             {cards.map((card, index) => (
               <Card

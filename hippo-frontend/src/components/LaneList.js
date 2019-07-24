@@ -1,7 +1,10 @@
 import React, { useCallback } from "react";
 import { withRouter } from "react-router-dom";
-import { toaster } from "evergreen-ui";
+import { Pane, toaster } from "evergreen-ui";
 import { useMutation } from "react-apollo-hooks";
+
+import { Droppable } from "react-beautiful-dnd";
+import CreateLaneCTA from "components/CreateLaneCTA";
 
 import {
   ConfirmAndMutate,
@@ -39,6 +42,12 @@ const LaneList = ({ lanes, projectId, history }) => {
     [history, projectId]
   );
 
+  // Lane creation callback
+  const handleAddClicked = useCallback(
+    () => history.push(`/projects/${projectId}/lanes/new`),
+    [history, projectId]
+  );
+
   const onLaneDeletionError = useCallback(() => {
     toaster.danger("Error deleting lane.. Please try again");
   }, []);
@@ -49,14 +58,39 @@ const LaneList = ({ lanes, projectId, history }) => {
 
   return (
     <React.Fragment>
-      {lanes.map(lane => (
-        <Lane
-          key={lane.id}
-          data={lane}
-          onLaneDelete={toggleDeleteLaneDialog}
-          onLaneEdit={handleEditLaneClicked}
-        />
-      ))}
+      <Droppable
+        droppableId={`project:${projectId}`}
+        type="LANE"
+        direction="horizontal"
+      >
+        {(provided, snapshot) => (
+          <Pane
+            width="100%"
+            height="100%"
+            display="flex"
+            overflowY="scroll"
+            padding="25px"
+            innerRef={provided.innerRef}
+          >
+            {lanes.map((lane, index) => (
+              <Lane
+                key={lane.id}
+                index={index}
+                data={lane}
+                onLaneDelete={toggleDeleteLaneDialog}
+                onLaneEdit={handleEditLaneClicked}
+              />
+            ))}
+
+            {provided.placeholder}
+
+            <CreateLaneCTA
+              initial={lanes.length === 0}
+              onAdd={handleAddClicked}
+            />
+          </Pane>
+        )}
+      </Droppable>
 
       <ConfirmAndMutate
         mutation={deleteLaneMutation}

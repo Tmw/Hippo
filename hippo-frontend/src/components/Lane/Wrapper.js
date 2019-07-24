@@ -1,7 +1,7 @@
 import React from "react";
 import { Pane } from "evergreen-ui";
 
-const Wrapper = ({ children }) => (
+const Wrapper = ({ children, ...other }) => (
   <Pane
     width={320}
     height="100%"
@@ -14,6 +14,7 @@ const Wrapper = ({ children }) => (
     display="flex"
     flexShrink={0}
     flexDirection="column"
+    {...other}
   >
     {children}
   </Pane>
