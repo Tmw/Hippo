@@ -3,6 +3,7 @@ import React, { useCallback } from "react";
 import { Pane, toaster } from "evergreen-ui";
 import { useMutation } from "react-apollo-hooks";
 import { withRouter } from "react-router-dom";
+import { Droppable } from "react-beautiful-dnd";
 
 import GET_PROJECT from "graphql/get_project_query";
 import DELETE_CARD_MUTATION from "graphql/delete_card_mutation";
@@ -13,7 +14,7 @@ import {
   useConfirmAndMutationState
 } from "components/ConfirmAndMutate";
 
-const CardList = ({ cards, match, history }) => {
+const CardList = ({ cards, laneId, match, history }) => {
   const {
     visible: dialogVisible,
     identifier: selectedCardId,
@@ -51,16 +52,28 @@ const CardList = ({ cards, match, history }) => {
 
   return (
     <React.Fragment>
-      <Pane paddingRight="20px" overflowY="scroll">
-        {cards.map(card => (
-          <Card
-            data={card}
-            key={card.id}
-            onCardDelete={handleCardDeleteClicked}
-            onCardEdit={handleCardEditClicked}
-          />
-        ))}
-      </Pane>
+      <Droppable droppableId={`lane:${laneId}`}>
+        {(provided, snapshot) => (
+          <Pane
+            paddingRight="20px"
+            overflowY="scroll"
+            innerRef={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandle}
+          >
+            {cards.map((card, index) => (
+              <Card
+                data={card}
+                index={index}
+                key={card.id}
+                onCardDelete={handleCardDeleteClicked}
+                onCardEdit={handleCardEditClicked}
+              />
+            ))}
+            {provided.placeholder}
+          </Pane>
+        )}
+      </Droppable>
 
       <ConfirmAndMutate
         mutation={deleteCardMutation}

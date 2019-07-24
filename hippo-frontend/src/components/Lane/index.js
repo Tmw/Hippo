@@ -34,7 +34,7 @@ const Lane = ({ data: { id, title, cards }, onLaneEdit, onLaneDelete }) => {
         laneId={id}
       />
 
-      <CardList cards={cards} />
+      <CardList cards={cards} laneId={id} />
     </Wrapper>
   );
 };
