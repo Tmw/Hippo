@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Pane } from "evergreen-ui";
 import { withRouter } from "react-router-dom";
-
+import { DragDropContext } from "react-beautiful-dnd";
 import CreateLaneCTA from "components/CreateLaneCTA";
 import LaneList from "components/LaneList";
 
@@ -14,17 +14,18 @@ const Project = ({ project: { lanes }, project, history }) => {
     [history, project.id]
   );
 
+  const onDragEnd = useCallback(dragInfo => {
+    console.log("dragInfo:", dragInfo);
+  }, []);
+
   return (
     <React.Fragment>
       <Header triggerTitle={project.title} />
-      <Pane
-        width="100%"
-        height="100%"
-        display="flex"
-        overflowX="scroll"
-        padding="25px"
-      >
-        <LaneList lanes={lanes} projectId={project.id} />
+      <Pane width="100%" height="100%" display="flex" padding="25px">
+        <DragDropContext onDragEnd={onDragEnd}>
+          <LaneList lanes={lanes} projectId={project.id} />
+        </DragDropContext>
+
         <CreateLaneCTA initial={lanes.length === 0} onAdd={handleAddClicked} />
       </Pane>
     </React.Fragment>
