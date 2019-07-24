@@ -6,7 +6,6 @@ const Wrapper = ({ children, ...other }) => (
     width={320}
     height="100%"
     marginRight={15}
-    padding={25}
     paddingRight={5}
     background="#f6f6f6"
     className="Lane"
