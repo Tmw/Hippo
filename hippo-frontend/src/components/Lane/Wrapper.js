@@ -3,7 +3,7 @@ import { Pane } from "evergreen-ui";
 
 const Wrapper = ({ children }) => (
   <Pane
-    width={350}
+    width={320}
     height="100%"
     marginRight={15}
     padding={25}
@@ -12,6 +12,7 @@ const Wrapper = ({ children }) => (
     className="Lane"
     borderRadius="5px"
     display="flex"
+    flexShrink={0}
     flexDirection="column"
   >
     {children}
