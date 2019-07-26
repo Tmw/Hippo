@@ -38,11 +38,12 @@ defmodule Hippo.Lanes do
 
   def get_lane!(id, :with_details) do
     Repo.one(
-      from l in Lane,
+      from(l in Lane,
         where: l.id == ^id,
         left_join: c in Card,
         on: c.lane_id == l.id,
         preload: [cards: c]
+      )
     )
   end
 
@@ -64,8 +65,10 @@ defmodule Hippo.Lanes do
         {:error, "project not found"}
 
       project ->
-        project
-        |> Ecto.build_assoc(:lanes, attrs)
+        attrs = Map.merge(attrs, %{position: :last, project_id: project_id})
+
+        %Lane{}
+        |> Lane.changeset(attrs)
         |> Repo.insert()
     end
   end

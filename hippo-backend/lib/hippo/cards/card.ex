@@ -6,11 +6,11 @@ defmodule Hippo.Cards.Card do
   @primary_key {:id, Ecto.ULID, autogenerate: true}
   @foreign_key_type Ecto.ULID
   schema "cards" do
-    field :title, :string
-    field :description, :string
-    field :rank, :integer
-    field :position, :any, virtual: true
-    belongs_to :lane, Hippo.Lanes.Lane
+    field(:title, :string)
+    field(:description, :string)
+    field(:rank, :integer)
+    field(:position, :any, virtual: true)
+    belongs_to(:lane, Hippo.Lanes.Lane)
 
     timestamps()
   end
@@ -18,7 +18,7 @@ defmodule Hippo.Cards.Card do
   @doc false
   def changeset(card, attrs) do
     card
-    |> cast(attrs, [:title, :description, :position])
+    |> cast(attrs, [:title, :description, :position, :lane_id])
     |> validate_required([:title])
     |> set_rank(scope: :lane_id)
   end
