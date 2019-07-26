@@ -41,25 +41,27 @@ Truncater.truncate([:projects, :lanes, :cards])
 # very bare bones helper module to setup some fake projects and data
 defmodule ProjectSeeder do
   def project() do
-    %Project{
+    Project.changeset(%Project{}, %{
       title: "Project - #{rand_id()}",
       description: "Some Description goes here - #{rand_id()}",
-      lanes: Enum.map(0..5, fn _idx -> lane() end)
-    }
+      lanes: Enum.map(0..5, &lane/1)
+    })
   end
 
-  def lane() do
-    %Lane{
+  def lane(index) do
+    %{
       title: "Lane Title #{rand_id()}",
       description: "A lane description #{rand_id()}",
-      cards: Enum.map(0..5, fn _idx -> card() end)
+      cards: Enum.map(0..5, &card/1),
+      position: index
     }
   end
 
-  def card() do
-    %Card{
+  def card(index) do
+    %{
       title: "Card title #{rand_id()}",
-      description: "some card description #{rand_id()}"
+      description: "some card description #{rand_id()}",
+      position: index
     }
   end
 
@@ -69,8 +71,8 @@ defmodule ProjectSeeder do
 end
 
 # make 25 projects to test with
-make_project = fn _idx ->
+make_project = fn ->
   ProjectSeeder.project() |> Hippo.Repo.insert()
 end
 
-Enum.each(0..25, make_project)
+for _ <- 0..25, do: make_project.()
