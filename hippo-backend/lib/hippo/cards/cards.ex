@@ -50,8 +50,10 @@ defmodule Hippo.Cards do
         {:error, "lane not found"}
 
       lane ->
-        lane
-        |> Ecto.build_assoc(:cards, attrs)
+        attrs = Map.merge(attrs, %{position: :first, lane_id: lane.id})
+
+        %Card{}
+        |> Card.changeset(attrs)
         |> Repo.insert()
     end
   end
