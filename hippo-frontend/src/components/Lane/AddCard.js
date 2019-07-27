@@ -118,7 +118,12 @@ const AddCard = ({ isShown, onCancel, onSubmitted, laneId }) => {
             />
 
             <Pane align="right" marginTop={10}>
-              <Button marginRight={5} height={24} onClick={onCancel}>
+              <Button
+                type="button"
+                marginRight={5}
+                height={24}
+                onClick={onCancel}
+              >
                 Cancel
               </Button>
               <Button type="submit" intent="success" height={24}>
