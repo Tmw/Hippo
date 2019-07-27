@@ -24,22 +24,6 @@ defmodule Hippo.Projects do
   def get_project(id), do: Repo.get(Project, id)
 
   @doc """
-  Gets a single project.
-
-  Raises `Ecto.NoResultsError` if the Project does not exist.
-
-  ## Examples
-
-      iex> get_project!(123)
-      %Project{}
-
-      iex> get_project!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_project!(id), do: Repo.get!(Project, id)
-
-  @doc """
   Gets a single project with lanes and cards preloaded
 
   ## Examples
@@ -50,13 +34,14 @@ defmodule Hippo.Projects do
   """
   def get_project!(id, :with_details) do
     Repo.one(
-      from p in Project,
+      from(p in Project,
         where: p.id == ^id,
         left_join: l in Lane,
         on: l.project_id == p.id,
         left_join: c in Card,
         on: c.lane_id == l.id,
         preload: [lanes: {l, cards: c}]
+      )
     )
   end
 
@@ -113,15 +98,17 @@ defmodule Hippo.Projects do
   end
 
   def lane_ids_for_project_id(project_id) do
-    from l in Lane,
+    from(l in Lane,
       where: l.project_id == ^project_id,
       select: l.id
+    )
   end
 
   def card_ids_for_lane_ids(lane_ids) do
-    from c in Card,
+    from(c in Card,
       where: c.lane_id in ^lane_ids,
       select: c.id
+    )
   end
 
   def delete_with_contents(project_id) do

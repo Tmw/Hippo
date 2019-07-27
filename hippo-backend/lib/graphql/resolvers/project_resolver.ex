@@ -21,7 +21,10 @@ defmodule Hippo.GraphQL.Resolvers.Project do
 
   @doc "Resolve by returning a single project by ID"
   def find(%{id: id}, _) do
-    {:ok, Projects.get_project!(id)}
+    case Projects.get_project(id) do
+      nil -> {:error, "Project not found"}
+      project -> {:ok, project}
+    end
   end
 
   @doc "Resolve by returning all projects"

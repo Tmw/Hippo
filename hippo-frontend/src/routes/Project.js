@@ -13,7 +13,9 @@ const ProjectRoute = ({ match: { params } }) => {
   });
 
   if (loading) return <SpinnerWithText text="Hold on.." />;
-  if (error) return <ErrorWithText text="Uh-oh.." description={error} />;
+  if (error)
+    return <ErrorWithText text="Uh-oh.." description={error.message} />;
+
   return <Project project={firstProject(data)} />;
 };
 
