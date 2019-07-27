@@ -89,42 +89,41 @@ const AddCard = ({ isShown, onCancel, onSubmitted, laneId }) => {
     <Formik onSubmit={handleSubmit} initialValues={initialValues}>
       {({ submitForm }) => (
         <Form>
-          <Pane marginRight="20px" onKeyDown={handleKeydown}>
-            <Pane
-              width="100%"
-              minHeight="150px"
-              borderRadius="5px"
-              marginBottom="15px"
-              background="white"
-              elevation={1}
-              padding="15px"
-              align="left"
-            >
-              <FormikField
-                component={TextInputField}
-                innerRef={setTitleInputRef}
-                name="title"
-                label="Card title"
-                placeholder="Card Title"
-                tabIndex={0}
-                required
-              />
+          <Pane
+            minHeight="150px"
+            borderRadius="5px"
+            margin="25px"
+            marginBottom="15px"
+            background="white"
+            elevation={1}
+            padding="15px"
+            align="left"
+            onKeyDown={handleKeydown}
+          >
+            <FormikField
+              component={TextInputField}
+              innerRef={setTitleInputRef}
+              name="title"
+              label="Card title"
+              placeholder="Card Title"
+              tabIndex={0}
+              required
+            />
 
-              <FormikField
-                component={Textarea}
-                name="description"
-                onCtrlEnter={submitForm}
-                placeholder="Card description"
-              />
+            <FormikField
+              component={Textarea}
+              name="description"
+              onCtrlEnter={submitForm}
+              placeholder="Card description"
+            />
 
-              <Pane align="right" marginTop={10}>
-                <Button marginRight={5} height={24} onClick={onCancel}>
-                  Cancel
-                </Button>
-                <Button type="submit" intent="success" height={24}>
-                  Save
-                </Button>
-              </Pane>
+            <Pane align="right" marginTop={10}>
+              <Button marginRight={5} height={24} onClick={onCancel}>
+                Cancel
+              </Button>
+              <Button type="submit" intent="success" height={24}>
+                Save
+              </Button>
             </Pane>
           </Pane>
         </Form>
