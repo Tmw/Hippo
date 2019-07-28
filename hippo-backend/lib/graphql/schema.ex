@@ -1,13 +1,12 @@
 defmodule Hippo.GraphQL.Schema do
   use Absinthe.Schema
-  alias Hippo.GraphQL.Resolvers
 
   # setup dataloader
   def context(ctx) do
     loader =
       Dataloader.new()
-      |> Dataloader.add_source(:lanes, Resolvers.Lane.data())
-      |> Dataloader.add_source(:cards, Resolvers.Card.data())
+      |> Dataloader.add_source(:lanes, Hippo.Lanes.data())
+      |> Dataloader.add_source(:cards, Hippo.Cards.data())
 
     Map.put(ctx, :loader, loader)
   end

@@ -7,6 +7,14 @@ defmodule Hippo.Lanes do
 
   import Ecto.Query
 
+  def data() do
+    Dataloader.Ecto.new(Hippo.Repo, query: &query/2)
+  end
+
+  def query(queryable, _params) do
+    from(queryable, order_by: [:rank, :id])
+  end
+
   @doc """
   Returns the list of lanes.
 

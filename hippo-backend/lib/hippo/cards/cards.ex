@@ -1,8 +1,14 @@
 defmodule Hippo.Cards do
-  alias Hippo.Cards.Card
-  alias Hippo.Lanes.Lane
+  import Ecto.Query
+  alias Hippo.{Cards.Card, Lanes.Lane, Repo}
 
-  alias Hippo.Repo
+  def data() do
+    Dataloader.Ecto.new(Hippo.Repo, query: &query/2)
+  end
+
+  def query(queryable, _params) do
+    from(queryable, order_by: [asc: :rank, desc: :id])
+  end
 
   @doc """
   Returns the list of cards.

@@ -1,15 +1,5 @@
 defmodule Hippo.GraphQL.Resolvers.Card do
-  import Ecto.Query
-  alias Hippo.Cards
-  alias Hippo.Cards.Card
-
-  def data() do
-    Dataloader.Ecto.new(Hippo.Repo, query: &query/2)
-  end
-
-  def query(queryable, _params) do
-    from(queryable, order_by: [asc: :rank, desc: :id])
-  end
+  alias Hippo.{Cards, Cards.Card}
 
   def create(%{card: params, lane_id: lane_id}, _) do
     case Cards.create_card(params, for_lane: lane_id) do

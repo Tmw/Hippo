@@ -1,15 +1,6 @@
 defmodule Hippo.GraphQL.Resolvers.Lane do
-  import Ecto.Query
   alias Hippo.Lanes
   alias Hippo.Lanes.Lane
-
-  def data() do
-    Dataloader.Ecto.new(Hippo.Repo, query: &query/2)
-  end
-
-  def query(queryable, _params) do
-    from(queryable, order_by: [:rank, :id])
-  end
 
   def create(%{lane: params, project_id: project_id}, _) do
     case Lanes.create_lane(params, for_project: project_id) do
