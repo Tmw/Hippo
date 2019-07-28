@@ -3,9 +3,10 @@ import { withRouter } from "react-router-dom";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useMutation } from "react-apollo-hooks";
 
-import GET_PROJECT from "graphql/get_project_query";
 import REPOSITION_CARD_MUTATION from "graphql/reposition_card_mutation";
 import REPOSITION_LANE_MUTATION from "graphql/reposition_lane_mutation";
+
+import moveCard from "graphql/helpers/moveCard";
 
 import LaneList from "components/LaneList";
 import Header from "components/Header";
@@ -13,13 +14,8 @@ import Header from "components/Header";
 const toActualId = identifier => identifier.split(":")[1];
 
 const Project = ({ project: { lanes }, project }) => {
-  const repositionLaneMutation = useMutation(REPOSITION_LANE_MUTATION, {
-    refetchQueries: [{ query: GET_PROJECT, variables: { id: project.id } }]
-  });
-
-  const repositionCardMutation = useMutation(REPOSITION_CARD_MUTATION, {
-    refetchQueries: [{ query: GET_PROJECT, variables: { id: project.id } }]
-  });
+  const repositionLaneMutation = useMutation(REPOSITION_LANE_MUTATION);
+  const repositionCardMutation = useMutation(REPOSITION_CARD_MUTATION);
 
   const onDragEnd = useCallback(
     dragInfo => {
@@ -31,11 +27,11 @@ const Project = ({ project: { lanes }, project }) => {
           // unwrap actual IDs from drag event
           const cardId = toActualId(draggableId);
           const sourceLaneId = toActualId(source.droppableId);
-          const targetLaneId = toActualId(destination.droppableId);
+          const destinationLaneId = toActualId(destination.droppableId);
 
           // if source and target are the same, early return to save a mutation
           if (
-            sourceLaneId === targetLaneId &&
+            sourceLaneId === destinationLaneId &&
             source.index === destination.index
           ) {
             return;
@@ -45,8 +41,25 @@ const Project = ({ project: { lanes }, project }) => {
           repositionCardMutation({
             variables: {
               cardId,
-              laneId: targetLaneId,
+              laneId: destinationLaneId,
               position: destination.index
+            },
+            optimisticResponse: {
+              __typename: "Mutation",
+              repositionCard: {
+                __typename: "RepositionCardPayload",
+                successful: true
+              }
+            },
+            update: store => {
+              moveCard(
+                store,
+                sourceLaneId,
+                source.index,
+                destinationLaneId,
+                destination.index,
+                cardId
+              );
             }
           }).catch(error => console.error(error));
           break;
