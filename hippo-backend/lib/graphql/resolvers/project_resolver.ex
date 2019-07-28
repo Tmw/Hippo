@@ -1,23 +1,5 @@
 defmodule Hippo.GraphQL.Resolvers.Project do
   alias Hippo.Projects
-  import Ecto.Query
-
-  def data() do
-    Dataloader.Ecto.new(Hippo.Repo, query: &query/2)
-  end
-
-  def query(queryable, _params)
-      when queryable in [Hippo.Lanes.Lane] do
-    from(queryable, order_by: [:rank, :id])
-  end
-
-  def query(queryable, _params)
-      when queryable in [Hippo.Cards.Card] do
-    from(queryable, order_by: [asc: :rank, desc: :id])
-  end
-
-  # fallback queryable; no ordering here
-  def query(queryable, _params), do: queryable
 
   @doc "Resolve by returning a single project by ID"
   def find(%{id: id}, _) do
