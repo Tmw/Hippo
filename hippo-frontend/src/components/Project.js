@@ -2,9 +2,11 @@ import React, { useCallback } from "react";
 import { withRouter } from "react-router-dom";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useMutation } from "react-apollo-hooks";
+import { move } from "ramda";
 
 import REPOSITION_CARD_MUTATION from "graphql/reposition_card_mutation";
 import REPOSITION_LANE_MUTATION from "graphql/reposition_lane_mutation";
+import GET_PROJECT_QUERY from "graphql/get_project_query";
 
 import moveCard from "graphql/helpers/moveCard";
 
@@ -78,6 +80,26 @@ const Project = ({ project: { lanes }, project }) => {
             variables: {
               laneId,
               position: destination.index
+            },
+            optimisticResponse: {
+              __typename: "Mutation",
+              repositionLane: {
+                __typename: "RepositionLanePayload",
+                successful: true
+              }
+            },
+            update: store => {
+              // update the order of the lanes
+              const updatedProject = {
+                ...project,
+                lanes: move(source.index, destination.index, project.lanes)
+              };
+
+              // write updated project back into the store
+              store.writeQuery({
+                query: GET_PROJECT_QUERY,
+                data: { projects: [updatedProject] }
+              });
             }
           }).catch(error => console.error(error));
           break;
@@ -86,7 +108,7 @@ const Project = ({ project: { lanes }, project }) => {
           console.log("Unsupported draggable type", draggableType);
       }
     },
-    [repositionCardMutation, repositionLaneMutation]
+    [project, repositionCardMutation, repositionLaneMutation]
   );
 
   return (
