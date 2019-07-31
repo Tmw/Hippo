@@ -23,6 +23,7 @@ defmodule Hippo.GraphQL.Schema do
 
   query do
     import_fields(:projects_index_query)
+    import_fields(:project_get_query)
   end
 
   mutation do
