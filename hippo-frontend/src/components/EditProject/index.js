@@ -80,10 +80,9 @@ const EditProjectSheetContents = ({ projectId, onClose, history }) => {
   if (loading) return <SpinnerWithText text="Hold on.." />;
   if (error) return <ErrorWithText text="Uh-oh.." description={error} />;
 
-  const project = data.projects[0];
   const initialValues = {
-    title: project.title,
-    description: project.description
+    title: data.project.title,
+    description: data.project.description
   };
 
   return (

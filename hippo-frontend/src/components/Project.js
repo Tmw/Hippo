@@ -98,7 +98,7 @@ const Project = ({ project: { lanes }, project }) => {
               // write updated project back into the store
               store.writeQuery({
                 query: GET_PROJECT_QUERY,
-                data: { projects: [updatedProject] }
+                data: { project: updatedProject }
               });
             }
           }).catch(error => console.error(error));

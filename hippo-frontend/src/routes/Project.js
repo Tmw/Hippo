@@ -5,8 +5,6 @@ import { useQuery } from "react-apollo-hooks";
 import GET_PROJECT from "graphql/get_project_query";
 import Project from "components/Project";
 
-const firstProject = ({ projects }) => projects[0];
-
 const ProjectRoute = ({ match: { params } }) => {
   const { data, error, loading } = useQuery(GET_PROJECT, {
     variables: { id: params.projectId }
@@ -16,7 +14,7 @@ const ProjectRoute = ({ match: { params } }) => {
   if (error)
     return <ErrorWithText text="Uh-oh.." description={error.message} />;
 
-  return <Project project={firstProject(data)} />;
+  return <Project project={data.project} />;
 };
 
 export default ProjectRoute;
