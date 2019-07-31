@@ -58,7 +58,7 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
   describe "ProjectQuery - Specific project" do
     @query """
     query Project($id: ID) {
-      projects (id: $id) {
+      project (id: $id) {
         id
         title
         description
@@ -79,10 +79,9 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
       conn = conn |> gql(skeleton(@query, %{"id" => project.id}))
 
       project_response =
-        json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("projects")
-        |> hd()
+        conn
+        |> json_response(200)
+        |> get_in(~w(data project))
 
       assert project_response["id"] == project.id
       assert project_response["title"] == project.title
@@ -93,14 +92,11 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
     test "lanes are sorted by rank", %{conn: conn, project: project} do
       conn = conn |> gql(skeleton(@query, %{"id" => project.id}))
 
-      lanes =
-        json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("projects")
-        |> Enum.at(0)
-        |> Map.get("lanes")
-
-      actual = lanes |> Enum.map(&Map.get(&1, "id"))
+      actual =
+        conn
+        |> json_response(200)
+        |> get_in(~w(data project lanes))
+        |> Enum.map(&Map.get(&1, "id"))
 
       expected =
         from(l in Lane,
@@ -119,11 +115,9 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
       first_lane = project.lanes |> Enum.at(0)
 
       actual =
-        json_response(conn, 200)
-        |> Map.get("data")
-        |> Map.get("projects")
-        |> Enum.at(0)
-        |> Map.get("lanes")
+        conn
+        |> json_response(200)
+        |> get_in(~w(data project lanes))
         |> Enum.find(&(&1["id"] == first_lane.id))
         |> Map.get("cards")
         |> Enum.map(&Map.get(&1, "id"))

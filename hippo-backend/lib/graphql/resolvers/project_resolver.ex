@@ -10,7 +10,7 @@ defmodule Hippo.GraphQL.Resolvers.Project do
   end
 
   @doc "Resolve by returning all projects"
-  def find(_, _) do
+  def all(_, _) do
     {:ok, Projects.list_projects()}
   end
 
