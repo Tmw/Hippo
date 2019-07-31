@@ -1,7 +1,7 @@
 import { gql } from "apollo-boost";
 export default gql`
-  query Projects($id: identifier!) {
-    projects(id: $id) {
+  query Project($id: identifier!) {
+    project(id: $id) {
       id
       title
       description
