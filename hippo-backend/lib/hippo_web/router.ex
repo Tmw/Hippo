@@ -19,6 +19,7 @@ defmodule HippoWeb.Router do
     forward "/graphiql", Absinthe.Plug.GraphiQL,
       schema: Hippo.GraphQL.Schema,
       interface: :playground,
-      json_codec: Jason
+      json_codec: Jason,
+      socket_url: "ws://localhost:4000/socket"
   end
 end
