@@ -1,5 +1,6 @@
 defmodule HippoWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :hippo
+  use Absinthe.Phoenix.Endpoint
 
   socket("/socket", HippoWeb.UserSocket,
     websocket: true,
