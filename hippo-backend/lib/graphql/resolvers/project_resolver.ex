@@ -1,5 +1,6 @@
 defmodule Hippo.GraphQL.Resolvers.Project do
   alias Hippo.Projects
+  alias Hippo.GraphQL.Events
 
   @doc "Resolve by returning a single project by ID"
   def find(%{id: id}, _) do
@@ -15,8 +16,13 @@ defmodule Hippo.GraphQL.Resolvers.Project do
   end
 
   def create(%{project: params}, _) do
-    case Projects.create_project(params) do
-      {:ok, project} -> {:ok, project: project}
+    with {:ok, project} <- Projects.create_project(params),
+         :ok <-
+           Events.publish(:projects_updates, "projects:all", %Events.Project.Created{
+             payload: project
+           }) do
+      {:ok, project: project}
+    else
       error -> error
     end
   end
@@ -25,7 +31,11 @@ defmodule Hippo.GraphQL.Resolvers.Project do
     with {:project, %Projects.Project{} = project} <-
            {:project, Projects.get_project(project_id)},
          {:updated, {:ok, %Projects.Project{} = project}} <-
-           {:updated, Projects.update_project(project, params)} do
+           {:updated, Projects.update_project(project, params)},
+         :ok <-
+           Events.publish(:projects_updates, "projects:all", %Events.Project.Updated{
+             payload: project
+           }) do
       {:ok, project: project}
     else
       {:project, nil} -> {:error, "project not found"}
@@ -34,6 +44,14 @@ defmodule Hippo.GraphQL.Resolvers.Project do
   end
 
   def delete(%{project_id: project_id}, _ctx) do
-    Projects.delete_with_contents(project_id)
+    with {:ok, response} <- Projects.delete_with_contents(project_id),
+         :ok <-
+           Events.publish(:projects_updates, "projects:all", %Events.Project.Deleted{
+             project_id: project_id
+           }) do
+      {:ok, response}
+    else
+      {:error, error} -> {:error, error}
+    end
   end
 end
