@@ -5,4 +5,5 @@ defmodule Hippo.GraphQL.Types do
   import_types(Hippo.GraphQL.Types.Project)
   import_types(Hippo.GraphQL.Types.Lane)
   import_types(Hippo.GraphQL.Types.Card)
+  import_types(Hippo.GraphQL.Types.Event)
 end
