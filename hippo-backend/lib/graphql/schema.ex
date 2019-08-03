@@ -20,6 +20,7 @@ defmodule Hippo.GraphQL.Schema do
   import_types(Hippo.GraphQL.Types)
   import_types(Hippo.GraphQL.Queries)
   import_types(Hippo.GraphQL.Mutations)
+  import_types(Hippo.GraphQL.Subscriptions)
 
   query do
     import_fields(:projects_index_query)
@@ -30,5 +31,9 @@ defmodule Hippo.GraphQL.Schema do
     import_fields(:project_mutations)
     import_fields(:lane_mutations)
     import_fields(:card_mutations)
+  end
+
+  subscription do
+    import_fields(:project_subscriptions)
   end
 end
