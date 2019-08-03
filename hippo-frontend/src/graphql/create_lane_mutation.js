@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 export default gql`
   mutation CreateLane($projectId: identifier!, $lane: LaneCreateParams!) {
     createLane(projectId: $projectId, lane: $lane) {

@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 export default gql`
   mutation UpdateCard($cardId: identifier!, $card: CardUpdateParams!) {
     updateCard(cardId: $cardId, card: $card) {
