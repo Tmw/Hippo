@@ -11,7 +11,8 @@ defmodule Hippo.Application do
       # Start the Ecto repository
       Hippo.Repo,
       # Start the endpoint when the application starts
-      HippoWeb.Endpoint
+      HippoWeb.Endpoint,
+      {Absinthe.Subscription, [HippoWeb.Endpoint]}
       # Starts a worker by calling: Hippo.Worker.start_link(arg)
       # {Hippo.Worker, arg},
     ]

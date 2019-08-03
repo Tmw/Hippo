@@ -1,6 +1,9 @@
 defmodule HippoWeb.UserSocket do
   use Phoenix.Socket
 
+  use Absinthe.Phoenix.Socket,
+    schema: Hippo.GraphQL.Schema
+
   ## Channels
   # channel "room:*", HippoWeb.RoomChannel
 
