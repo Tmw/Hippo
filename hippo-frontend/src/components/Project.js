@@ -1,12 +1,13 @@
 import React, { useCallback } from "react";
 import { withRouter } from "react-router-dom";
 import { DragDropContext } from "react-beautiful-dnd";
-import { useMutation } from "react-apollo-hooks";
+import { useMutation, useSubscription } from "react-apollo-hooks";
 import { move } from "ramda";
 
 import REPOSITION_CARD_MUTATION from "graphql/reposition_card_mutation";
 import REPOSITION_LANE_MUTATION from "graphql/reposition_lane_mutation";
 import GET_PROJECT_QUERY from "graphql/get_project_query";
+import PROJECTS_ALL_SUBSCRIPTION from "graphql/projects_all_subscription";
 
 import moveCard from "graphql/helpers/moveCard";
 
@@ -110,6 +111,13 @@ const Project = ({ project: { lanes }, project }) => {
     },
     [project, repositionCardMutation, repositionLaneMutation]
   );
+
+  useSubscription(PROJECTS_ALL_SUBSCRIPTION, {
+    onSubscriptionData: (things, moreThings) => {
+      console.log(things);
+      console.log(moreThings);
+    }
+  });
 
   return (
     <React.Fragment>
