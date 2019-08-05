@@ -27,7 +27,8 @@
     "start": "NODE_PATH=src/ react-scripts start",
     "build": "NODE_PATH=src/ react-scripts build",
     "test": "NODE_PATH=src/ react-scripts test",
-    "eject": "NODE_PATH=src/ react-scripts eject"
+    "eject": "NODE_PATH=src/ react-scripts eject",
+    "get_fragment_types": "node scripts/get_fragment_types.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,5 +44,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "node-fetch": "^2.6.0"
   }
 }

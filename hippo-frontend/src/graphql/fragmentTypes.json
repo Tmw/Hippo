@@ -1,0 +1,1 @@
+{"__schema":{"types":[{"kind":"UNION","name":"ProjectsEvent","possibleTypes":[{"name":"ProjectCreatedEvent"},{"name":"ProjectUpdatedEvent"},{"name":"ProjectDeletedEvent"}]}]}}
