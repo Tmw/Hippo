@@ -9,6 +9,7 @@ import REPOSITION_LANE_MUTATION from "graphql/reposition_lane_mutation";
 import GET_PROJECT_QUERY from "graphql/get_project_query";
 import PROJECTS_ALL_SUBSCRIPTION from "graphql/projects_all_subscription";
 
+import ProjectsCache from "graphql/helpers/projects_cache";
 import moveCard from "graphql/helpers/moveCard";
 
 import LaneList from "components/LaneList";
@@ -113,9 +114,29 @@ const Project = ({ project: { lanes }, project }) => {
   );
 
   useSubscription(PROJECTS_ALL_SUBSCRIPTION, {
-    onSubscriptionData: (things, moreThings) => {
-      console.log(things);
-      console.log(moreThings);
+    onSubscriptionData: ({ client, subscriptionData }) => {
+      const {
+        data: { projectsUpdates }
+      } = subscriptionData;
+
+      switch (projectsUpdates.__typename) {
+        case "ProjectUpdatedEvent":
+          // No explicit action required, Apollo will update the project
+          // since it has matching IDs in the payload.
+          break;
+
+        case "ProjectDeletedEvent":
+          ProjectsCache.deleteProject(client, projectsUpdates.projectId);
+          break;
+
+        case "ProjectCreatedEvent":
+          ProjectsCache.createProject(client, projectsUpdates.payload);
+          break;
+
+        default:
+          console.warn("unhandled event type");
+          break;
+      }
     }
   });
 
