@@ -10,6 +10,17 @@ defmodule Hippo.Cards do
     from(queryable, order_by: [asc: :rank, desc: :id])
   end
 
+  def find_owning_project_id(%Card{id: card_id}),
+    do: find_owning_project_id(card_id)
+
+  def find_owning_project_id(card_id) when is_binary(card_id) do
+    from(card in Card)
+    |> where([card], card.id == ^card_id)
+    |> join(:left, [card], lane in assoc(card, :lane))
+    |> select([..., lane], lane.project_id)
+    |> Repo.one()
+  end
+
   @doc """
   Returns the list of cards.
 
