@@ -15,6 +15,16 @@ defmodule Hippo.Lanes do
     from(queryable, order_by: [:rank, :id])
   end
 
+  def owning_project_id(%Lane{id: lane_id}),
+    do: owning_project_id(lane_id)
+
+  def owning_project_id(lane_id) when is_binary(lane_id) do
+    from(lane in Lane)
+    |> where([lane], lane.id == ^lane_id)
+    |> select([lane], lane.project_id)
+    |> Repo.one()
+  end
+
   @doc """
   Returns the list of lanes.
 
@@ -72,7 +82,7 @@ defmodule Hippo.Lanes do
       nil ->
         {:error, "project not found"}
 
-      project ->
+      %Project{id: project_id} ->
         attrs = Map.merge(attrs, %{position: :last, project_id: project_id})
 
         %Lane{}

@@ -17,10 +17,7 @@ defmodule Hippo.GraphQL.Resolvers.Project do
 
   def create(%{project: params}, _) do
     with {:ok, project} <- Projects.create_project(params),
-         :ok <-
-           Events.publish(:projects_updates, "projects:all", %Events.Project.Created{
-             payload: project
-           }) do
+         :ok <- publish(%Events.Project.Created{payload: project}) do
       {:ok, project: project}
     else
       error -> error
@@ -32,10 +29,7 @@ defmodule Hippo.GraphQL.Resolvers.Project do
            {:project, Projects.get_project(project_id)},
          {:updated, {:ok, %Projects.Project{} = project}} <-
            {:updated, Projects.update_project(project, params)},
-         :ok <-
-           Events.publish(:projects_updates, "projects:all", %Events.Project.Updated{
-             payload: project
-           }) do
+         :ok <- publish(%Events.Project.Updated{payload: project}) do
       {:ok, project: project}
     else
       {:project, nil} -> {:error, "project not found"}
@@ -45,13 +39,14 @@ defmodule Hippo.GraphQL.Resolvers.Project do
 
   def delete(%{project_id: project_id}, _ctx) do
     with {:ok, response} <- Projects.delete_with_contents(project_id),
-         :ok <-
-           Events.publish(:projects_updates, "projects:all", %Events.Project.Deleted{
-             project_id: project_id
-           }) do
+         :ok <- publish(%Events.Project.Deleted{project_id: project_id}) do
       {:ok, response}
     else
       {:error, error} -> {:error, error}
     end
+  end
+
+  defp publish(event) do
+    Events.publish(:projects_updates, "projects:all", event)
   end
 end

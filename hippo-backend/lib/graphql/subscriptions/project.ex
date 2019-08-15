@@ -15,11 +15,11 @@ defmodule Hippo.GraphQL.Subscriptions.Project do
     @desc """
     subscribe to events from a single given project. Things like lane or card events.
     """
-    field :project_updates, :project do
+    field :project_updates, :project_events do
       arg(:project_id, :identifier)
 
       config(fn args, _ ->
-        {:ok, topic: "project:#{args.project_id}"}
+        {:ok, topic: "projects:#{args[:project_id]}"}
       end)
     end
   end
