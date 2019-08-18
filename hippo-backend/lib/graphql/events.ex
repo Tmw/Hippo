@@ -50,18 +50,18 @@ end
 
 defmodule Hippo.GraphQL.Events.Card do
   defmodule Created do
-    defstruct [:payload]
+    defstruct [:card, :lane_id]
   end
 
   defmodule Updated do
-    defstruct [:payload]
+    defstruct [:card]
   end
 
   defmodule Deleted do
-    defstruct [:card_id]
+    defstruct [:card_id, :lane_id]
   end
 
   defmodule Repositioned do
-    defstruct [:card_id, :target_lane_id, :position]
+    defstruct [:card_id, :source_lane_id, :target_lane_id, :position]
   end
 end
