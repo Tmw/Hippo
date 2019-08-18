@@ -5,7 +5,7 @@ defmodule Hippo.GraphQL.Resolvers.Lane do
 
   def create(%{lane: params, project_id: project_id}, _) do
     with {:ok, lane} <- Lanes.create_lane(params, for_project: project_id),
-         :ok <- publish(project_id, %Events.Lane.Created{payload: lane}) do
+         :ok <- publish(project_id, %Events.Lane.Created{lane: lane}) do
       {:ok, lane: lane}
     end
   end
@@ -14,7 +14,7 @@ defmodule Hippo.GraphQL.Resolvers.Lane do
     with {:lane, %Lane{} = lane} <- {:lane, Lanes.get_lane(lane_id)},
          {:ok, lane} <- Lanes.update_lane(lane, params),
          project_id <- Lanes.owning_project_id(lane),
-         :ok <- publish(project_id, %Events.Lane.Updated{payload: lane}) do
+         :ok <- publish(project_id, %Events.Lane.Updated{lane: lane}) do
       {:ok, lane: lane}
     else
       {:error, _} = error -> error

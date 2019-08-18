@@ -18,11 +18,11 @@ end
 
 defmodule Hippo.GraphQL.Events.Project do
   defmodule Created do
-    defstruct [:payload]
+    defstruct [:project]
   end
 
   defmodule Updated do
-    defstruct [:payload]
+    defstruct [:project]
   end
 
   defmodule Deleted do
@@ -32,11 +32,11 @@ end
 
 defmodule Hippo.GraphQL.Events.Lane do
   defmodule Created do
-    defstruct [:payload]
+    defstruct [:lane]
   end
 
   defmodule Updated do
-    defstruct [:payload]
+    defstruct [:lane]
   end
 
   defmodule Deleted do

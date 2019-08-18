@@ -3,11 +3,11 @@ defmodule Hippo.GraphQL.Types.Event do
   alias Hippo.GraphQL.Events
 
   object :project_created_event do
-    field(:payload, :project)
+    field(:project, :project)
   end
 
   object :project_updated_event do
-    field(:payload, :project)
+    field(:project, :project)
   end
 
   object :project_deleted_event do
@@ -26,11 +26,11 @@ defmodule Hippo.GraphQL.Types.Event do
   end
 
   object :lane_created_event do
-    field(:payload, :lane)
+    field(:lane, :lane)
   end
 
   object :lane_updated_event do
-    field(:payload, :lane)
+    field(:lane, :lane)
   end
 
   object :lane_deleted_event do

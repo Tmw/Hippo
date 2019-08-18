@@ -17,7 +17,7 @@ defmodule Hippo.GraphQL.Resolvers.Project do
 
   def create(%{project: params}, _) do
     with {:ok, project} <- Projects.create_project(params),
-         :ok <- publish(%Events.Project.Created{payload: project}) do
+         :ok <- publish(%Events.Project.Created{project: project}) do
       {:ok, project: project}
     else
       error -> error
@@ -29,7 +29,7 @@ defmodule Hippo.GraphQL.Resolvers.Project do
            {:project, Projects.get_project(project_id)},
          {:updated, {:ok, %Projects.Project{} = project}} <-
            {:updated, Projects.update_project(project, params)},
-         :ok <- publish(%Events.Project.Updated{payload: project}) do
+         :ok <- publish(%Events.Project.Updated{project: project}) do
       {:ok, project: project}
     else
       {:project, nil} -> {:error, "project not found"}
