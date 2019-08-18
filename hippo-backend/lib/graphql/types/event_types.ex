@@ -43,19 +43,22 @@ defmodule Hippo.GraphQL.Types.Event do
   end
 
   object :card_created_event do
-    field(:payload, :card)
+    field(:card, :card)
+    field(:lane_id, :identifier)
   end
 
   object :card_updated_event do
-    field(:payload, :card)
+    field(:card, :card)
   end
 
   object :card_deleted_event do
     field(:card_id, :identifier)
+    field(:lane_id, :identifier)
   end
 
   object :card_repositioned_event do
     field(:card_id, :identifier)
+    field(:source_lane_id, :identifier)
     field(:target_lane_id, :identifier)
     field(:position, :integer)
   end
@@ -82,7 +85,7 @@ defmodule Hippo.GraphQL.Types.Event do
       %Events.Card.Created{}, _ -> :card_created_event
       %Events.Card.Updated{}, _ -> :card_updated_event
       %Events.Card.Deleted{}, _ -> :card_deleted_event
-      %Events.Card.Repositioned{}, _ -> :catd_repositioned_event
+      %Events.Card.Repositioned{}, _ -> :card_repositioned_event
     end)
   end
 end
