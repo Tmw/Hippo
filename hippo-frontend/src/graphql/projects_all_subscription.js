@@ -5,7 +5,7 @@ export default gql`
       __typename
 
       ... on ProjectUpdatedEvent {
-        payload {
+        project {
           id
           title
           description
@@ -17,7 +17,7 @@ export default gql`
       }
 
       ... on ProjectCreatedEvent {
-        payload {
+        project {
           id
           title
           description
