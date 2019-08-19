@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import apolloClient from "graphql/client";
 import { ApolloProvider } from "react-apollo-hooks";
 
+import useProjectsAllRealtimeEvents from "graphql/hooks/projects_all_subscription_hook";
+
 import Home from "./routes/Home";
 import Project from "./routes/Project";
 import ProjectPicker from "routes/ProjectPicker";
@@ -27,33 +29,38 @@ const Centered = ({ children }) => (
   </Pane>
 );
 
-const Routes = () => (
-  <React.Fragment>
-    <Route
-      path="/projects/:projectId/projects-picker"
-      component={ProjectPicker}
-    />
-    <Route path="/projects/:projectId/edit" component={EditProject} />
-    <Route path="/projects/:projectId/lanes/new" component={CreateLane} />
-    <Route
-      path="/projects/:projectId/lanes/:laneId/edit"
-      component={EditLane}
-    />
-    <Route
-      path="/projects/:projectId/cards/:cardId/edit"
-      component={EditCard}
-    />
+const Routes = () => {
+  // subscribe to projects events on the global level
+  useProjectsAllRealtimeEvents();
 
-    <Centered>
-      <Switch>
-        <Route path="/projects/new" exact component={NewProject} />
-        <Route path="/projects/:projectId" component={Project} />
-      </Switch>
-    </Centered>
+  return (
+    <React.Fragment>
+      <Route
+        path="/projects/:projectId/projects-picker"
+        component={ProjectPicker}
+      />
+      <Route path="/projects/:projectId/edit" component={EditProject} />
+      <Route path="/projects/:projectId/lanes/new" component={CreateLane} />
+      <Route
+        path="/projects/:projectId/lanes/:laneId/edit"
+        component={EditLane}
+      />
+      <Route
+        path="/projects/:projectId/cards/:cardId/edit"
+        component={EditCard}
+      />
 
-    <Route path="/" exact component={Home} />
-  </React.Fragment>
-);
+      <Centered>
+        <Switch>
+          <Route path="/projects/new" exact component={NewProject} />
+          <Route path="/projects/:projectId" component={Project} />
+        </Switch>
+      </Centered>
+
+      <Route path="/" exact component={Home} />
+    </React.Fragment>
+  );
+};
 
 const App = () => {
   return (
