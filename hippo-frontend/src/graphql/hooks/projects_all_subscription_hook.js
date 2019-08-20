@@ -1,6 +1,6 @@
 import { useSubscription } from "react-apollo-hooks";
 import PROJECTS_ALL_SUBSCRIPTION from "graphql/projects_all_subscription";
-import ProjectsCache from "graphql/helpers/projects_cache";
+import ProjectCache from "graphql/helpers/project_cache";
 
 const handleEvent = (client, event) => {
   switch (event.__typename) {
@@ -10,11 +10,11 @@ const handleEvent = (client, event) => {
       break;
 
     case "ProjectDeletedEvent":
-      ProjectsCache.deleteProject(client, event.projectId);
+      ProjectCache.deleteProject(client, event.projectId);
       break;
 
     case "ProjectCreatedEvent":
-      ProjectsCache.createProject(client, event.project);
+      ProjectCache.createProject(client, event.project);
       break;
 
     default:
