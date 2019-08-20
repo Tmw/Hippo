@@ -3,7 +3,7 @@ import React from "react";
 import { Pane } from "evergreen-ui";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import apolloClient from "graphql/client";
-import { ApolloProvider } from "react-apollo-hooks";
+import { ApolloProvider } from "react-apollo";
 
 import useProjectsAllRealtimeEvents from "graphql/hooks/projects_all_subscription_hook";
 

@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { Dialog, TextInputField, Label, Textarea, toaster } from "evergreen-ui";
 import { Formik, Form } from "formik";
-import { useMutation } from "react-apollo-hooks";
+import { useMutation } from "@apollo/react-hooks";
 
 import { propOr } from "ramda";
 
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import GET_CARD from "graphql/get_card_query";
 
 import UPDATE_CARD_MUTATION from "graphql/update_card_mutation";
@@ -19,7 +19,7 @@ const EditCard = ({ history, match: { params } }) => {
   const [dialogVisible, setDialogVisible] = useState(true);
   const [mutationLoading, setMutationLoading] = useState(false);
 
-  const updateCard = useMutation(UPDATE_CARD_MUTATION, {
+  const [updateCard] = useMutation(UPDATE_CARD_MUTATION, {
     refetchQueries: [{ query: GET_PROJECT_QUERY, variables: { id: projectId } }]
   });
 

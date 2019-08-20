@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 
 import { Pane, toaster } from "evergreen-ui";
-import { useMutation } from "react-apollo-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { withRouter } from "react-router-dom";
 import { Droppable } from "react-beautiful-dnd";
 
@@ -23,7 +23,7 @@ const CardList = ({ cards, laneId, match, history }) => {
   } = useConfirmAndMutationState();
 
   // define the card deletion mutation
-  const deleteCardMutation = useMutation(DELETE_CARD_MUTATION, {
+  const [deleteCardMutation] = useMutation(DELETE_CARD_MUTATION, {
     variables: { cardId: selectedCardId },
     refetchQueries: [
       { query: GET_PROJECT, variables: { id: match.params.projectId } }

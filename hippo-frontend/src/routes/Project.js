@@ -1,7 +1,7 @@
 import React from "react";
 import SpinnerWithText from "components/SpinnerWithText";
 import ErrorWithText from "components/ErrorWithText";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import GET_PROJECT from "graphql/get_project_query";
 import Project from "components/Project";
 
