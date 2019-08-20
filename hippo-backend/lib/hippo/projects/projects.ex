@@ -19,7 +19,9 @@ defmodule Hippo.Projects do
       [%Project{}, ...]
 
   """
-  def list_projects, do: Repo.all(Project)
+  def list_projects() do
+    Repo.all(from(project in Project, order_by: [desc: project.id]))
+  end
 
   def get_project(id), do: Repo.get(Project, id)
 

@@ -8,7 +8,7 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
 
   setup %{conn: conn} do
     # list of 2 projects (no lanes or cards)
-    projects = insert_list(2, :project)
+    insert_list(2, :project)
 
     # single project with three lanes, each three cards sorted by rank
     lanes =
@@ -22,6 +22,7 @@ defmodule Hippo.Grapql.ProjectQueriesTest do
       end)
 
     project = insert(:project, lanes: lanes)
+    projects = Hippo.Projects.list_projects()
 
     {:ok, conn: conn, projects: projects, project: project}
   end
