@@ -9,6 +9,11 @@ export default gql`
           id
           title
           description
+          cards {
+            id
+            title
+            description
+          }
         }
       }
 

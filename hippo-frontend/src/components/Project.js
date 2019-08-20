@@ -9,7 +9,7 @@ import REPOSITION_LANE_MUTATION from "graphql/reposition_lane_mutation";
 import GET_PROJECT_QUERY from "graphql/get_project_query";
 import useProjectRealtimeEvents from "graphql/hooks/project_subscription_hook";
 
-import moveCard from "graphql/helpers/moveCard";
+import CardCache from "graphql/helpers/card_cache";
 import LaneList from "components/LaneList";
 import Header from "components/Header";
 
@@ -27,6 +27,8 @@ const Project = ({ project: { lanes }, project }) => {
 
       switch (draggableType) {
         case "card":
+          if (!destination) return;
+
           // unwrap actual IDs from drag event
           const cardId = toActualId(draggableId);
           const sourceLaneId = toActualId(source.droppableId);
@@ -55,13 +57,12 @@ const Project = ({ project: { lanes }, project }) => {
               }
             },
             update: store => {
-              moveCard(
+              CardCache.repositionCard(
                 store,
+                cardId,
                 sourceLaneId,
-                source.index,
                 destinationLaneId,
-                destination.index,
-                cardId
+                destination.index
               );
             }
           }).catch(error => console.error(error));
