@@ -11,7 +11,7 @@ import {
 
 import { Formik, Form } from "formik";
 import { withRouter } from "react-router-dom";
-import { useQuery, useMutation } from "react-apollo-hooks";
+import { useMutation, useQuery } from "@apollo/react-hooks";
 
 import GET_PROJECT from "graphql/get_project_query";
 import GET_PROJECTS from "graphql/get_projects_query";
@@ -24,18 +24,20 @@ import ErrorWithText from "components/ErrorWithText";
 
 const EditProjectSheetContents = ({ projectId, onClose, history }) => {
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [isProjectDeleting, setProjectDeleting] = useState(false);
 
   const { data, error, loading } = useQuery(GET_PROJECT, {
     variables: { id: projectId }
   });
 
-  const deleteProject = useMutation(DELETE_PROJECT, {
-    variables: { projectId },
-    refetchQueries: [{ query: GET_PROJECTS }]
-  });
+  const [deleteProject, { loading: isProjectDeleting }] = useMutation(
+    DELETE_PROJECT,
+    {
+      variables: { projectId },
+      refetchQueries: [{ query: GET_PROJECTS }]
+    }
+  );
 
-  const updateProject = useMutation(UPDATE_PROJECT, {
+  const [updateProject] = useMutation(UPDATE_PROJECT, {
     refetchQueries: [{ query: GET_PROJECT, variables: { id: projectId } }]
   });
 
@@ -60,18 +62,15 @@ const EditProjectSheetContents = ({ projectId, onClose, history }) => {
   );
 
   const handleDeleteProject = useCallback(() => {
-    setProjectDeleting(true);
     deleteProject()
       .then(() => {
         // first get rid of the loading state and close the dialog
-        setProjectDeleting(false);
         setDialogVisible(false);
 
         // Navigate back to home, so it'll pick the first available project again
         history.push("/");
       })
       .catch(error => {
-        setProjectDeleting(false);
         console.error(error);
         toaster.danger("There was an error deleting the project");
       });

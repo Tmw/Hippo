@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Dialog, TextInputField, Label, Textarea, toaster } from "evergreen-ui";
 import { Formik, Form } from "formik";
-import { useMutation } from "react-apollo-hooks";
+import { useMutation } from "@apollo/react-hooks";
 
 import CREATE_LANE_MUTATION from "graphql/create_lane_mutation";
 import GET_PROJECT_QUERY from "graphql/get_project_query";
@@ -13,7 +13,7 @@ const CreateLane = ({ history, match: { params } }) => {
 
   const [dialogVisible, setDialogVisible] = useState(true);
 
-  const createLane = useMutation(CREATE_LANE_MUTATION, {
+  const [createLane] = useMutation(CREATE_LANE_MUTATION, {
     refetchQueries: [{ query: GET_PROJECT_QUERY, variables: { id: projectId } }]
   });
 

@@ -17,7 +17,7 @@
     "phoenix": "^1.4.9",
     "ramda": "^0.26.1",
     "react": "^16.8.6",
-    "react-apollo-hooks": "^0.4.5",
+    "react-apollo": "^3.0.1",
     "react-beautiful-dnd": "^11.0.5",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",

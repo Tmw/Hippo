@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import {
   Pane,
   Button,
@@ -12,7 +12,7 @@ import SidePanel from "components/SidePanel";
 import FormikField from "components/FormikField";
 import CREATE_PROJECT_MUTATION from "graphql/create_project_mutation";
 import GET_PROJECTS from "graphql/get_projects_query";
-import { useMutation } from "react-apollo-hooks";
+import { useMutation } from "@apollo/react-hooks";
 
 const initialValues = {
   title: "",
@@ -24,23 +24,21 @@ const NewProject = ({ history }) => {
     history.goBack();
   }, [history]);
 
-  const [isSubmitting, setSubmitting] = useState(false);
-
-  const createProject = useMutation(CREATE_PROJECT_MUTATION, {
-    refetchQueries: [{ query: GET_PROJECTS }]
-  });
+  const [createProject, { loading: isSubmitting }] = useMutation(
+    CREATE_PROJECT_MUTATION,
+    {
+      refetchQueries: [{ query: GET_PROJECTS }]
+    }
+  );
 
   const submitHandler = useCallback(
     values => {
-      setSubmitting(true);
       createProject({ variables: { project: values } })
         .then(({ data }) => {
-          setSubmitting(false);
           const projectId = data.createProject.project.id;
           history.push(`${projectId}`);
         })
         .catch(error => {
-          setSubmitting(false);
           console.error(error);
           toaster.danger("There was an error saving the project");
         });

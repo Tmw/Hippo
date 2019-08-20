@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { withRouter } from "react-router-dom";
 import { Pane, toaster } from "evergreen-ui";
-import { useMutation } from "react-apollo-hooks";
+import { useMutation } from "@apollo/react-hooks";
 
 import { Droppable } from "react-beautiful-dnd";
 import CreateLaneCTA from "components/CreateLaneCTA";
@@ -24,7 +24,7 @@ const LaneList = ({ lanes, projectId, history }) => {
   } = useConfirmAndMutationState();
 
   // define the lane deletion mutation
-  const deleteLaneMutation = useMutation(DELETE_LANE_MUTATION, {
+  const [deleteLaneMutation] = useMutation(DELETE_LANE_MUTATION, {
     variables: { laneId: selectedLaneId },
     refetchQueries: [{ query: GET_PROJECT, variables: { id: projectId } }]
   });

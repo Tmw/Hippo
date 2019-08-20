@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/react-hooks";
 
 import GET_PROJECTS from "graphql/get_projects_query";
 import SpinnerWithText from "components/SpinnerWithText";

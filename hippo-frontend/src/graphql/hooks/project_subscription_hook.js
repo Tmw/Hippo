@@ -1,4 +1,4 @@
-import { useSubscription } from "react-apollo-hooks";
+import { useSubscription } from "@apollo/react-hooks";
 import PROJECT_SUBSCRIPTION from "graphql/project_subscription";
 import LaneCache from "graphql/helpers/lane_cache";
 import CardCache from "graphql/helpers/card_cache";

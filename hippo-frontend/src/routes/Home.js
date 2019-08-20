@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import { pipe, head, prop } from "ramda";
 import { Redirect } from "react-router-dom";
 

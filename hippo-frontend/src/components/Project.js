@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { withRouter } from "react-router-dom";
 import { DragDropContext } from "react-beautiful-dnd";
-import { useMutation } from "react-apollo-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { move } from "ramda";
 
 import REPOSITION_CARD_MUTATION from "graphql/reposition_card_mutation";
@@ -16,8 +16,8 @@ import Header from "components/Header";
 const toActualId = identifier => identifier.split(":")[1];
 
 const Project = ({ project: { lanes }, project }) => {
-  const repositionLaneMutation = useMutation(REPOSITION_LANE_MUTATION);
-  const repositionCardMutation = useMutation(REPOSITION_CARD_MUTATION);
+  const [repositionLaneMutation] = useMutation(REPOSITION_LANE_MUTATION);
+  const [repositionCardMutation] = useMutation(REPOSITION_CARD_MUTATION);
   useProjectRealtimeEvents(project.id);
 
   const onDragEnd = useCallback(

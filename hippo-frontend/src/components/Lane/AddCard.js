@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import { Pane, TextInputField, Textarea, Button, toaster } from "evergreen-ui";
 import { Formik, Form } from "formik";
 
-import { useMutation } from "react-apollo-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import CREATE_CARD_MUTATION from "graphql/create_card_mutation";
 import GET_LANE_WITH_CARDS_QUERY from "graphql/get_lane_with_cards_query";
 
@@ -19,7 +19,7 @@ const useAddCardState = initialState => {
 };
 
 const AddCard = ({ isShown, onCancel, onSubmitted, laneId }) => {
-  const createCard = useMutation(CREATE_CARD_MUTATION, {
+  const [createCard] = useMutation(CREATE_CARD_MUTATION, {
     update: (cache, { data: { createCard } }) => {
       // read cached lane
       const { lane } = cache.readQuery({
