@@ -54,10 +54,9 @@ const Routes = () => {
         <Switch>
           <Route path="/projects/new" exact component={NewProject} />
           <Route path="/projects/:projectId" component={Project} />
+          <Route path="/" exact component={Home} />
         </Switch>
       </Centered>
-
-      <Route path="/" exact component={Home} />
     </React.Fragment>
   );
 };
