@@ -4,34 +4,44 @@ import LaneCache from "graphql/helpers/lane_cache";
 import CardCache from "graphql/helpers/card_cache";
 
 const handleEvent = (client, projectId, event) => {
-  switch (event.__typename) {
+  // If the event was triggered by ourselves, drop the event since we do not want to replay the
+  // same event twice.
+  if (event.triggeredBySelf) return;
+
+  const payload = event.payload;
+  switch (payload.__typename) {
     case "LaneCreatedEvent":
-      LaneCache.createLane(client, projectId, event.lane);
+      LaneCache.createLane(client, projectId, payload.lane);
       break;
 
     case "LaneDeletedEvent":
-      LaneCache.deleteLane(client, projectId, event.laneId);
+      LaneCache.deleteLane(client, projectId, payload.laneId);
       break;
 
     case "LaneRepositionedEvent":
-      LaneCache.repositionLane(client, projectId, event.laneId, event.position);
+      LaneCache.repositionLane(
+        client,
+        projectId,
+        payload.laneId,
+        payload.position
+      );
       break;
 
     case "CardCreatedEvent":
-      CardCache.createCard(client, event.laneId, event.card);
+      CardCache.createCard(client, payload.laneId, payload.card);
       break;
 
     case "CardDeletedEvent":
-      CardCache.deleteCard(client, event.laneId, event.cardId);
+      CardCache.deleteCard(client, payload.laneId, payload.cardId);
       break;
 
     case "CardRepositionedEvent":
       CardCache.repositionCard(
         client,
-        event.cardId,
-        event.sourceLaneId,
-        event.targetLaneId,
-        event.position
+        payload.cardId,
+        payload.sourceLaneId,
+        payload.targetLaneId,
+        payload.position
       );
       break;
 

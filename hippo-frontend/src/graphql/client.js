@@ -18,9 +18,21 @@ import introspectionQueryResultData from "graphql/fragmentTypes.json";
 const httpUri = "http://localhost:4000/graphql";
 const wsUri = "ws://localhost:4000/socket";
 
-const httpLink = new HttpLink({ uri: httpUri });
+const getSessionToken = () => "hah-lol-hope";
+
+const httpLink = new HttpLink({
+  uri: httpUri,
+  headers: { "x-session-token": getSessionToken() }
+});
+
 const wsLink = createAbsintheSocketLink(
-  AbsintheSocket.create(new PhoenixSocket(wsUri))
+  AbsintheSocket.create(
+    new PhoenixSocket(wsUri, {
+      params: {
+        sessionToken: getSessionToken()
+      }
+    })
+  )
 );
 
 // using the ability to split links, you can send data to each link

@@ -18,50 +18,50 @@ end
 
 defmodule Hippo.GraphQL.Events.Project do
   defmodule Created do
-    defstruct [:project]
+    defstruct [:session_token, :project]
   end
 
   defmodule Updated do
-    defstruct [:project]
+    defstruct [:session_token, :project]
   end
 
   defmodule Deleted do
-    defstruct [:project_id]
+    defstruct [:session_token, :project_id]
   end
 end
 
 defmodule Hippo.GraphQL.Events.Lane do
   defmodule Created do
-    defstruct [:lane]
+    defstruct [:session_token, :lane]
   end
 
   defmodule Updated do
-    defstruct [:lane]
+    defstruct [:session_token, :lane]
   end
 
   defmodule Deleted do
-    defstruct [:lane_id]
+    defstruct [:session_token, :lane_id]
   end
 
   defmodule Repositioned do
-    defstruct [:lane_id, :position]
+    defstruct [:session_token, :lane_id, :position]
   end
 end
 
 defmodule Hippo.GraphQL.Events.Card do
   defmodule Created do
-    defstruct [:card, :lane_id]
+    defstruct [:session_token, :card, :lane_id]
   end
 
   defmodule Updated do
-    defstruct [:card]
+    defstruct [:session_token, :card]
   end
 
   defmodule Deleted do
-    defstruct [:card_id, :lane_id]
+    defstruct [:session_token, :card_id, :lane_id]
   end
 
   defmodule Repositioned do
-    defstruct [:card_id, :source_lane_id, :target_lane_id, :position]
+    defstruct [:session_token, :card_id, :source_lane_id, :target_lane_id, :position]
   end
 end

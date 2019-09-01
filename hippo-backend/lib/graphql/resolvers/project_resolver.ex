@@ -15,21 +15,29 @@ defmodule Hippo.GraphQL.Resolvers.Project do
     {:ok, Projects.list_projects()}
   end
 
-  def create(%{project: params}, _) do
+  def create(%{project: params}, ctx) do
     with {:ok, project} <- Projects.create_project(params),
-         :ok <- publish(%Events.Project.Created{project: project}) do
+         :ok <-
+           publish(%Events.Project.Created{
+             session_token: session_from_context(ctx),
+             project: project
+           }) do
       {:ok, project: project}
     else
       error -> error
     end
   end
 
-  def update(%{project_id: project_id, project: params}, _) do
+  def update(%{project_id: project_id, project: params}, ctx) do
     with {:project, %Projects.Project{} = project} <-
            {:project, Projects.get_project(project_id)},
          {:updated, {:ok, %Projects.Project{} = project}} <-
            {:updated, Projects.update_project(project, params)},
-         :ok <- publish(%Events.Project.Updated{project: project}) do
+         :ok <-
+           publish(%Events.Project.Updated{
+             session_token: session_from_context(ctx),
+             project: project
+           }) do
       {:ok, project: project}
     else
       {:project, nil} -> {:error, "project not found"}
@@ -37,9 +45,13 @@ defmodule Hippo.GraphQL.Resolvers.Project do
     end
   end
 
-  def delete(%{project_id: project_id}, _ctx) do
+  def delete(%{project_id: project_id}, ctx) do
     with {:ok, response} <- Projects.delete_with_contents(project_id),
-         :ok <- publish(%Events.Project.Deleted{project_id: project_id}) do
+         :ok <-
+           publish(%Events.Project.Deleted{
+             session_token: session_from_context(ctx),
+             project_id: project_id
+           }) do
       {:ok, response}
     else
       {:error, error} -> {:error, error}
@@ -47,6 +59,8 @@ defmodule Hippo.GraphQL.Resolvers.Project do
   end
 
   defp publish(event) do
-    Events.publish(:projects_updates, "projects:all", event)
+    Events.publish(:projects_updates, "projects:all", %{payload: event})
   end
+
+  defp session_from_context(%{context: %{session_token: token}}), do: token
 end

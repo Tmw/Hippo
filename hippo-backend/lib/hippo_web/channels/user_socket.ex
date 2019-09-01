@@ -18,7 +18,9 @@ defmodule HippoWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket, _connect_info) do
+  def connect(params, socket, connect_info) do
+    session_token = Map.get(params, "sessionToken")
+    socket = Absinthe.Phoenix.Socket.put_options(socket, context: %{session: session_token})
     {:ok, socket}
   end
 
