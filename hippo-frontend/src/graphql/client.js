@@ -18,7 +18,20 @@ import introspectionQueryResultData from "graphql/fragmentTypes.json";
 const httpUri = "http://localhost:4000/graphql";
 const wsUri = "ws://localhost:4000/socket";
 
-const getSessionToken = () => "hah-lol-hope";
+const getSessionToken = () => {
+  const sessionToken = window.sessionStorage.getItem("sessionToken");
+  if (sessionToken) return sessionToken;
+
+  const randomChars = Array.from(
+    window.crypto.getRandomValues(new Uint8Array(64))
+  )
+    .map(String.fromCharCode)
+    .join("");
+
+  const token = btoa(randomChars);
+  window.sessionStorage.setItem("sessionToken", token);
+  return token;
+};
 
 const httpLink = new HttpLink({
   uri: httpUri,
