@@ -3,18 +3,23 @@ import PROJECTS_ALL_SUBSCRIPTION from "graphql/projects_all_subscription";
 import ProjectCache from "graphql/helpers/project_cache";
 
 const handleEvent = (client, event) => {
-  switch (event.__typename) {
+  // If the event was triggered by ourselves, drop the event since we do not want to replay the
+  // same event twice.
+  if (event.triggeredBySelf) return;
+
+  const payload = event.payload;
+  switch (payload.__typename) {
     case "ProjectUpdatedEvent":
       // No explicit action required, Apollo will update the project
       // since it has matching IDs in the payload.
       break;
 
     case "ProjectDeletedEvent":
-      ProjectCache.deleteProject(client, event.projectId);
+      ProjectCache.deleteProject(client, payload.projectId);
       break;
 
     case "ProjectCreatedEvent":
-      ProjectCache.createProject(client, event.project);
+      ProjectCache.createProject(client, payload.project);
       break;
 
     default:

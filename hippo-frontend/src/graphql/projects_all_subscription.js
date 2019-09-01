@@ -2,25 +2,28 @@ import gql from "graphql-tag";
 export default gql`
   subscription {
     projectsUpdates {
-      __typename
+      triggeredBySelf
+      payload {
+        __typename
 
-      ... on ProjectUpdatedEvent {
-        project {
-          id
-          title
-          description
+        ... on ProjectUpdatedEvent {
+          project {
+            id
+            title
+            description
+          }
         }
-      }
 
-      ... on ProjectDeletedEvent {
-        projectId
-      }
+        ... on ProjectDeletedEvent {
+          projectId
+        }
 
-      ... on ProjectCreatedEvent {
-        project {
-          id
-          title
-          description
+        ... on ProjectCreatedEvent {
+          project {
+            id
+            title
+            description
+          }
         }
       }
     }

@@ -16,13 +16,6 @@ const persistUpdatedLane = (client, lane) =>
 const createCard = (client, laneId, card) => {
   const { lane } = getLane(client, laneId);
 
-  // early return if card was already in cache. This can happen when the real-time event
-  // is delivered but we made the edit ourselves. This is a special case since we're not
-  // relying on Apollo to refetch the query.
-  if (lane.cards.find(existingCard => existingCard.id === card.id) !== null) {
-    return;
-  }
-
   const updatedLane = {
     ...lane,
     cards: [card, ...lane.cards]
