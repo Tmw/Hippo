@@ -2,7 +2,8 @@ defmodule Hippo.GraphQL.Resolvers.Card do
   alias Hippo.{
     Cards,
     Cards.Card,
-    GraphQL.Events
+    GraphQL.Events,
+    Session
   }
 
   def create(%{card: params, lane_id: lane_id}, ctx) do
@@ -10,7 +11,7 @@ defmodule Hippo.GraphQL.Resolvers.Card do
          project_id <- Cards.owning_project_id(card),
          :ok <-
            publish(project_id, %Events.Card.Created{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              card: card,
              lane_id: lane_id
            }) do
@@ -24,7 +25,7 @@ defmodule Hippo.GraphQL.Resolvers.Card do
          project_id <- Cards.owning_project_id(card),
          :ok <-
            publish(project_id, %Events.Card.Updated{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              card: card
            }) do
       {:ok, card: card}
@@ -40,7 +41,7 @@ defmodule Hippo.GraphQL.Resolvers.Card do
          {:ok, _} <- Cards.delete_card_by_id(card_id),
          :ok <-
            publish(project_id, %Events.Card.Deleted{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              card_id: card.id,
              lane_id: card.lane_id
            }) do
@@ -57,7 +58,7 @@ defmodule Hippo.GraphQL.Resolvers.Card do
          project_id <- Cards.owning_project_id(card_id),
          :ok <-
            publish(project_id, %Events.Card.Repositioned{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              card_id: card.id,
              source_lane_id: source_lane_id,
              target_lane_id: lane_id,
@@ -76,6 +77,4 @@ defmodule Hippo.GraphQL.Resolvers.Card do
   defp publish(project_id, event) when is_binary(project_id) do
     Events.publish(:project_updates, "projects:#{project_id}", %{payload: event})
   end
-
-  defp session_from_context(%{context: %{session_token: token}}), do: token
 end

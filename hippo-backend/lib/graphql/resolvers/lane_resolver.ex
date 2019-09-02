@@ -1,5 +1,5 @@
 defmodule Hippo.GraphQL.Resolvers.Lane do
-  alias Hippo.Lanes
+  alias Hippo.{Lanes, Session}
   alias Hippo.Lanes.Lane
   alias Hippo.GraphQL.Events
 
@@ -7,7 +7,7 @@ defmodule Hippo.GraphQL.Resolvers.Lane do
     with {:ok, lane} <- Lanes.create_lane(params, for_project: project_id),
          :ok <-
            publish(project_id, %Events.Lane.Created{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              lane: lane
            }) do
       {:ok, lane: lane}
@@ -20,7 +20,7 @@ defmodule Hippo.GraphQL.Resolvers.Lane do
          project_id <- Lanes.owning_project_id(lane),
          :ok <-
            publish(project_id, %Events.Lane.Updated{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              lane: lane
            }) do
       {:ok, lane: lane}
@@ -35,7 +35,7 @@ defmodule Hippo.GraphQL.Resolvers.Lane do
          {:ok, _} <- Lanes.delete_with_contents(lane_id),
          :ok <-
            publish(project_id, %Events.Lane.Deleted{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              lane_id: lane_id
            }) do
       {:ok, message: "lane and its card deleted"}
@@ -48,7 +48,7 @@ defmodule Hippo.GraphQL.Resolvers.Lane do
          project_id <- Lanes.owning_project_id(lane_id),
          :ok <-
            publish(project_id, %Events.Lane.Repositioned{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              lane_id: lane_id,
              position: position
            }) do
@@ -62,6 +62,4 @@ defmodule Hippo.GraphQL.Resolvers.Lane do
   defp publish(project_id, event) when is_binary(project_id) do
     Events.publish(:project_updates, "projects:#{project_id}", %{event: event})
   end
-
-  defp session_from_context(%{context: %{session_token: token}}), do: token
 end

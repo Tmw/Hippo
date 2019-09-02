@@ -1,5 +1,5 @@
 defmodule Hippo.GraphQL.Resolvers.Project do
-  alias Hippo.Projects
+  alias Hippo.{Projects, Session}
   alias Hippo.GraphQL.Events
 
   @doc "Resolve by returning a single project by ID"
@@ -19,7 +19,7 @@ defmodule Hippo.GraphQL.Resolvers.Project do
     with {:ok, project} <- Projects.create_project(params),
          :ok <-
            publish(%Events.Project.Created{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              project: project
            }) do
       {:ok, project: project}
@@ -35,7 +35,7 @@ defmodule Hippo.GraphQL.Resolvers.Project do
            {:updated, Projects.update_project(project, params)},
          :ok <-
            publish(%Events.Project.Updated{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              project: project
            }) do
       {:ok, project: project}
@@ -49,7 +49,7 @@ defmodule Hippo.GraphQL.Resolvers.Project do
     with {:ok, response} <- Projects.delete_with_contents(project_id),
          :ok <-
            publish(%Events.Project.Deleted{
-             session_token: session_from_context(ctx),
+             session_token: Session.from_absinthe_context(ctx),
              project_id: project_id
            }) do
       {:ok, response}
@@ -61,6 +61,4 @@ defmodule Hippo.GraphQL.Resolvers.Project do
   defp publish(event) do
     Events.publish(:projects_updates, "projects:all", %{payload: event})
   end
-
-  defp session_from_context(%{context: %{session_token: token}}), do: token
 end
