@@ -28,11 +28,7 @@ defmodule Hippo.GraphQL.Types.Event do
   object :projects_event do
     field(:triggered_by_self, :boolean,
       description: "Wether or not the event was triggered by the user that received the event",
-      resolve: fn %{payload: %{session_token: trigger_session}},
-                  _,
-                  %{context: %{session: current_session}} ->
-        {:ok, trigger_session == current_session}
-      end
+      resolve: &session_matches?/3
     )
 
     @desc "The actual details of the given event"
@@ -105,14 +101,17 @@ defmodule Hippo.GraphQL.Types.Event do
   object :project_events do
     field(:triggered_by_self, :boolean,
       description: "Wether or not the event was triggered by the user that received the event",
-      resolve: fn %{payload: %{session_token: trigger_session}},
-                  _,
-                  %{context: %{session: current_session}} ->
-        {:ok, trigger_session == current_session}
-      end
+      resolve: &session_matches?/3
     )
 
     @desc "The actual details of the given event"
     field(:payload, :project_events_payload)
   end
+
+  defp session_matches?(
+         %{payload: %{session_token: trigger_session}},
+         _,
+         %{context: %{session: current_session}}
+       ),
+       do: {:ok, trigger_session == current_session}
 end
