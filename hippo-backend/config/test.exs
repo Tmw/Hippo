@@ -14,5 +14,5 @@ config :hippo, Hippo.Repo,
   username: "hippo",
   password: "hippo",
   database: "hippo-test",
-  hostname: "localhost",
+  hostname: System.get_env("DB_HOST") || "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
