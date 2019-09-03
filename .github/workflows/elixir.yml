@@ -4,7 +4,6 @@ on: push
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     container:
@@ -22,16 +21,18 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Install Dependencies
-      run: |
-        cd hippo-backend
-        mix local.rebar --force
-        mix local.hex --force
-        mix deps.get
-    - name: Run Tests
-      run: |
-        cd hippo-backend
-        mix test
-      env: 
-        DB_HOST: postgres
+      - uses: actions/checkout@v1
+      - name: Install Dependencies
+        run: |
+          cd hippo-backend
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+      - name: Run Tests
+        run: |
+          cd hippo-backend
+          mix test
+        env:
+          DB_HOST: postgres
+          DB_PASS: postgres
+          DB_USER: postgres
