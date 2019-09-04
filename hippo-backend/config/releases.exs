@@ -10,7 +10,7 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :hippo, HippoWeb.Endpoint,
-  http: [:inet6, port: 4000],
+  http: [:inet6, port: System.get_env("PORT") || 4000],
   server: true,
   url: [host: "localhost", port: System.get_env("PORT") || 4000]
 
@@ -29,8 +29,8 @@ config :logger, level: :info
 #         :inet6,
 #         port: 443,
 #         cipher_suite: :strong,
-#         keyfile: System.get_env("SOME_APP_SSL_KEY_PATH"),
-#         certfile: System.get_env("SOME_APP_SSL_CERT_PATH")
+#         keyfile: System.fetch_env!("SOME_APP_SSL_KEY_PATH"),
+#         certfile: System.fetch_env!("SOME_APP_SSL_CERT_PATH")
 #       ]
 #
 # The `cipher_suite` is set to `:strong` to support only the
@@ -63,7 +63,7 @@ config :logger, level: :info
 #
 #     config :hippo, HippoWeb.Endpoint, server: true
 #
-# Note you can't rely on `System.get_env/1` when using releases.
+# Note you can't rely on `System.fetch_env!/1` when using releases.
 # See the releases documentation accordingly.
 
 # Finally import the config/prod.secret.exs which should be versioned
@@ -75,8 +75,8 @@ config :hippo, HippoWeb.Endpoint,
 
 # Configure your database
 config :hippo, Hippo.Repo,
-  username: System.get_env("DB_USER"),
-  password: System.get_env("DB_PASS"),
-  database: System.get_env("DB_NAME"),
-  hostname: System.get_env("DB_HOST"),
+  username: System.fetch_env!("DB_USER"),
+  password: System.fetch_env!("DB_PASS"),
+  database: System.fetch_env!("DB_NAME"),
+  hostname: System.fetch_env!("DB_HOST"),
   pool_size: 10

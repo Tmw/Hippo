@@ -48,8 +48,7 @@ defmodule Hippo.MixProject do
       {:absinthe, "~> 1.4"},
       {:freight, "~> 0.3"},
       {:absinthe_phoenix, "~> 1.4.0"},
-      {:dataloader, "~> 1.0"},
-      {:distillery, "~> 2.0"}
+      {:dataloader, "~> 1.0"}
     ]
   end
 
