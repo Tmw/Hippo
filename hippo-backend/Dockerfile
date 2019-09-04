@@ -4,12 +4,11 @@
 # the erlang VM likes it when the kernels match; we're using the same alpine version
 # for the resulting image as was used inside the elixir image.
 ARG ALPINE_VERSION=3.9
-FROM elixir:1.8.1-alpine AS builder
+FROM elixir:1.9.1-alpine AS builder
 
 # we're always building using prod environment
 ENV APP_NAME="hippo"
 ENV MIX_ENV=prod
-ENV REPLACE_OS_VARS=true
 WORKDIR /opt/app
 
 # install the tools we need, but no overages
@@ -28,7 +27,7 @@ COPY . .
 RUN mix do deps.get, deps.compile, compile
 
 # make a release
-RUN mix release --verbose
+RUN mix release
 
 ##########################################
 # runnable application image starts here #
@@ -42,7 +41,6 @@ RUN apk update && \
   bash \
   openssl-dev
 
-ENV REPLACE_OS_VARS=true
 ENV APP_NAME="hippo"
 
 # Expose for http traffic
@@ -54,4 +52,4 @@ WORKDIR /opt/app
 COPY --from=builder /opt/app/_build/prod/rel/${APP_NAME} .
 
 # start command
-CMD trap 'exit' INT; /opt/app/bin/${APP_NAME} foreground
+CMD trap 'exit' INT; /opt/app/bin/${APP_NAME} start
