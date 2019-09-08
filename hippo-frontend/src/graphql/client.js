@@ -15,32 +15,17 @@ import { getMainDefinition } from "apollo-utilities";
 
 import introspectionQueryResultData from "graphql/fragmentTypes.json";
 
-const httpUri = "http://localhost:4000/graphql";
-const wsUri = "ws://localhost:4000/socket";
-
-const getSessionToken = () => {
-  const sessionToken = window.sessionStorage.getItem("sessionToken");
-  if (sessionToken) return sessionToken;
-
-  const randomChars = Array.from(
-    window.crypto.getRandomValues(new Uint8Array(64))
-  )
-    .map(String.fromCharCode)
-    .join("");
-
-  const token = btoa(randomChars);
-  window.sessionStorage.setItem("sessionToken", token);
-  return token;
-};
+import config from "config";
+import getSessionToken from "session.js";
 
 const httpLink = new HttpLink({
-  uri: httpUri,
+  uri: config.apiUrl,
   headers: { "x-session-token": getSessionToken() }
 });
 
 const wsLink = createAbsintheSocketLink(
   AbsintheSocket.create(
-    new PhoenixSocket(wsUri, {
+    new PhoenixSocket(config.wsUrl, {
       params: {
         sessionToken: getSessionToken()
       }
