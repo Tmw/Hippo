@@ -13,6 +13,6 @@ defmodule GraphqlHelpers do
   def gql(conn, query) do
     conn
     |> put_req_header("content-type", "application/json")
-    |> post("/graphql", query)
+    |> post("/api/graphql", query)
   end
 end
