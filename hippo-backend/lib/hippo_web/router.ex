@@ -27,4 +27,8 @@ defmodule HippoWeb.Router do
       socket_url: "ws://localhost:4000/socket"
     )
   end
+
+  scope "/" do
+    forward("/", HippoWeb.Plugs.Frontend)
+  end
 end
