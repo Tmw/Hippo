@@ -12,7 +12,7 @@ defmodule HippoWeb.Router do
     )
   end
 
-  scope "/" do
+  scope "/api" do
     pipe_through(:api)
 
     forward("/graphql", Absinthe.Plug,
