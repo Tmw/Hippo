@@ -14,11 +14,11 @@ import { withRouter } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 
 import GET_PROJECT from "graphql/get_project_query";
-import GET_PROJECTS from "graphql/get_projects_query";
 import DELETE_PROJECT from "graphql/delete_project_mutation";
 import UPDATE_PROJECT from "graphql/update_project_mutation";
 
 import FormikField from "components/FormikField";
+import ProjectCache from "graphql/helpers/project_cache";
 import SpinnerWithText from "components/SpinnerWithText";
 import ErrorWithText from "components/ErrorWithText";
 
@@ -33,7 +33,7 @@ const EditProjectSheetContents = ({ projectId, onClose, history }) => {
     DELETE_PROJECT,
     {
       variables: { projectId },
-      refetchQueries: [{ query: GET_PROJECTS }]
+      update: (cache, _result) => ProjectCache.deleteProject(cache, projectId)
     }
   );
 
