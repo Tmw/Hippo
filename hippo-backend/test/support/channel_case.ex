@@ -14,12 +14,12 @@ defmodule HippoWeb.ChannelCase do
   """
 
   use ExUnit.CaseTemplate
+  alias Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
-      alias Ecto.Adapters.SQL.Sandbox
 
       # The default endpoint for testing
       @endpoint HippoWeb.Endpoint

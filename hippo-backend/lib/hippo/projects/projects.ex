@@ -137,7 +137,7 @@ defmodule Hippo.Projects do
         |> Multi.delete_all(:drop_cards, from(c in Card, where: c.id in ^card_ids))
         |> Multi.delete_all(:drop_lanes, from(l in Lane, where: l.id in ^lane_ids))
         |> Multi.delete_all(:drop_project, from(p in Project, where: p.id == ^project_id))
-        |> Ecto.transaction()
+        |> Repo.transaction()
         |> case do
           {:ok, _} -> {:ok, message: "Projects and contents deleted"}
           {:error, _} = err -> err
