@@ -4,11 +4,12 @@ defmodule Hippo.Projects do
   """
 
   import Ecto.Query, warn: false
-  alias Hippo.Repo
+  alias Ecto.Multi
 
   alias Hippo.Cards.Card
   alias Hippo.Lanes.Lane
   alias Hippo.Projects.Project
+  alias Hippo.Repo
 
   @doc """
   Returns the list of projects.
@@ -132,11 +133,11 @@ defmodule Hippo.Projects do
           |> Repo.all()
 
         # write one big multi that drops all the things.
-        Ecto.Multi.new()
-        |> Ecto.Multi.delete_all(:drop_cards, from(c in Card, where: c.id in ^card_ids))
-        |> Ecto.Multi.delete_all(:drop_lanes, from(l in Lane, where: l.id in ^lane_ids))
-        |> Ecto.Multi.delete_all(:drop_project, from(p in Project, where: p.id == ^project_id))
-        |> Repo.transaction()
+        Multi.new()
+        |> Multi.delete_all(:drop_cards, from(c in Card, where: c.id in ^card_ids))
+        |> Multi.delete_all(:drop_lanes, from(l in Lane, where: l.id in ^lane_ids))
+        |> Multi.delete_all(:drop_project, from(p in Project, where: p.id == ^project_id))
+        |> Ecto.transaction()
         |> case do
           {:ok, _} -> {:ok, message: "Projects and contents deleted"}
           {:error, _} = err -> err
