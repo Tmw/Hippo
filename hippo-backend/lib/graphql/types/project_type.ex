@@ -1,4 +1,5 @@
 defmodule Hippo.GraphQL.Types.Project do
+  @moduledoc false
   use Absinthe.Schema.Notation
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 

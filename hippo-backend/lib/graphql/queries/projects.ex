@@ -1,4 +1,5 @@
 defmodule Hippo.GraphQL.Queries.Projects do
+  @moduledoc false
   use Absinthe.Schema.Notation
   alias Hippo.GraphQL.Resolvers
 

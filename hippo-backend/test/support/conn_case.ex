@@ -19,6 +19,7 @@ defmodule HippoWeb.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
+      alias Ecto.Adapters.SQL.Sandbox
       alias HippoWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
@@ -27,10 +28,10 @@ defmodule HippoWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Hippo.Repo)
+    :ok = Sandbox.checkout(Hippo.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Hippo.Repo, {:shared, self()})
+      Sandbox.mode(Hippo.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

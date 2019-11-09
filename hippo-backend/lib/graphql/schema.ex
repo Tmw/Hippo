@@ -1,4 +1,5 @@
 defmodule Hippo.GraphQL.Schema do
+  @moduledoc false
   use Absinthe.Schema
 
   # setup dataloader

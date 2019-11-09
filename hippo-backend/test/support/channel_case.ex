@@ -19,6 +19,7 @@ defmodule HippoWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
+      alias Ecto.Adapters.SQL.Sandbox
 
       # The default endpoint for testing
       @endpoint HippoWeb.Endpoint
@@ -26,10 +27,10 @@ defmodule HippoWeb.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Hippo.Repo)
+    :ok = Sandbox.checkout(Hippo.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Hippo.Repo, {:shared, self()})
+      Sandbox.mode(Hippo.Repo, {:shared, self()})
     end
 
     :ok

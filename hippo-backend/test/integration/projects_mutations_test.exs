@@ -2,8 +2,8 @@ defmodule Hippo.Grapql.ProjectMutationsTest do
   use HippoWeb.GraphqlCase
   import Hippo.Test.Factory
 
-  alias Hippo.Repo
   alias Hippo.Projects.Project
+  alias Hippo.Repo
 
   setup %{conn: conn} do
     project = insert(:project)

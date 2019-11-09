@@ -1,4 +1,5 @@
 defmodule Hippo.GraphQL.Subscriptions.Project do
+  @moduledoc false
   use Absinthe.Schema.Notation
 
   object :project_subscriptions do

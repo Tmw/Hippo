@@ -1,6 +1,8 @@
 defmodule Hippo.GraphQL.Resolvers.Project do
-  alias Hippo.{Projects, Session}
+  @moduledoc false
+
   alias Hippo.GraphQL.Events
+  alias Hippo.{Projects, Session}
 
   @doc "Resolve by returning a single project by ID"
   def find(%{id: id}, _) do

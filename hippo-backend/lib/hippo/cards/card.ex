@@ -1,4 +1,5 @@
 defmodule Hippo.Cards.Card do
+  @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
   import EctoRanked

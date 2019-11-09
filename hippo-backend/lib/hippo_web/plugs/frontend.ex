@@ -10,7 +10,7 @@ defmodule HippoWeb.Plugs.Frontend do
 
   def call(conn, _opts), do: send_file(conn, 200, front_end_index_path())
 
-  defp front_end_index_path() do
+  defp front_end_index_path do
     Application.app_dir(:hippo, "priv/static/index.html")
   end
 end

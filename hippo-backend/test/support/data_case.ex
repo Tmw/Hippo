@@ -16,6 +16,7 @@ defmodule Hippo.DataCase do
 
   using do
     quote do
+      alias Ecto.Adapters.SQL.Sandbox
       alias Hippo.Repo
 
       import Ecto
@@ -26,10 +27,10 @@ defmodule Hippo.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Hippo.Repo)
+    :ok = Sandbox.checkout(Hippo.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Hippo.Repo, {:shared, self()})
+      Sandbox.mode(Hippo.Repo, {:shared, self()})
     end
 
     :ok

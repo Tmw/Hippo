@@ -1,4 +1,5 @@
 defmodule HippoWeb.Endpoint do
+  @moduledoc false
   use Phoenix.Endpoint, otp_app: :hippo
   use Absinthe.Phoenix.Endpoint
 

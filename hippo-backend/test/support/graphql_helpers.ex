@@ -1,4 +1,5 @@
 defmodule GraphqlHelpers do
+  @moduledoc false
   use Phoenix.ConnTest
 
   @endpoint HippoWeb.Endpoint

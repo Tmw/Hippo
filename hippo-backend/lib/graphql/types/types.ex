@@ -1,4 +1,5 @@
 defmodule Hippo.GraphQL.Types do
+  @moduledoc false
   use Absinthe.Schema.Notation
 
   import_types(Hippo.GraphQL.Types.Identifier)

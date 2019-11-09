@@ -40,7 +40,7 @@ Truncater.truncate([:projects, :lanes, :cards])
 
 # very bare bones helper module to setup some fake projects and data
 defmodule ProjectSeeder do
-  def project() do
+  def project do
     Project.changeset(%Project{}, %{
       title: "Project - #{rand_id()}",
       description: "Some Description goes here - #{rand_id()}",
@@ -65,7 +65,7 @@ defmodule ProjectSeeder do
     }
   end
 
-  defp rand_id() do
+  defp rand_id do
     :crypto.strong_rand_bytes(6) |> Base.encode16()
   end
 end
