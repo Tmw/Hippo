@@ -48,6 +48,9 @@ jobs:
       - name: Install Dependencies
         run: |
           cd hippo-backend
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
       - name: Run Credo
         run: |
           cd hippo-backend
