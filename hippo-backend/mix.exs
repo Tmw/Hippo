@@ -1,4 +1,5 @@
 defmodule Hippo.MixProject do
+  @moduledoc false
   use Mix.Project
 
   def project do
@@ -48,7 +49,8 @@ defmodule Hippo.MixProject do
       {:absinthe, "~> 1.4"},
       {:freight, "~> 0.3"},
       {:absinthe_phoenix, "~> 1.4.0"},
-      {:dataloader, "~> 1.0"}
+      {:dataloader, "~> 1.0"},
+      {:credo, "~> 1.1.0", only: :dev}
     ]
   end
 
