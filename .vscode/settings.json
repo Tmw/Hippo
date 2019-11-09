@@ -11,5 +11,8 @@
     "editor.trimAutoWhitespace": false,
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true
-  }
+  },
+  "elixirLS.dialyzerEnabled": true,
+  "elixirLS.projectDir": "./hippo-backend",
+  "elixirLS.suggestSpecs": true
 }
