@@ -36,3 +36,19 @@ jobs:
           DB_HOST: postgres
           DB_PASS: postgres
           DB_USER: postgres
+
+  credo:
+    runs-on: ubuntu-latest
+    container:
+      image: elixir:1.9.1-slim
+      env:
+        MIX_ENV: test
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Dependencies
+        run: |
+          cd hippo-backend
+      - name: Run Credo
+        run: |
+          cd hippo-backend
+          mix credo --strict
