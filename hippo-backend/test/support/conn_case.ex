@@ -14,12 +14,12 @@ defmodule HippoWeb.ConnCase do
   """
 
   use ExUnit.CaseTemplate
+  alias Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      alias Ecto.Adapters.SQL.Sandbox
       alias HippoWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
