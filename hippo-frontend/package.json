@@ -24,10 +24,10 @@
     "react-scripts": "3.0.0"
   },
   "scripts": {
-    "start": "NODE_PATH=src/ react-scripts start",
-    "build": "NODE_PATH=src/ react-scripts build",
-    "test": "NODE_PATH=src/ react-scripts test",
-    "eject": "NODE_PATH=src/ react-scripts eject",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "get_fragment_types": "node scripts/get_fragment_types.js"
   },
   "eslintConfig": {
