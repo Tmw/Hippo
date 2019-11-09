@@ -42,7 +42,7 @@ jobs:
     container:
       image: elixir:1.9.1-slim
       env:
-        MIX_ENV: test
+        MIX_ENV: dev
     steps:
       - uses: actions/checkout@v1
       - name: Install Dependencies
