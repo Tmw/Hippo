@@ -1,4 +1,5 @@
 defmodule HippoWeb.Router do
+  @moduledoc false
   use HippoWeb, :router
 
   pipeline :api do

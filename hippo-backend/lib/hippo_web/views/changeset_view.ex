@@ -1,4 +1,5 @@
 defmodule HippoWeb.ChangesetView do
+  @moduledoc false
   use HippoWeb, :view
 
   @doc """

@@ -1,3 +1,4 @@
+# credo:disable-for-this-file Credo.Check.Readability.ModuleDoc
 defmodule Hippo.GraphQL.Events do
   @moduledoc """
   The structs defined in this modules submodules will be triggered by

@@ -1,4 +1,5 @@
 defmodule Hippo.GraphQL.Types.Event do
+  @moduledoc false
   use Absinthe.Schema.Notation
   alias Hippo.GraphQL.Events
 

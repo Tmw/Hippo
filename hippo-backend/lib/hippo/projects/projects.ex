@@ -6,9 +6,9 @@ defmodule Hippo.Projects do
   import Ecto.Query, warn: false
   alias Hippo.Repo
 
-  alias Hippo.Projects.Project
   alias Hippo.Cards.Card
   alias Hippo.Lanes.Lane
+  alias Hippo.Projects.Project
 
   @doc """
   Returns the list of projects.
@@ -19,7 +19,7 @@ defmodule Hippo.Projects do
       [%Project{}, ...]
 
   """
-  def list_projects() do
+  def list_projects do
     Repo.all(from(project in Project, order_by: [desc: project.id]))
   end
 

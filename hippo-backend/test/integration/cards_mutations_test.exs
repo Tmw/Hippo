@@ -2,8 +2,8 @@ defmodule Hippo.Grapql.CardsMutationsTest do
   use HippoWeb.GraphqlCase
   import Hippo.Test.Factory
 
-  alias Hippo.Repo
   alias Hippo.Cards.Card
+  alias Hippo.Repo
 
   import Ecto.Query
 

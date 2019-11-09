@@ -1,4 +1,5 @@
 defmodule HippoWeb.UserSocket do
+  @moduledoc false
   use Phoenix.Socket
 
   use Absinthe.Phoenix.Socket,

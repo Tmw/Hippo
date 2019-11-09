@@ -2,8 +2,8 @@ defmodule Hippo.Grapql.LanesMutationsTest do
   use HippoWeb.GraphqlCase
   import Hippo.Test.Factory
 
-  alias Hippo.Repo
   alias Hippo.Lanes.Lane
+  alias Hippo.Repo
   import Ecto.Query
 
   setup %{conn: conn} do

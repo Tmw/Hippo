@@ -1,8 +1,9 @@
 defmodule Hippo.Cards do
+  @moduledoc false
   import Ecto.Query
   alias Hippo.{Cards.Card, Lanes.Lane, Repo}
 
-  def data() do
+  def data do
     Dataloader.Ecto.new(Hippo.Repo, query: &query/2)
   end
 

@@ -1,7 +1,8 @@
 defmodule Hippo.GraphQL.Resolvers.Lane do
+  @moduledoc false
+  alias Hippo.GraphQL.Events
   alias Hippo.{Lanes, Session}
   alias Hippo.Lanes.Lane
-  alias Hippo.GraphQL.Events
 
   def create(%{lane: params, project_id: project_id}, ctx) do
     with {:ok, lane} <- Lanes.create_lane(params, for_project: project_id),

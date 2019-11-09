@@ -1,4 +1,5 @@
 defmodule Hippo.Repo.Migrations.CreateProjects do
+  @moduledoc false
   use Ecto.Migration
 
   def change do

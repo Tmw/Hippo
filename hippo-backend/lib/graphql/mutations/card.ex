@@ -1,4 +1,5 @@
 defmodule Hippo.GraphQL.Mutations.Card do
+  @moduledoc false
   use Absinthe.Schema.Notation
   alias Hippo.GraphQL.Resolvers
   import Freight.Payload

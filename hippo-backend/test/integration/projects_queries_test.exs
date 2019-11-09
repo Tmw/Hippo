@@ -1,7 +1,7 @@
 defmodule Hippo.Grapql.ProjectQueriesTest do
   use HippoWeb.GraphqlCase
-  alias Hippo.Lanes.Lane
   alias Hippo.Cards.Card
+  alias Hippo.Lanes.Lane
   alias Hippo.Repo
   import Hippo.Test.Factory
   import Ecto.Query

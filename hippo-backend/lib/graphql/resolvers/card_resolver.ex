@@ -1,4 +1,5 @@
 defmodule Hippo.GraphQL.Resolvers.Card do
+  @moduledoc false
   alias Hippo.{
     Cards,
     Cards.Card,

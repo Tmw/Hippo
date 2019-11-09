@@ -1,4 +1,5 @@
 defmodule Hippo.Lanes.Lane do
+  @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
   import EctoRanked

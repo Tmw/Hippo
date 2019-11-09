@@ -1,13 +1,15 @@
 defmodule Hippo.Lanes do
+  @moduledoc false
+
   import Ecto.Query, warn: false
-  alias Hippo.Projects.Project
-  alias Hippo.Lanes.Lane
   alias Hippo.Cards.Card
+  alias Hippo.Lanes.Lane
+  alias Hippo.Projects.Project
   alias Hippo.Repo
 
   import Ecto.Query
 
-  def data() do
+  def data do
     Dataloader.Ecto.new(Hippo.Repo, query: &query/2)
   end
 
